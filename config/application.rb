@@ -1,3 +1,4 @@
+require "dotenv/load"
 require_relative "boot"
 
 require "rails/all"
@@ -10,6 +11,11 @@ module MagmaChat
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 7.0
+
+    # primary key type
+    config.generators do |g|
+      g.orm :active_record, primary_key_type: :uuid
+    end
 
     # Configuration for the application, engines, and railties goes here.
     #
