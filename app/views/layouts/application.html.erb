@@ -15,25 +15,21 @@
 
   <body class="min-h-screen flex flex-col">
     <div class="flex-1 flex flex-col sm:flex-row">
-      <main class="flex-1 flex flex-col h-screen top-0 bottom-0 max-h-[100vh] overflow-y-auto">
+      <main class="flex-1 flex flex-col h-screen top-0 bottom-0 max-h-[100vh] overflow-y-auto bg-gray-600">
         <% if content_for?(:header) %>
-          <header class="bg-gray-300 h-fit sticky top-0 z-10"><%= yield :header %></header>
+          <header class="bg-gray-600 h-fit sticky top-0 z-10"><%= yield :header %></header>
         <% end %>
         <div class="flex-1 max-h-screen overflow-auto"><%= yield %></div>
         <% if content_for?(:footer) %>
-          <footer class="bg-gray-100 sticky top-[100vh]"><%= yield :footer %></footer>
+          <footer class="sticky top-[100vh] bg-gray-600"><%= yield :footer %></footer>
         <% end %>
       </main>
-      <nav class="order-first sm:w-[16%] bg-black flex sm:flex-col gap-2 py-1 px-2 sm:p-3 items-center items h-12 sm:h-screen sticky sm:relative">
-        <%= link_to root_path, class: "opacity-80 hover:opacity-100" do %>
-          <div class="logo flex sm:flex-col items-center">
-            <%= image_tag "logo.png", class: "w-10 sm:w-24 h-10 sm:h-24 object-fit" %>
-            <h1 class="text uppercase text-orange-500 hover:text-orange-300 text-center hidden sm:block">MAGMACHAT</h1>
-          </div>
-        <% end %>
+      <nav class="order-first sm:w-[20%] bg-gray-800 flex sm:flex-col gap-2 py-1 px-2 sm:p-3 items-center items h-12 sm:h-screen sticky sm:relative">
         <%= yield :left %>
       </nav>
-      <aside class="sm:min-w-60 bg-gray-200"><%= yield :right %></aside>
+       <% if content_for?(:right) %>
+        <aside class="sm:w-60 bg-gray-800"><%= yield :right %></aside>
+      <% end %>
     </div>
   </body>
 </html>

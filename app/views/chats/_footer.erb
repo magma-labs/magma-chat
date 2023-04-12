@@ -1,0 +1,10 @@
+  <div class="w-full p-4">
+    <input id="prompt" type="text" class="w-full rounded-md bg-gray-700 text-white" placeholder="Send a message..."
+           data-controller="chat" data-reflex="change->Chat#prompt" data-id="<%= @chat&.id %>">
+    <button disabled="" class="absolute p-5 rounded-md text-gray-500 bottom-2 right-1 opacity-40">
+      <svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 mr-1" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg">
+        <line x1="22" y1="2" x2="11" y2="13"></line>
+        <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+      </svg>
+    </button>
+  </div>

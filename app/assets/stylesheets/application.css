@@ -13,3 +13,24 @@
  *= require_tree .
  *= require_self
  */
+
+.message {
+  color: #e5ded5;
+}
+
+.message p {
+  font-size: 16px !important;
+  line-height: 28px !important;
+}
+/* not last p */
+.message p:not(:last-child) {
+  margin-bottom: 20px !important;
+}
+
+.message.assistant {
+   background-color: rgb(75 85 99);
+}
+
+.message.user {
+   background-color: rgb(55 65 81)
+}

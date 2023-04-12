@@ -7,6 +7,9 @@ body {
 }
 
 @layer components {
+  input[type="text"] {
+    @apply border-transparent focus:border-transparent focus:ring-0;
+  }
   .btn {
     @apply inline-block font-medium tracking-wider rounded shadow py-2 px-4 text-white cursor-pointer;
   }
@@ -25,11 +28,9 @@ body {
   .btn-cancel {
     @apply btn bg-gray-600 hover:bg-gray-400;
   }
-
   .btn.disabled {
     @apply bg-gray-400 cursor-not-allowed !important;
   }
-
   .card {
     @apply bg-white rounded shadow p-4;
   }

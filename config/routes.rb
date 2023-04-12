@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
-  resource :example, constraints: -> { Rails.env.development? }
   resources :home, only: [:index]
+  resources :chats
+  resource :example
 
   # Defines the root path route ("/")
   root "home#index"

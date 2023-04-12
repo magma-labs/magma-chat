@@ -1,0 +1,20 @@
+<%= cable_ready_updates_for @campaign, html_options: { class: "flex flex-col gap-0" } do %>
+  <% @chat.transcript.each do |message| %>
+    <div class="message <%= message["role"] %> w-full p-4">
+      <div class="text-lg max-w-2xl mx-auto">
+        <%= markdown(message["content"]) %>
+      </div>
+    </div>
+  <% end %>
+  <span data-controller="scroll" data-action="scroll#scroll"></span>
+<% end %>
+
+<% content_for :right do %>
+  <div class="w-[20%]">
+
+  </div>
+<% end %>
+
+<% content_for :footer do %>
+  <%= render "chats/footer" %>
+<% end %>

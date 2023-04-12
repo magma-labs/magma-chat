@@ -1,0 +1,19 @@
+<div class="flex flex-col w-full h-full">
+  <%= image_tag "logo.png", class: "w-48 object-fit m-auto" %>
+</div>
+<% content_for :right do %>
+  <div class="w-[20%]">
+
+  </div>
+<% end %>
+
+<% content_for :footer do %>
+    <div class="w-full p-4">
+      <%= form_with model: Chat.new do |f| %>
+        <%= f.hidden_field :engine, value: "gpt-3.5-turbo" %>
+        <%= f.text_field :first_message, class: "w-full rounded-md bg-gray-700 text-white", placeholder: "Send a message...",
+                                   data: {controller: "chat", action: "change->chat#submit"} %>
+    <% end %>
+  </div>
+
+<% end %>
