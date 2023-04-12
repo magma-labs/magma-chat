@@ -25,9 +25,9 @@
         <% end %>
       </main>
       <nav class="order-first sm:w-[20%] bg-gray-800 bg-gradient-to-l from-gray-900 text-gray-300 flex sm:flex-col gap-3 py-1 px-2 sm:p-3 items-start items h-12 sm:h-screen sticky sm:relative">
-        <div class="text-lg font-medium flex items-center gap-3 pt-1 pb-3 border-b border-b-gray-600 w-full">
+        <div class="text-lg font-medium flex items-center gap-3 pb-[1rem] border-b border-b-gray-700 w-full">
           <%= image_tag "logo.png", class: "w-5 object-fit m-auto" %>
-          <span class="flex-1">Latest Chats</span>
+          <span class="flex-1">Latest <span class="hidden md:inline">Chats</span></span>
         </div>
         <%= render Chat.order(created_at: :desc).limit(10) %>
       </nav>

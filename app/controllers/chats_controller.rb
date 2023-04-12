@@ -13,7 +13,10 @@ class ChatsController < ApplicationController
   end
 
   def show
-    @chat = Chat.find(params[:id])
+    @chat ||= Chat.find(params[:id])
+    if @chat.id != params[:id]
+      redirect_to [@chat]
+    end
   end
 
   private
