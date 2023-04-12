@@ -4,5 +4,6 @@ class ChatPromptJob < ApplicationJob
       chat.transcript += [{ role: "assistant", content: response }]
       chat.save!
     end
+    # todo: error handling
   end
 end

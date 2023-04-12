@@ -13,6 +13,25 @@
  *= require_tree .
  *= require_self
  */
+html {
+  color-scheme: dark;
+  scrollbar-face-color: rgb(75 85 99);
+  scrollbar-base-color: rgb(75 85 99);
+  scrollbar-3dlight-color: rgb(75 85 99);
+  scrollbar-highlight-color: rgb(75 85 99);
+  scrollbar-track-color: rgb(75 85 99);
+  scrollbar-arrow-color: rgb(75 85 99);
+  scrollbar-shadow-color: rgb(75 85 99);
+  scrollbar-darkshadow-color: rgb(75 85 99);
+}
+
+::-webkit-scrollbar { width: 10px; height: 3px;}
+::-webkit-scrollbar-button {  background-color: #52585e; }
+::-webkit-scrollbar-track {  background-color: #646464;}
+::-webkit-scrollbar-track-piece { background-color: rgb(46, 54, 68); }
+::-webkit-scrollbar-thumb { height: 50px; background-color: #52585e; border-radius: 3px;}
+::-webkit-scrollbar-corner { background-color: #646464;}
+::-webkit-resizer { background-color: #666;}
 
 .message {
   color: #e5ded5;
@@ -27,6 +46,28 @@
   margin-bottom: 20px !important;
 }
 
+.message ul {
+  /* conventional list style */
+  list-style: disc;
+}
+
+.message ul li {
+  font-size: 16px !important;
+  line-height: 28px !important;
+  margin-bottom: 20px !important;
+}
+
+.message ol {
+  /* conventional list style, indented */
+  list-style: decimal;
+}
+
+.message ol li {
+  font-size: 16px !important;
+  line-height: 28px !important;
+  margin-bottom: 20px !important;
+}
+
 .message.assistant {
    background-color: rgb(75 85 99);
 }
@@ -34,3 +75,110 @@
 .message.user {
    background-color: rgb(55 65 81)
 }
+
+.message h1 {
+  font-size: 2em;
+  font-weight: bold;
+}
+.message h2 {
+  font-size: 1.5em;
+  font-weight: bold;
+}
+.message h3 {
+  font-size: 1.17em;
+  font-weight: bold;
+}
+.message h4 {
+  font-size: 1em;
+  font-weight: bold;
+}
+.message h5 {
+  font-size: 0.83em;
+  font-weight: bold;
+}
+.message h6 {
+  font-size: 0.67em;
+  font-weight: bold;
+}
+
+.message em {
+  font-style: italic;
+}
+
+.message strong {
+  font-weight: bold;
+}
+
+.message s {
+  text-decoration: line-through;
+}
+
+.message ul {
+  list-style-type: disc;
+}
+.message ol {
+  list-style-type: decimal;
+}
+.message li {
+  margin-left: 2em;
+}
+
+.message a {
+  text-decoration: underline;
+}
+
+.message img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Code */
+.message code {
+  font-family: monospace;
+  padding: 0.2em 0.4em;
+  border-radius: 3px;
+}
+
+.message pre {
+  overflow: auto;
+  font-family: monospace;
+  padding: 1em;
+  border-radius: 3px;
+}
+
+/* Blockquotes */
+.message blockquote {
+  border-left: 4px solid #ddd;
+  margin: 0 0 1em;
+  padding: 0.5em 0.5em 0.5em 1em;
+}
+
+/* Tables */
+.message table {
+  border-collapse: collapse;
+  margin-bottom: 1em;
+  width: 100%;
+}
+
+.message th, td {
+  border: 1px solid #ddd;
+  padding: 0.5em;
+  text-align: left;
+}
+.message th {
+  background-color: #f8f8f8;
+  font-weight: bold;
+}
+
+body::-webkit-scrollbar {
+   width: 1em;
+ }
+
+ body::-webkit-scrollbar-track {
+   box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+ }
+
+ body::-webkit-scrollbar-thumb {
+   background-color: darkgrey;
+   outline: 1px solid slategrey;
+ }

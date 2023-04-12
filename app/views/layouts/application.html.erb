@@ -15,20 +15,24 @@
 
   <body class="min-h-screen flex flex-col">
     <div class="flex-1 flex flex-col sm:flex-row">
-      <main class="flex-1 flex flex-col h-screen top-0 bottom-0 max-h-[100vh] overflow-y-auto bg-gray-600">
+      <main class="flex-1 flex flex-col h-screen top-0 bottom-0 max-h-[100vh] overflow-y-auto bg-gray-600 scroll-smooth">
         <% if content_for?(:header) %>
           <header class="bg-gray-600 h-fit sticky top-0 z-10"><%= yield :header %></header>
         <% end %>
         <div class="flex-1 max-h-screen overflow-auto"><%= yield %></div>
         <% if content_for?(:footer) %>
-          <footer class="sticky top-[100vh] bg-gray-600"><%= yield :footer %></footer>
+          <footer class="sticky top-[100vh]"><%= yield :footer %></footer>
         <% end %>
       </main>
-      <nav class="order-first sm:w-[20%] bg-gray-800 flex sm:flex-col gap-2 py-1 px-2 sm:p-3 items-center items h-12 sm:h-screen sticky sm:relative">
-        <%= yield :left %>
+      <nav class="order-first sm:w-[20%] bg-gray-800 bg-gradient-to-l from-gray-900 text-gray-300 flex sm:flex-col gap-3 py-1 px-2 sm:p-3 items-start items h-12 sm:h-screen sticky sm:relative">
+        <div class="text-lg font-medium flex items-center gap-3 pt-1 pb-3 border-b border-b-gray-600 w-full">
+          <%= image_tag "logo.png", class: "w-5 object-fit m-auto" %>
+          <span class="flex-1">Latest Chats</span>
+        </div>
+        <%= render Chat.order(created_at: :desc).limit(10) %>
       </nav>
        <% if content_for?(:right) %>
-        <aside class="sm:w-60 bg-gray-800"><%= yield :right %></aside>
+        <aside class="sm:w-[20%] bg-gray-800"><%= yield :right %></aside>
       <% end %>
     </div>
   </body>
