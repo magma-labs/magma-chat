@@ -16,6 +16,8 @@ module Gpt
       messages += [{ role: "user", content: prompt}]
       params = { model: "gpt-3.5-turbo", messages: messages, temperature: temperature, frequency_penalty: frequency_penalty, presence_penalty: presence_penalty, max_tokens: max_tokens }
 
+      Rails.logger.info("GPT REQUEST: #{params}")
+
       client.chat(parameters: params).then do |response|
         Rails.logger.info("GPT RESPONSE: #{response}")
         response.dig("choices", 0, "message","content")

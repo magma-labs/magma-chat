@@ -1,24 +1,20 @@
-# README
+# MagmaChat
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+MagmaLabs presents the best ChatGPT-style interface for GPT, written in Rails 7 with CableReady and StimulusReflex!
+## Setup
 
-Things you may want to cover:
+Make sure you have `OPENAI_ACCESS_TOKEN` environment variable set. (Developers, use a `.env` file in the root of the project.)
 
-* Ruby version
+* Ruby 3.2.1
 
-* System dependencies
+* Requires Postgres and Redis to be running
 
-* Configuration
+* Run `rails db:setup` to create the database
 
-* Database creation
+* At the moment there are no tests
 
-* Database initialization
+* At the moment there are no other services
 
-* How to run the test suite
+* TODO: Dockerize!
 
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+* TODO: License

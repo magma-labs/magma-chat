@@ -13,10 +13,15 @@ class ChatReflex < StimulusReflex::Reflex
     @value = element.value
   end
 
-  def prompt
+  def prompt(message: value)
     slash_filter do
-      chat.prompt(message: element.value)
+      chat.prompt(message: message)
     end
+  end
+
+  def suggested
+    @value = element.dataset[:value]
+    prompt
   end
 
   def destroy

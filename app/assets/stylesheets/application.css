@@ -140,10 +140,15 @@ html {
 }
 
 .message pre {
-  overflow: auto;
+  /* TODO: Add syntax highlighting like til.magmalabs.io has */
+  overflow-x: hidden;
+  max-width: 100%;
+  font-size: 14px;
   font-family: monospace;
   padding: 1em;
+  margin-bottom: 1em;
   border-radius: 3px;
+  background-color: rgb(31 41 55);
 }
 
 /* Blockquotes */
