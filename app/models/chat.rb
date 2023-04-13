@@ -3,19 +3,25 @@ class Chat < ApplicationRecord
   enable_cable_ready_updates on: [:update]
   after_commit :prompt, on: :create
 
-  def prompt(message: title)
+  # todo: is there a way to send and persist inner voice chat messages with instructions for GPT?
+  # for example: why haven't you sent the analysis yet
+
+  def prompt(message: title, visible: true)
     Rails.logger.info("PROMPT: #{message}")
-    # should update the transcript for the user with the prompt
-    self.transcript += [{ role: "user", content: message }]
-    save!
+    if visible
+      # should update the transcript for the user with the prompt
+      self.transcript += [{ role: "user", content: message }]
+      save!
+    end
+
     # should update the transcript for the user with the reply
     # todo: move to after_commit to prevent race condition missing latest message
-    ChatPromptJob.perform_later(self, message)
+    ChatPromptJob.perform_later(self, message, visible)
   end
 
   def transcript_with_instructions
     [{role: "user", content: instructions.strip },
-     {role: "assistant", content: "Okay! Whenever it makes sense I will append a JSON object to my normal responses with the information requested."}] + transcript
+     {role: "assistant", content: "Okay! I will append a JSON object surrounded by ~~~ to my normal responses."}] + transcript
   end
 
   def analysis_next
@@ -30,18 +36,15 @@ class Chat < ApplicationRecord
 
   def instructions
     <<-INSTRUCTIONS
-    Starting after the first few messages, respond normally but before stopping append
-    a JSON object wrapped in ~~~ to the end of the message with the following keys:
+    Before finishing your response, append a JSON object wrapped in ~~~ to the end
+    containing the following keys:
 
-    `category`: a 1-2 word category for the conversation so far
-    `summary`: a 1-2 sentence summary of the conversation so far
+    `title`: an appropriate title for the conversation so far
+    `summary`: a paragraph summarizing the conversation so far (optional, when you have enough context)
     `sentiment`: a 1 word sentiment analysis of the conversation so far
-    `importance`: integer from 1-100 representing your subjective evaluation of the importance of this topic
-    `language`: human language being used in this conversation, unless the conversation is about software programming then tell me the programming language
-    `tags`: an array of lowercase tags labeling the conversation for later retrieval
-    `next`: an array of suggested potential next prompts from the user
-
-    Don't repeat keys if their value hasn't changed.
+    `language`: the human or programming language used in this conversation
+    `tags`: an array of lowercase tags for categorizing the conversation
+    `next`: an array of suggested potential next prompts from the user (optional, if it makes sense)
 
     INSTRUCTIONS
   end

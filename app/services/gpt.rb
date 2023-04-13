@@ -20,7 +20,7 @@ module Gpt
 
       client.chat(parameters: params).then do |response|
         Rails.logger.info("GPT RESPONSE: #{response}")
-        response.dig("choices", 0, "message","content")
+        return response.dig("choices", 0, "message","content")
       end
     end
   end

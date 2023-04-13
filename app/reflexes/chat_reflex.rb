@@ -4,19 +4,13 @@ class ChatReflex < StimulusReflex::Reflex
   attr_reader :chat
   attr_reader :value
 
-  before_reflex do
-    if id = element.dataset[:id].presence
-      @chat = Chat.find(id)
-    else
-      @chat = Chat.create(title: element.value, engine: "gpt-3.5-turbo")
-    end
-    @value = element.value
-  end
+  before_reflex :load_chat
 
   def prompt(message: value)
     slash_filter do
       chat.prompt(message: message)
     end
+    morph :nothing
   end
 
   def suggested
@@ -24,11 +18,25 @@ class ChatReflex < StimulusReflex::Reflex
     prompt
   end
 
+  def toggle_grow(_, checked)
+    chat.update!(grow: checked)
+    morph :nothing
+  end
+
   def destroy
     chat.destroy!
   end
 
   private
+
+  def load_chat
+    if id = element.dataset[:id].presence
+      @chat = Chat.find(id)
+    else
+      @chat = Chat.create(title: element.value, engine: "gpt-3.5-turbo")
+    end
+    @value = element.value
+  end
 
   def slash_filter
     if value.starts_with?("/")
@@ -43,6 +51,9 @@ class ChatReflex < StimulusReflex::Reflex
         @chat.destroy
         cable_ready.redirect_to(url: "/chats/new").broadcast
         morph :nothing
+      when /^\/analyze/
+        message = title = value.split("/analyze").last&.strip.presence || "Can you go ahead and provide the analysis JSON now? Don't forget to wrap it in ~~~"
+        chat.prompt(message: message, visible: false)
       when /^\/clear/
         # todo: implement
       when /^\/stats/

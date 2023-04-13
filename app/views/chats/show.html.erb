@@ -1,7 +1,9 @@
 <% content_for :header do %>
-  <div class="h-14 p-3 text-lg font-medium shadow-lg text-ellipsis overflow-hidden whitespace-nowrap" style="background-color:rgb(55 65 81)">
-    <%= @chat.title %>
-  </div>
+  <%= cable_ready_updates_for @chat do %>
+    <div class="h-14 p-3 text-lg font-medium shadow-lg text-ellipsis overflow-hidden whitespace-nowrap" style="background-color:rgb(55 65 81)">
+      <%= @chat.title %>
+    </div>
+  <% end %>
 <% end %>
 
 <%= cable_ready_updates_for @chat, html_options: { class: "flex flex-col gap-0" } do %>
@@ -31,22 +33,33 @@
   <div class="p-3 analysis">
     <%= cable_ready_updates_for @chat, html_options: { class: "space-y-2 w-full text-gray-300" } do %>
       <% unless @chat.analysis.blank? %>
-        <div class="text-sm"><label>Category</label><%= @chat.analysis["category"] %>&nbsp;</div>
-        <div class="text-sm"><label>Summary</label><%= @chat.analysis["summary"] %>&nbsp;</div>
-        <div class="text-sm"><label>Sentiment</label><%= @chat.analysis["sentiment"] %>&nbsp;</div>
-        <div class="text-sm"><label>Importance</label><%= @chat.analysis["importance"] %>&nbsp;</div>
+        <% unless @chat.analysis["summary"].blank? %>
+          <div class="text-sm"><label>Summary</label><%= @chat.analysis["summary"] %>&nbsp;</div>
+        <% end %>
+        <div class="text-sm"><label>Sentiment</label><%= @chat.analysis["sentiment"]&.titleize %>&nbsp;</div>
         <div class="text-sm"><label>Language</label><%= @chat.analysis["language"] %>&nbsp;</div>
-        <div class="text-sm"><label>Tags</label><%= @chat.tags.to_sentence %>&nbsp;</div>
-        <div class="text-sm"><label>Suggestions</label>
-          <% @chat.analysis_next.each do |sugg| %>
-            <span data-reflex="click->Chat#suggested" data-id="<%= @chat&.id %>" data-value="<%= sugg %>"
-                 class="cursor-pointer hover:text-white bg-transparent text-sm p-0" readonly="true" disabled="true">
-              <%= sugg %>
-            </span>
-            <span class="text-gray-500 last-of-type:hidden">•</span>
-            &nbsp;
-          <% end %>
-        </div>
+        <% unless @chat.tags.empty? %>
+          <label>Tags</label>
+          <div class="text-sm flex flex-wrap gap-2">
+            <% @chat.tags.each do |tag| %>
+              <div class="bg-gray-700 rounded-md px-2 py-1 mr-2 text-sm font-medium text-gray-300">
+                <%= tag %>
+              </div>
+            <% end %>
+          </div>
+        <% end %>
+        <% unless @chat.analysis_next.empty? %>
+          <div class="text-sm"><label>Suggestions</label>
+            <% @chat.analysis_next.each do |sugg| %>
+              <span data-reflex="click->Chat#suggested" data-id="<%= @chat&.id %>" data-value="<%= sugg %>"
+                  class="cursor-pointer hover:text-white bg-transparent text-sm p-0" readonly="true" disabled="true">
+                <%= sugg %>
+              </span>
+              <span class="text-gray-500 last-of-type:hidden">•</span>
+              &nbsp;
+            <% end %>
+          </div>
+        <% end %>
       <% end %>
     <% end %>
   </div>

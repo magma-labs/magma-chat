@@ -7,9 +7,17 @@ body {
 }
 
 @layer components {
-  input[type="text"] {
-    @apply border-transparent focus:border-transparent focus:ring-0;
+  textarea,
+  input[type="text"],
+  input[type="checkbox"],
+  input[type="checkbox"]:checked {
+    @apply border-transparent focus:border-transparent focus:ring-0 !important;
   }
+
+  input[type="checkbox"]:checked {
+    @apply bg-gray-300 !important;
+  }
+
   .btn {
     @apply inline-block font-medium tracking-wider rounded shadow py-2 px-4 text-white cursor-pointer;
   }
@@ -37,5 +45,33 @@ body {
 
   .analysis label {
     @apply text-gray-500 block text-xs;
+  }
+
+  .grow-wrap::after {
+    /* Note the weird space! Needed to preventy jumpy behavior */
+    content: attr(data-replicated-value) " ";
+
+    /* This is how textarea text behaves */
+    white-space: pre-wrap;
+
+    /* Hidden from view, clicks, and screen readers */
+    visibility: hidden;
+  }
+  .grow-wrap > textarea {
+    /* You could leave this, but after a user resizes, then it ruins the auto sizing */
+    resize: none;
+
+    /* Firefox shows scrollbar on growth, you can hide like this. */
+    overflow: hidden;
+  }
+  .grow-wrap > textarea,
+  .grow-wrap::after {
+    /* Identical styling required!! */
+    border: 1px solid transparent;
+    padding: 1rem;
+    font: inherit;
+
+    /* Place on top of each other */
+    grid-area: 1 / 1 / 2 / 2;
   }
 }

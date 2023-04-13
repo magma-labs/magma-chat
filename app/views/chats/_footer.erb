@@ -1,11 +1,18 @@
   <div class="w-full p-4">
-    <input id="prompt" type="text" class="w-full rounded-md bg-gray-700 text-white"
-           placeholder="Send a message..." autocomplete="off"
-           data-controller="chat" data-reflex="change->Chat#prompt" data-id="<%= @chat&.id %>">
-    <button disabled="" class="absolute p-5 rounded-md text-gray-500 bottom-2 right-1 opacity-40">
-      <svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 mr-1" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg">
-        <line x1="22" y1="2" x2="11" y2="13"></line>
-        <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
-      </svg>
-    </button>
+    <div class="grow-wrap grid">
+      <input id="prompt_text" type="text" class="w-full rounded-md bg-gray-700 text-white p-[16px]"
+             placeholder="Send a message..." autocomplete="off"
+             data-controller="chat" data-reflex="change->Chat#prompt" data-id="<%= @chat&.id %>">
+      <textarea id="prompt_textarea" type="text" class="w-full rounded-md bg-gray-700 text-white hidden pl-3"
+             placeholder="Send a message..." autocomplete="off" rows="1"
+             onKeyUp="this.parentNode.dataset.replicatedValue = this.value"
+             data-controller="chat" data-action="keydown->chat#keydown"
+             data-reflex="change->Chat#prompt" data-id="<%= @chat&.id %>"></textarea>
+    </div>
+    <div class="py-1 px-2 text-xs text-gray-400 flex justify-start items-center">
+      <input id="grow" type="checkbox" class="bg-gray-400 m-1 mr-2 rounded-sm"
+             <%= @chat.grow ? 'checked' : '' %> data-id="<%= @chat&.id %>"
+             data-controller="grow" data-action="click->grow#toggle"/>
+      <span>Multiple line input (cmd+enter to send)</span>
+    </div>
   </div>
