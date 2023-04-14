@@ -57,7 +57,6 @@ gem "bootsnap", require: false
 
 gem "action-cable-redis-backport", "~> 1"
 gem "cable_ready", "~> 5.0.0.pre10"
-gem "dartsass-rails", "~> 0.4.1"
 gem "dotenv", "~> 2.8"
 gem "httparty"
 gem "redcarpet"
