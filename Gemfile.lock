@@ -91,8 +91,6 @@ GEM
       xpath (~> 3.2)
     concurrent-ruby (1.2.2)
     crass (1.0.6)
-    dartsass-rails (0.4.1)
-      railties (>= 6.0.0)
     date (3.3.3)
     debug (1.7.2)
       irb (>= 1.5.0)
@@ -255,7 +253,6 @@ DEPENDENCIES
   bootsnap
   cable_ready (~> 5.0.0.pre10)
   capybara
-  dartsass-rails (~> 0.4.1)
   debug
   dotenv (~> 2.8)
   httparty
