@@ -8,7 +8,7 @@
 
 <%= cable_ready_updates_for @chat, html_options: { class: "flex flex-col gap-0" } do %>
   <% @chat.transcript.each do |message| %>
-    <div class="message <%= message[" role"] %> w-full p-4 first-of-type:hidden">
+    <div class="message <%= message["role"] %> w-full p-4 first-of-type:hidden">
       <div class="text-lg max-w-[80%] lg:max-w-2xl mx-auto flex items-start gap-6">
         <% if message["role"]["user"] %>
           <div class="flex-shrink-0 relative h-[30px] w-[30px] p-1 rounded-sm text-white flex items-center justify-center">
