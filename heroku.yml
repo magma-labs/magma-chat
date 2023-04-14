@@ -7,3 +7,5 @@ release:
   command:
     - bash -c "bundle exec rails db:prepare && bundle exec rails db:migrate"
 
+run:
+  web: bundle exec puma -C config/puma.rb
