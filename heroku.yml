@@ -1,0 +1,9 @@
+build:
+  docker:
+    web: Dockerfile
+
+release:
+  image: web
+  command:
+    - bash -c "bundle exec rails db:prepare && bundle exec rails db:migrate"
+

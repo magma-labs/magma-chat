@@ -1,0 +1,6 @@
+.git
+.gitignore
+log
+tmp
+Dockerfile
+.dockerignore

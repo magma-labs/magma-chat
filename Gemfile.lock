@@ -142,6 +142,8 @@ GEM
     nio4r (2.5.9)
     nokogiri (1.14.3-arm64-darwin)
       racc (~> 1.4)
+    nokogiri (1.14.3-x86_64-linux)
+      racc (~> 1.4)
     pg (1.4.6)
     public_suffix (5.0.1)
     puma (5.6.5)
@@ -214,9 +216,12 @@ GEM
       redis (>= 4.0, < 6.0)
     tailwindcss-rails (2.0.27-arm64-darwin)
       railties (>= 6.0.0)
+    tailwindcss-rails (2.0.27-x86_64-linux)
+      railties (>= 6.0.0)
     thor (1.2.1)
     thread-local (1.1.0)
     tiktoken_ruby (0.0.4-arm64-darwin)
+    tiktoken_ruby (0.0.4-x86_64-linux)
     timeout (0.3.2)
     turbo-rails (1.4.0)
       actionpack (>= 6.0.0)
@@ -243,6 +248,7 @@ GEM
 
 PLATFORMS
   arm64-darwin-21
+  x86_64-linux
 
 DEPENDENCIES
   action-cable-redis-backport (~> 1)
