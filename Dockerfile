@@ -70,4 +70,5 @@ USER rails:rails
 
 # Start Server
 EXPOSE 3000
+RUN mkdir -p tmp/pids
 CMD ["bundle", "exec", "puma", "-C", "config/puma.rb"]
