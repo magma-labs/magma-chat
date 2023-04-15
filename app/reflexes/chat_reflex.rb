@@ -44,18 +44,20 @@ class ChatReflex < StimulusReflex::Reflex
       when /^\/new/
         # assume the title is whatever string supplied after the /new command
         title = value.split("/new").last&.strip.presence || "New Chat"
-        @chat = Chat.create(title: title, engine: "gpt-3.5-turbo")
+        @chat = Chat.create!(title: title, engine: "gpt-3.5-turbo")
         cable_ready.redirect_to(url: "/chats/#{chat.id}").broadcast
         morph :nothing
       when /^\/delete/
-        @chat.destroy
+        @chat.destroy!
         cable_ready.redirect_to(url: "/chats/new").broadcast
         morph :nothing
       when /^\/analyze/
         message = title = value.split("/analyze").last&.strip.presence || "Can you go ahead and provide the analysis JSON now? Don't forget to wrap it in ~~~"
         chat.prompt(message: message, visible: false)
       when /^\/clear/
-        # todo: implement
+        chat.update!(transcript: [])
+      when /^\/regenerate/
+        chat.regenerate! # todo: take a temperature argument
       when /^\/stats/
         # todo: implement
       when /^\/summarize/
@@ -63,6 +65,7 @@ class ChatReflex < StimulusReflex::Reflex
       when /^\/help/
         # todo: implement
       end
+
     else
       yield
     end

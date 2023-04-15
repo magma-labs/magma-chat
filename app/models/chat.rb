@@ -19,6 +19,13 @@ class Chat < ApplicationRecord
     ChatPromptJob.perform_later(self, message, visible)
   end
 
+  def regenerate!
+    # todo: delete the last response and prompt again with the same message
+    transcript.pop # remove the last response
+    prompt_message = transcript.pop["content"] # remove the last prompt message
+    prompt(message: prompt_message, visible: true)
+  end
+
   def transcript_with_instructions
     [{role: "user", content: instructions.strip },
      {role: "assistant", content: "Okay! I will append a JSON object surrounded by ~~~ to my normal responses."}] + transcript
