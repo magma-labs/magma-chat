@@ -6,9 +6,11 @@ class ChatReflex < StimulusReflex::Reflex
 
   before_reflex :load_chat
 
+  delegate :current_user, to: :connection
+
   def prompt(message: value)
     slash_filter do
-      chat.prompt(message: message)
+      chat.prompt!(message: message, sender: current_user)
     end
     morph :nothing
   end
@@ -52,7 +54,7 @@ class ChatReflex < StimulusReflex::Reflex
         destroy
       when /^\/analyze/
         message = title = value.split("/analyze").last&.strip.presence || "Can you go ahead and provide the analysis JSON now? Don't forget to wrap it in ~~~"
-        chat.prompt(message: message, visible: false)
+        chat.prompt!(message: message, visible: false)
       when /^\/clear/
         chat.update!(transcript: [])
       when /^\/regenerate/

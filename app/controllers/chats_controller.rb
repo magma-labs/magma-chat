@@ -9,7 +9,7 @@ class ChatsController < ApplicationController
   end
 
   def create
-    Chat.create!(title: chat_params[:first_message], engine: chat_params[:engine]).then do |chat|
+    current_user.chats.create!(title: chat_params[:first_message], engine: chat_params[:engine]).then do |chat|
       redirect_to [chat]
     end
   end

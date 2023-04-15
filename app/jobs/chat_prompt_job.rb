@@ -1,6 +1,6 @@
 class ChatPromptJob < ApplicationJob
   def perform(chat, message, visible)
-    Gpt.chat(prompt: message, transcript: chat.transcript_with_instructions).then do |reply|
+    Gpt.chat(prompt: message, transcript: chat.messages_for_gpt).then do |reply|
       reply = extract_analysis(chat, reply.strip)
       if visible
         chat.transcript += [{ role: "assistant", content: reply }]
