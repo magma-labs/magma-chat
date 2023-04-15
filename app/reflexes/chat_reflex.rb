@@ -25,6 +25,8 @@ class ChatReflex < StimulusReflex::Reflex
 
   def destroy
     chat.destroy!
+    cable_ready.redirect_to(url: "/chats/new").broadcast
+    morph :nothing
   end
 
   private
@@ -48,9 +50,7 @@ class ChatReflex < StimulusReflex::Reflex
         cable_ready.redirect_to(url: "/chats/#{chat.id}").broadcast
         morph :nothing
       when /^\/delete/
-        @chat.destroy!
-        cable_ready.redirect_to(url: "/chats/new").broadcast
-        morph :nothing
+        destroy
       when /^\/analyze/
         message = title = value.split("/analyze").last&.strip.presence || "Can you go ahead and provide the analysis JSON now? Don't forget to wrap it in ~~~"
         chat.prompt(message: message, visible: false)
