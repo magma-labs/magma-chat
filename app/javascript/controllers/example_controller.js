@@ -1,6 +1,5 @@
-import ApplicationController from './application_controller'
-
-// 
+import ApplicationController from 'controllers/application_controller'
+//
 // This is the Stimulus controller for the Example Reflex.
 //
 // It corresponds to the server-side Reflex class located at /app/reflexes/example.rb
