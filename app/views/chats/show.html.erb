@@ -9,7 +9,7 @@
 <%= cable_ready_updates_for @chat, html_options: { class: "flex flex-col gap-0" } do %>
   <% @chat.transcript.each do |message| %>
     <div class="message <%= message["role"] %> w-full p-4">
-      <div class="text-lg sm:max-w-[80%] lg:max-w-2xl mx-auto flex items-start gap-6">
+      <div class="text-lg sm:max-w-[70%] mx-auto flex items-start gap-6">
         <% if message["role"]["user"] %>
           <div class="flex-shrink-0 relative h-[30px] w-[30px] p-1 rounded-sm text-white flex items-center justify-center">
             <svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" class="h-6 w-6" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg">
