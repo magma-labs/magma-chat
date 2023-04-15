@@ -1,6 +1,6 @@
 <% content_for :header do %>
   <%= cable_ready_updates_for @chat do %>
-    <div class="h-14 pl-2 sm:block p-3 text-lg font-medium shadow-lg text-ellipsis overflow-hidden whitespace-nowrap">
+    <div class="h-14 pl-4 sm:block p-3 text-lg font-medium shadow-lg text-ellipsis overflow-hidden whitespace-nowrap">
       <%= @chat.title %>
     </div>
   <% end %>
@@ -36,22 +36,22 @@
 <% content_for :right do %>
   <%= cable_ready_updates_for @chat, html_options: { class: "p-3 md:p-5 analysis text-sm space-y-2 w-full text-gray-300 flex flex-col gap-2" } do %>
     <% unless @chat.analysis.blank? %>
-      <% unless @chat.analysis["summary"].blank? %>
+      <% unless @chat.analysis[:summary].blank? %>
         <div>
           <label>Summary</label>
-          <%= @chat.analysis["summary"] %>&nbsp;
+          <%= @chat.analysis[:summary] %>&nbsp;
         </div>
       <% end %>
-      <% unless @chat.analysis["sentiment"].blank? %>
+      <% unless @chat.analysis[:sentiment].blank? %>
         <div>
           <label>Sentiment</label>
-          <%= @chat.analysis["sentiment"]&.titleize %>&nbsp;
+          <%= @chat.analysis[:sentiment]&.titleize %>&nbsp;
         </div>
       <% end %>
-      <% unless @chat.analysis["language"].blank? %>
+      <% unless @chat.analysis[:language].blank? %>
         <div>
           <label>Language</label>
-          <%= @chat.analysis["language"] %>&nbsp;
+          <%= @chat.analysis[:language] %>&nbsp;
         </div>
       <% end %>
       <% unless @chat.tags.empty? %>
