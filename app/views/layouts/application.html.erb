@@ -33,6 +33,11 @@
           <a href="/chats/new" class="text-gray-400 hover:text-gray-200 pr-3">➕</a>
         </div>
         <%= render Chat.order(created_at: :desc).limit(10) %>
+        <% if current_user %>
+          <%= link_to "Sign out", "/logout", class: "text-gray-400 hover:text-gray-200" %>
+        <% else %>
+          <%= button_to "Sign in with Google", "/auth/google_oauth2" %>
+        <% end %>
       </nav>
        <% if content_for?(:right) %>
         <aside class="sm:w-[20%] bg-gray-900"><%= yield :right %></aside>

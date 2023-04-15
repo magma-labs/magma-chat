@@ -1,5 +1,6 @@
 class Chat < ApplicationRecord
   attribute :first_message
+  belongs_to :user
   enable_cable_ready_updates on: [:update]
   after_commit :prompt, on: :create
 

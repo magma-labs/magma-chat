@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_04_12_172949) do
+ActiveRecord::Schema[7.0].define(version: 2023_04_15_045433) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -22,8 +22,23 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_12_172949) do
     t.datetime "updated_at", null: false
     t.jsonb "analysis", default: {}, null: false
     t.boolean "grow", default: false, null: false
+    t.uuid "user_id", default: "b48d0808-271f-451e-a190-8610009df363", null: false
     t.index ["engine"], name: "index_chats_on_engine"
     t.index ["title"], name: "index_chats_on_title"
+    t.index ["user_id"], name: "index_chats_on_user_id"
+  end
+
+  create_table "users", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "name", default: "", null: false
+    t.string "email", null: false
+    t.string "image_url"
+    t.string "oauth_uid", null: false
+    t.string "oauth_provider", null: false
+    t.string "oauth_token"
+    t.datetime "oauth_expires_at"
+    t.integer "chats_count", default: 0, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
 end
