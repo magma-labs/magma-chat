@@ -30,6 +30,7 @@
         <div class="text-lg font-medium flex items-center gap-3 pb-[1rem] border-b border-b-gray-700 w-full">
           <%= image_tag "logo.png", class: "w-5 object-fit m-auto" %>
           <span class="flex-1">Latest <span class="hidden md:inline">Chats</span></span>
+          <a href="/chats/new" class="text-gray-400 hover:text-gray-200 pr-3">➕</a>
         </div>
         <%= render Chat.order(created_at: :desc).limit(100) %>
       </nav>

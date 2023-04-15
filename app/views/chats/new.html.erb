@@ -11,7 +11,7 @@
     <div class="w-full p-4">
       <%= form_with model: Chat.new do |f| %>
         <%= f.hidden_field :engine, value: "gpt-3.5-turbo" %>
-        <%= f.text_field :first_message, class: "w-full rounded-md bg-gray-700 text-white", placeholder: "Send a message...",
+        <%= f.text_field :first_message, class: "w-full rounded-md bg-gray-700 text-white", placeholder: "Start a conversation with GPT",
                                    data: {controller: "chat focus", action: "change->chat#submit"} %>
     <% end %>
   </div>
