@@ -33,6 +33,21 @@ html {
 ::-webkit-scrollbar-corner { background-color: #646464;}
 ::-webkit-resizer { background-color: #666;}
 
+.clickable-region {
+  position: relative;
+}
+
+.region-link::after {
+  content: "";
+  display: block;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 20;
+}
+
 .message {
   color: #e5ded5;
 }

@@ -1,6 +1,6 @@
 <% content_for :header do %>
   <%= cable_ready_updates_for @chat do %>
-    <div class="h-14 pl-2 sm:p-3 text-lg font-medium shadow-lg text-ellipsis overflow-hidden whitespace-nowrap">
+    <div class="h-14 pl-2 sm:block p-3 text-lg font-medium shadow-lg text-ellipsis overflow-hidden whitespace-nowrap">
       <%= @chat.title %>
     </div>
   <% end %>
@@ -66,7 +66,7 @@
       <% end %>
       <% unless @chat.analysis_next.empty? %>
         <div>
-          <label>Suggestions</label>
+          <label class="mb-1">Suggestions</label>
           <% @chat.analysis_next.each do |sugg| %>
             <div data-reflex="click->Chat#suggested" data-id="<%= @chat&.id %>" data-value="<%= sugg %>"
                  class="cursor-pointer hover:text-white mb-2">

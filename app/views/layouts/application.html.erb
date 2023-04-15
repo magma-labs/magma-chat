@@ -13,11 +13,11 @@
     <%= javascript_importmap_tags %>
   </head>
 
-  <body class="min-h-screen flex flex-col">
+  <body class="min-h-screen flex flex-col overflow-clip">
     <div class="flex-1 flex flex-col sm:flex-row">
       <main class="flex-1 flex flex-col h-screen top-0 bottom-0 max-h-[100vh] overflow-y-auto bg-gray-600 scroll-smooth">
         <% if content_for?(:header) %>
-          <header class="bg-gradient-to-r from-orange-500 to-red-600  h-fit sticky top-0 z-10 overflow-hidden shadow-2xl"><%= yield :header %></header>
+          <header class="hidden sm:block bg-gradient-to-r from-orange-500 to-red-600 h-12 sticky top-0 z-10 overflow-hidden shadow-xl"><%= yield :header %></header>
         <% end %>
         <div class="flex-1 max-h-screen overflow-auto"><%= yield %></div>
         <% if content_for?(:footer) %>
@@ -25,22 +25,12 @@
         <% end %>
       </main>
       <nav class="order-first sm:w-[20%] bg-gray-800 bg-gradient-to-l from-gray-900 text-gray-300 flex
-                  sm:flex-col gap-3 py-1 px-2 sm:p-3 items-start items h-12 sm:h-screen sticky sm:relative
-                  sm:overflow-y-auto sm:max-h-screen">
-        <div class="text-lg font-medium flex items-center gap-3 pb-[1rem] border-b border-b-gray-700 w-full">
-          <%= image_tag "logo.png", class: "w-5 object-fit m-auto" %>
-          <span class="flex-1">Latest <span class="hidden md:inline">Chats</span></span>
-          <a href="/chats/new" class="text-gray-400 hover:text-gray-200 pr-3">➕</a>
-        </div>
-        <%= render Chat.order(created_at: :desc).limit(10) %>
-        <% if current_user %>
-          <%= link_to "Sign out", "/logout", class: "text-gray-400 hover:text-gray-200" %>
-        <% else %>
-          <%= button_to "Sign in with Google", "/auth/google_oauth2" %>
-        <% end %>
+            sm:flex-col gap-3 py-1 px-2 sm:p-3 items-center sm:items-start h-12 sm:h-screen sm:relative
+            sm:overflow-y-auto sm:max-h-screen">
+        <%= render "nav" %>
       </nav>
-       <% if content_for?(:right) %>
-        <aside class="sm:w-[20%] bg-gray-900"><%= yield :right %></aside>
+      <% if content_for?(:right) %>
+        <aside class="hidden sm:block sm:w-[20%] bg-gray-900"><%= yield :right %></aside>
       <% end %>
     </div>
   </body>

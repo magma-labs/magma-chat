@@ -7,6 +7,10 @@ class Chat < ApplicationRecord
   # todo: is there a way to send and persist inner voice chat messages with instructions for GPT?
   # for example: why haven't you sent the analysis yet
 
+  def analysis
+    super.deep_symbolize_keys
+  end
+
   def prompt(message: title, visible: true)
     Rails.logger.info("PROMPT: #{message}")
     if visible
@@ -27,17 +31,21 @@ class Chat < ApplicationRecord
     prompt(message: prompt_message, visible: true)
   end
 
+  def summary
+    analysis[:summary]
+  end
+
   def transcript_with_instructions
     [{role: "user", content: instructions.strip },
      {role: "assistant", content: "Okay! I will append a JSON object surrounded by ~~~ to my normal responses."}] + transcript
   end
 
   def analysis_next
-    analysis["next"] || []
+    analysis[:next] || []
   end
 
   def tags
-    analysis["tags"]
+    analysis[:tags].presence || []
   end
 
   private

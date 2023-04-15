@@ -1,9 +1,30 @@
-<% content_for :right do %>
-  <div class="w-[20%]">
-
+<div class="space-y-4">
+  <div class="flex justify-between items-center gap-4 shadow sticky top-0 z-50 bg-slate-800 p-3">
+    <h1 class="text-2xl font-medium">Chats</h1>
+    <input type="text" placeholder="Search..." autocomplete="off"
+           class="rounded-md bg-gray-400 border-gray-200 border-2 text-gray-800 p-1 w-28 focus:bg-white focus:flex-1 focus:pr-12">
+    <div class="absolute right-4 opacity-60">🔎</div>
   </div>
-<% end %>
-
-<% content_for :footer do %>
-  <%= render "chats/footer" %>
-<% end %>
+  <div class="flex flex-col gap-2 px-3 pb-12">
+    <% @chats.each do |chat| %>
+      <div class="flex justify-between items-center card clickable-region">
+        <div class="flex gap-2 items-center">
+          <div class="flex flex-col">
+            <div class="text-gray-800 font-medium"><%= link_to chat.title, [chat], class: "region-link" %></div>
+            <% if chat.summary.present? %>
+              <div class="text-sm text-gray-600">
+                <%= chat.summary %>
+                <% chat.tags.each do |tag| %>
+                  <%= "##{tag}" %>&nbsp;
+                <% end %>
+              </div>
+            <% end %>
+            <div class="text-xs text-gray-500 mt-1">
+              <%= chat.created_at.strftime("%b %d, %Y") %> -
+              <%= chat.transcript.count %> messages
+            </div>
+          </div>
+        </div>
+      </div>
+    <% end %>
+</div>

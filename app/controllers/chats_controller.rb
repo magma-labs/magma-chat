@@ -1,9 +1,11 @@
 class ChatsController < ApplicationController
   # send not found to new
+  before_action :require_user
   rescue_from ActiveRecord::RecordNotFound, with: :index
 
+
   def index
-    redirect_to [:new, :chat]
+    @chats ||= current_user.chats.order("updated_at DESC")
   end
 
   def create

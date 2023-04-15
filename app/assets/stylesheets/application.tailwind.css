@@ -22,7 +22,7 @@ body {
     @apply inline-block font-medium tracking-wider rounded shadow py-2 px-4 text-white cursor-pointer;
   }
   .btn-primary {
-    @apply btn bg-teal-600 hover:bg-teal-500;
+    @apply btn bg-orange-500 hover:bg-orange-400;
   }
   .btn-secondary {
     @apply btn bg-indigo-600 hover:bg-indigo-500;
@@ -40,7 +40,7 @@ body {
     @apply bg-gray-400 cursor-not-allowed !important;
   }
   .card {
-    @apply bg-white rounded shadow p-4;
+    @apply bg-gray-200 hover:bg-white rounded shadow p-3;
   }
   .tag {
     @apply bg-gray-700 text-xs inline-block rounded-md py-1 px-2 mt-1 mb-1 mr-2 text-gray-300

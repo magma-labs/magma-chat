@@ -20,7 +20,6 @@ class ChatReflex < StimulusReflex::Reflex
 
   def toggle_grow(_, checked)
     chat.update!(grow: checked)
-    morph :nothing
   end
 
   def destroy
