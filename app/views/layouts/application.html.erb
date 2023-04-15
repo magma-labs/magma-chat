@@ -17,7 +17,7 @@
     <div class="flex-1 flex flex-col sm:flex-row">
       <main class="flex-1 flex flex-col h-screen top-0 bottom-0 max-h-[100vh] overflow-y-auto bg-gray-600 scroll-smooth">
         <% if content_for?(:header) %>
-          <header class="bg-gray-600 h-fit sticky top-0 z-10 overflow-hidden shadow-xl"><%= yield :header %></header>
+          <header class="bg-gradient-to-r from-orange-500 to-red-600  h-fit sticky top-0 z-10 overflow-hidden shadow-2xl"><%= yield :header %></header>
         <% end %>
         <div class="flex-1 max-h-screen overflow-auto"><%= yield %></div>
         <% if content_for?(:footer) %>
@@ -32,10 +32,10 @@
           <span class="flex-1">Latest <span class="hidden md:inline">Chats</span></span>
           <a href="/chats/new" class="text-gray-400 hover:text-gray-200 pr-3">➕</a>
         </div>
-        <%= render Chat.order(created_at: :desc).limit(100) %>
+        <%= render Chat.order(created_at: :desc).limit(10) %>
       </nav>
        <% if content_for?(:right) %>
-        <aside class="sm:w-[20%] bg-gray-800"><%= yield :right %></aside>
+        <aside class="sm:w-[20%] bg-gray-900"><%= yield :right %></aside>
       <% end %>
     </div>
   </body>

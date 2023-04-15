@@ -1,6 +1,6 @@
 <% content_for :header do %>
   <%= cable_ready_updates_for @chat do %>
-    <div class="h-14 p-3 text-lg font-medium shadow-lg text-ellipsis overflow-hidden whitespace-nowrap" style="background-color:rgb(55 65 81)">
+    <div class="h-14 pl-2 sm:p-3 text-lg font-medium shadow-lg text-ellipsis overflow-hidden whitespace-nowrap">
       <%= @chat.title %>
     </div>
   <% end %>
@@ -59,9 +59,7 @@
           <label class="mb-1">Tags</label>
           <div>
             <% @chat.tags.each do |tag| %>
-              <span class="bg-gray-700 text-xs inline-block rounded-md py-1 px-3 mb-2 mr-2 text-gray-300">
-                <%= tag %>
-              </span>
+              <span class="tag"><%= tag %></span>
             <% end %>
           </div>
         </div>

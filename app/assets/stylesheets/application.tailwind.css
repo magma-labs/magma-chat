@@ -42,6 +42,9 @@ body {
   .card {
     @apply bg-white rounded shadow p-4;
   }
+  .tag {
+    @apply bg-gray-700 text-xs inline-block rounded-md py-1 px-2 mt-1 mb-1 mr-2 text-gray-300
+  }
 
   .analysis label {
     @apply text-gray-500 block text-xs;
@@ -73,5 +76,9 @@ body {
 
     /* Place on top of each other */
     grid-area: 1 / 1 / 2 / 2;
+  }
+
+  .chatnav.active {
+    @apply text-orange-400 font-medium;
   }
 }
