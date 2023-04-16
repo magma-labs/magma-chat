@@ -14,6 +14,10 @@ class ChatsController < ApplicationController
     end
   end
 
+  def search
+    @search = Search.chats(params[:q])
+  end
+
   def show
     @chat ||= Chat.find(params[:id])
     if @chat.id != params[:id]

@@ -1,6 +1,10 @@
 Rails.application.routes.draw do
   resources :home, only: [:index]
-  resources :chats
+  resources :chats do
+    collection do
+      post :search
+    end
+  end
 
   get "/auth/:provider/callback", to: "sessions#create"
   get "/logout", to: "sessions#destroy", as: :logout

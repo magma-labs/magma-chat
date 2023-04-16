@@ -3,9 +3,10 @@ class Chat < ApplicationRecord
 
   belongs_to :user
 
-  enable_cable_ready_updates on: [:update]
-
   after_commit :prompt!, on: :create
+  after_commit :reindex, on: :update
+
+  enable_cable_ready_updates on: [:update]
 
   def analysis
     super.deep_symbolize_keys
@@ -32,6 +33,18 @@ class Chat < ApplicationRecord
     transcript.pop # remove the last GPT response
     last_prompt = transcript.pop.deep_symbolize_keys # remove the last user prompt
     prompt!(message: last_prompt[:content], user: last_prompt[:user])
+  end
+
+  def reindex
+    ChatReindexJob.perform_later(self)
+  end
+
+  def language
+    analysis[:language]
+  end
+
+  def sentiment
+    analysis[:sentiment]
   end
 
   def summary
@@ -61,16 +74,15 @@ class Chat < ApplicationRecord
 
   def instructions
     <<-INSTRUCTIONS
-    At the end of every reply, you must append a JSON object wrapped in ~~~ to the end containing the following keys:
+    At the end of every reply, you must append a JSON object wrapped in ~~~ with
+    the following keys containing an analysis of the conversation so far:
 
-    `title`: an appropriate title for the conversation so far
-    `summary`: a paragraph summarizing the conversation so far
-    `sentiment`: a 1 word sentiment analysis of the conversation so far
-    `language`: the human or programming language used in this conversation
-    `tags`: an array of lowercase tags for categorizing the conversation
-    `next`: an array of suggested potential next prompts from the user (optional, if it makes sense)
-
-    When you send this information you must only send the JSON object wrapped in ~~~ without annotations or any other text about it or I will be upset.
+    `title`: an appropriate title
+    `summary`: one paragraph summary
+    `sentiment`: one word sentiment analysis
+    `language`: primary human or programming language used
+    `tags`: array of lowercase tags for categorizing the conversation
+    `next`: array of possible followup questions from the user
 
     INSTRUCTIONS
   end

@@ -1,13 +1,14 @@
 <div class="space-y-4">
-  <div class="flex justify-between items-center gap-4 shadow sticky top-0 z-50 bg-slate-800 p-3">
+  <%= form_for :search, url: "/chats/search", class: "flex justify-between items-center gap-4 shadow sticky top-0 z-50 bg-slate-800 p-3" do |f| %>
     <h1 class="text-2xl font-medium">Chats</h1>
-    <input type="text" placeholder="Search..." autocomplete="off"
-           class="rounded-md bg-gray-400 border-gray-200 border-2 text-gray-800 p-1 w-28 focus:bg-white focus:flex-1 focus:pr-12 transition-all duration-500 transform">
+    <input type="text" placeholder="Search..." autocomplete="off" name="q"
+           class="rounded-md bg-gray-400 border-gray-200 border-2 text-gray-800 p-1 w-28
+                focus:bg-white focus:flex-1 focus:pr-12 transition-all duration-300 transform">
     <div class="absolute right-4 opacity-60">🔎</div>
-  </div>
+  <% end %>
   <div class="flex flex-col gap-2 px-3 pb-12">
     <% @chats.each do |chat| %>
-      <div class="flex justify-between items-center card clickable-region">
+      <div class="flex justify-between items-center card p-3 clickable-region">
         <div class="flex gap-2 items-center">
           <div class="flex flex-col">
             <div class="text-gray-800 font-medium"><%= link_to chat.title, [chat], class: "region-link" %></div>
