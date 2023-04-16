@@ -1,15 +1,17 @@
-<div class="space-y-3 bg-orange-900 h-full">
+<div class="space-y-3 bg-gray-700 h-full">
   <%= form_for :search, url: "/chats/search", class: "flex justify-between items-center gap-4 shadow sticky top-0 z-50 bg-slate-800 p-3" do |f| %>
-    <h1 class="text-2xl font-medium">Search</h1>
-    <input type="text" name="q" value="<%= @search.query %>" onblur="this.parentNode.submit()"
+    <input type="text" name="q" value="<%= @search.query %>" onchange="this.parentNode.submit()"
            data-controller="focus" autocomplete="off" placeholder="Search..."
            class="rounded-md border-gray-200 border-2 text-gray-800 p-1 flex-1 bg-white pr-12">
     <div class="absolute right-5 opacity-60 cursor pointer">🔎</div>
   <% end %>
-  <div class="flex flex-col gap-2 px-3 pb-12">
-    <div class="p-1 italic text-gray-300">Found <%= @search.results.count %> matching conversations</div>
+  <div class="flex flex-col gap-3 px-3 pb-12">
+    <div class="p-1 italic text-gray-300">
+      Found <%= @search.results.count %> conversations matching&nbsp;
+      <strong><%= @search.query %></strong>
+    </div>
     <% @search.results.each do |result| %>
-      <div class="flex-col gap-2 card">
+      <div class="flex-col gap-2 card" data-controller="expando">
         <div class="flex flex-col p-3">
           <div class="flex flex-col">
             <div class="text-gray-800 font-medium"><%= link_to result.chat.title, [result.chat] %></div>
@@ -17,25 +19,31 @@
               <div class="text-sm text-gray-600">
                 <%= result.chat.summary %>
                 <% result.chat.tags.each do |tag| %>
-                  <%= "##{tag}" %>&nbsp;
+                  <%= link_to "##{tag}", tag_path(tag) %>&nbsp;
                 <% end %>
               </div>
             <% end %>
-            <div class="text-xs text-gray-500 mt-1">
+            <div class="text-xs text-gray-500 mt-1 flex gap-2 items-center">
+              <% if result.messages.any? %>
+                <div class="text-gray-700 cursor-pointer" data-action="click->expando#toggle" data-collapsible=".result_messages">▶︎</div>
+              <% end %>
               <%= result.chat.created_at.strftime("%b %d, %Y") %> -
               <%= result.chat.transcript.count %> messages
+              <% if result.messages.any? %>
+                (<%= pluralize result.messages.count, "hit" %>)
+              <% end %>
             </div>
           </div>
         </div>
-        <div class="space-y-2 p-3">
+        <div class="result_messages expando-collapsed space-y-2 px-3 pb-3">
           <% result.messages.each do |message| %>
-            <div class="text-sm text-gray-600 message rounded-md p-2 <%= message.role %> opacity-80 hover:opacity-100">
+            <div class="text-sm text-gray-600 message rounded-md p-2 <%= message.role %> opacity-80 hover:opacity-100 sm:mr-[20%]">
               <%= message.content %>
               <%= link_to "link", [result.chat, { message: message.id.split("-").last }] %>
             </div>
           <% end %>
         </div>
       </div>
-    </div>
-  <% end %>
+    <% end %>
+  </div>
 </div>

@@ -1,6 +1,15 @@
 class User < ApplicationRecord
   has_many :chats, dependent: :destroy
 
+  def tag_cloud(limit: 500)
+    tag_counts = Hash.new(0)
+    chats.select(:analysis).map(&:tags).flatten.each do |tag|
+      tag_counts[tag] += 1
+    end
+    tag_counts.sort_by {|k, v| v}.reverse.take(limit).to_h
+  end
+
+
   def self.from_omniauth(auth)
     auth.deep_symbolize_keys!
     where(oauth_provider: auth[:provider], oauth_uid: auth[:uid]).first_or_create do |user|

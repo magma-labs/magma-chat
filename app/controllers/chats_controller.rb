@@ -15,11 +15,18 @@ class ChatsController < ApplicationController
   end
 
   def search
-    @search = Search.chats(params[:q])
+    # todo: add user scoping as filter
+    @search = ChatSearch.tensor(params[:q])
+  end
+
+  def tag
+    # todo: add user scoping as filter
+    @search = ChatSearch.tag(params[:q])
+    render :search
   end
 
   def show
-    @chat ||= Chat.find(params[:id])
+    @chat ||= current_user.chats.find(params[:id])
     if @chat.id != params[:id]
       redirect_to [@chat]
     end

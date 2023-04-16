@@ -9,12 +9,17 @@ class Marqo
     @auth = auth
   end
 
-  def store(index_name, doc, id)
+  def store(index:, doc:, id:, non_tensor_fields: [])
     options = {
       headers: { 'Content-Type' => 'application/json' },
       body: [doc.merge({_id: id})].to_json
     }
-    self.class.post("/indexes/#{index_name.parameterize}/documents", options).then do |response|
+    url = "/indexes/#{index.parameterize}/documents"
+    if non_tensor_fields.any?
+      field_array = non_tensor_fields.map { |f| "non_tensor_fields=#{f}" }
+      url += "?#{field_array.join("&")}"
+    end
+    self.class.post(url, options).then do |response|
       puts response
       response.dig("items",0,"_id")
     end
@@ -25,6 +30,19 @@ class Marqo
       basic_auth: @auth,
       headers: { 'Content-Type' => 'application/json' },
       body: { q: query, limit: limit }.to_json
+    }
+    self.class.post("/indexes/#{index_name.parameterize}/search", options)
+  end
+
+  def lexsearch(index_name, attributes, query)
+    options = {
+      basic_auth: @auth,
+      headers: { 'Content-Type' => 'application/json' },
+      body: {
+        q: query,
+        searchableAttributes: attributes,
+        searchMethod: "LEXICAL"
+      }.to_json
     }
     self.class.post("/indexes/#{index_name.parameterize}/search", options)
   end

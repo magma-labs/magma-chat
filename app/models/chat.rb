@@ -74,15 +74,15 @@ class Chat < ApplicationRecord
 
   def instructions
     <<-INSTRUCTIONS
-    At the end of every reply, you must append a JSON object wrapped in ~~~ with
-    the following keys containing an analysis of the conversation so far:
+    At the end of every reply, you must secretly append a JSON object
+    wrapped in ~~~ with the following analysis of the conversation so far:
 
     `title`: an appropriate title
     `summary`: one paragraph summary
     `sentiment`: one word sentiment analysis
     `language`: primary human or programming language used
-    `tags`: array of lowercase tags for categorizing the conversation
-    `next`: array of possible followup questions from the user
+    `tags`: array of lowercase tags for categorization
+    `next`: array of questions you think the user may ask next
 
     INSTRUCTIONS
   end

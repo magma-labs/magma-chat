@@ -1,16 +1,32 @@
 <% if current_user %>
   <% @latest_chats = current_user.chats.order(updated_at: :desc).limit(10) %>
-  <div class="text-base font-medium flex items-center gap-3 justify-between w-full p-2 my-2 sm:p-0">
-    <%= link_to(image_tag("logo.png", class: "w-4 object-fit sm:m-auto"), [:chats]) %>
-    <span class="hidden sm:inline text-sm flex-1 text-gray-300">Latest (<%= @latest_chats.length %>)</span>
+  <div class="text-base font-medium flex items-center gap-3 justify-between w-full p-2 my-1 sm:p-0">
+    <%= link_to [:chats], class: "flex gap-3" do %>
+      <%= image_tag("logo.png", class: "w-4 object-fit sm:m-auto") %>
+      <span class="hidden sm:inline text-lg flex-1 text-gray-100 tracking-widest">MagmaChat</span>
+    <% end %>
     <a href="/chats/new" class="text-gray-400 text-sm hover:text-gray-200" title="New chat">➕</a>
   </div>
-  <div class="hidden sm:flex sm:flex-col gap-2"><%= render @latest_chats %></div>
+  <div class="hidden sm:flex sm:flex-col gap-2">
+    <label class="block text-gray-400 font-medium text-xs">Latest Chats (<%= @latest_chats.length %>)</label>
+    <%= render @latest_chats %>
+  </div>
+  <div class="hidden sm:block">
+    <% @tags = current_user.tag_cloud %>
+    <label class="block text-gray-400 font-medium text-xs mb-2">Popular Tags (<%= @tags.length %>)</label>
+    <div style="font-size: 4px">
+      <% @tags.each do |tag, count| %>
+        <%= link_to tag, tag_path(tag), class: "inline-block text-gray-400 px-1 hover:text-yellow-500",
+                                        style: "font-size: #{count_to_em(count)}em;
+                                                font-weight: #{(count*10).clamp(200,500)}" %>
+      <% end %>
+    </div>
+  </div>
   <div class="hidden sm:block mt-auto text-xs px-1 py-2">
     <div class="font-medium">
       <%= current_user.email %>
     </div>
-    <%= link_to "Sign out", "/logout", class: "text-gray-400 hover:text-gray-200 block" %>
+    <%= link_to "Sign out", "/logout", class: "text-gray-400 hover:text-yellow-500 block" %>
   </div>
   <%= link_to "/logout", class: "sm:hidden text-gray-400 hover:text-gray-200 p-2" do %>
     <svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"

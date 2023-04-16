@@ -54,6 +54,12 @@ body {
     @apply text-orange-400 font-medium;
   }
 
+  .expando-collapsed {
+      height: 0;
+      opacity: 0;
+      transition: height 0.2s ease-out, opacity 0.2s ease-out;
+  }
+
   .grow-wrap::after {
     /* Note the weird space! Needed to preventy jumpy behavior */
     content: attr(data-replicated-value) " ";

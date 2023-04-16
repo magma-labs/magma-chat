@@ -6,6 +6,8 @@ Rails.application.routes.draw do
     end
   end
 
+  get "/tag/:q", to: "chats#tag", as: :tag
+
   get "/auth/:provider/callback", to: "sessions#create"
   get "/logout", to: "sessions#destroy", as: :logout
 

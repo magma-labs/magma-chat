@@ -47,7 +47,7 @@ class ChatReflex < StimulusReflex::Reflex
       when /^\/new/
         # assume the title is whatever string supplied after the /new command
         title = value.split("/new").last&.strip.presence || "New Chat"
-        @chat = Chat.create!(title: title, engine: "gpt-3.5-turbo")
+        @chat = current_user.chats.create!(title: title, engine: "gpt-3.5-turbo")
         cable_ready.redirect_to(url: "/chats/#{chat.id}").broadcast
         morph :nothing
       when /^\/delete/

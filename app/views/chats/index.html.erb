@@ -16,7 +16,7 @@
               <div class="text-sm text-gray-600">
                 <%= chat.summary %>
                 <% chat.tags.each do |tag| %>
-                  <%= "##{tag}" %>&nbsp;
+                  <%= link_to "##{tag}", tag_path(tag) %>&nbsp;
                 <% end %>
               </div>
             <% end %>

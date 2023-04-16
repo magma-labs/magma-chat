@@ -1,4 +1,4 @@
-class Search
+class ChatSearch
   attr_reader :results
   attr_reader :query
 
@@ -7,7 +7,7 @@ class Search
     @query = query
   end
 
-  def self.chats(query)
+  def self.tensor(query)
     response = Marqo.client.search("chats", query)
     response.deep_symbolize_keys!
     new(response.dig(:hits).group_by { |hit| hit[:chat_id] }.map { |chat_id, hits|
@@ -20,4 +20,11 @@ class Search
     }, response[:query])
   end
 
+  def self.tag(query)
+    response = Marqo.client.lexsearch("chats", [:tags], query)
+    response.deep_symbolize_keys!
+    new(response.dig(:hits).group_by { |hit| hit[:chat_id] }.map { |chat_id, hits|
+      chat_result = OpenStruct.new(chat: Chat.find(chat_id), messages: [])
+    }, "tag: #{response[:query]}")
+  end
 end
