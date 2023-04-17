@@ -54,13 +54,14 @@ class ChatReflex < StimulusReflex::Reflex
         morph :nothing
       when /^\/delete/
         destroy
-      when /^\/analyze/
-        message = title = value.split("/analyze").last&.strip.presence || "Can you go ahead and provide the analysis JSON now? Don't forget to wrap it in ~~~"
-        chat.prompt!(message: message, visible: false)
       when /^\/clear/
         chat.update!(transcript: [])
       when /^\/regenerate/
         chat.regenerate! # todo: take a temperature argument
+      when /^\/whisper/
+        # message = value.split("/whisper").last&.strip.presence
+        # chat.prompt!(message: message, visible: false)
+        # todo: some mechanism to message the user with a transient pop up response or something
       when /^\/stats/
         # todo: implement
       when /^\/summarize/
