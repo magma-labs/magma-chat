@@ -1,0 +1,13 @@
+chats:
+  analyze: |
+    Analyze the conversation so far and return a JSON object with the following keys:
+
+    `title`: an appropriate title
+    `summary`: one paragraph summary
+    `sentiment`: one word sentiment analysis
+    `language`: primary human or programming language used
+    `tags`: array of lowercase tags for categorization
+    `next`: array of questions you think the user may ask next
+
+    You must ONLY return a valid, well-formatted JSON object
+    that I can parse with no additional conversation or commentary.

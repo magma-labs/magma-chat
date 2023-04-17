@@ -7,6 +7,8 @@ class ChatSearch
     @query = query
   end
 
+  # TODO: Scope searches to user's chats ONLY
+
   def self.tensor(query)
     response = Marqo.client.search("chats", query)
     response.deep_symbolize_keys!

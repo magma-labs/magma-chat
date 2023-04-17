@@ -1,9 +1,11 @@
 class Chat < ApplicationRecord
   attribute :first_message
+  attribute :run_analysis_after_saving, :boolean, default: false
 
   belongs_to :user
 
   after_commit :prompt!, on: :create
+  after_commit :reanalyze, on: :update, if: :run_analysis_after_saving
   after_commit :reindex, on: :update
 
   enable_cable_ready_updates on: [:update]
@@ -35,6 +37,10 @@ class Chat < ApplicationRecord
     prompt!(message: last_prompt[:content], user: last_prompt[:user])
   end
 
+  def reanalyze
+    ChatAnalysisJob.perform_later(self)
+  end
+
   def reindex
     ChatReindexJob.perform_later(self)
   end
@@ -52,10 +58,9 @@ class Chat < ApplicationRecord
   end
 
   def messages_for_gpt
-    [{ role: "user", content: instructions.strip },
-     { role: "assistant", content: "Okay! I will append a JSON object surrounded by ~~~ to my normal responses."} ] + transcript.map do |message|
+    transcript.map do |message|
       { role: message[:role], content: message[:content] }
-     end
+    end
   end
 
   def analysis_next
@@ -68,22 +73,5 @@ class Chat < ApplicationRecord
 
   def transcript
     super.map(&:deep_symbolize_keys)
-  end
-
-  private
-
-  def instructions
-    <<-INSTRUCTIONS
-    At the end of every reply, you must secretly append a JSON object
-    wrapped in ~~~ with the following analysis of the conversation so far:
-
-    `title`: an appropriate title
-    `summary`: one paragraph summary
-    `sentiment`: one word sentiment analysis
-    `language`: primary human or programming language used
-    `tags`: array of lowercase tags for categorization
-    `next`: array of questions you think the user may ask next
-
-    INSTRUCTIONS
   end
 end
