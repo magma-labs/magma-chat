@@ -3,7 +3,7 @@ require 'httparty'
 class Marqo
   include HTTParty
 
-  base_uri 'http://localhost:8882'
+  base_uri ENV.fetch('MARQO_URL', "http://localhost:8882")
 
   def initialize(auth = { username: 'admin', password: 'admin' })
     @auth = auth
