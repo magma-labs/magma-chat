@@ -5,6 +5,8 @@ class Marqo
 
   base_uri ENV.fetch('MARQO_URL', "http://localhost:8882")
 
+  # TODO: Add a way to pass in auth
+
   def initialize(auth = { username: 'admin', password: 'admin' })
     @auth = auth
   end

@@ -11,6 +11,8 @@ class ChatReflex < StimulusReflex::Reflex
   def prompt(message: value)
     slash_filter do
       chat.prompt!(message: message, sender: current_user)
+      # todo: render chats/loading partial into .message #loading div
+      # cable_ready.morph(children_only: true, selector: ".message#loading", html: render(partial: "chats/loading")).broadcast
     end
     morph :nothing
   end

@@ -32,6 +32,9 @@
       </div>
     </div>
   <% end %>
+  <div class="message pt-10 pl-16">
+    <div id="loading" class="text-lg sm:max-w-[70%] mx-auto flex items-start gap-6 relative"><%# = render "loading" %></div>
+  </div>
   <% unless params[:message] %><span data-controller="scroll" data-action="scroll#scroll"></span><% end %>
 <% end %>
 
