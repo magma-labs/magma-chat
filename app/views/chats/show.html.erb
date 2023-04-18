@@ -28,7 +28,7 @@
   <% unless params[:message] || action_name["readonly"] %><span data-controller="scroll" data-action="scroll#scroll"></span><% end %>
 <% end %>
 
-<% if @chat.public_access && current_user %>
+<% if @chat.public_access && current_user == @chat.user %>
 <div class="absolute text-[9vw] text-red-600 opacity-20 font-black z-40 top-[20%] left-[20%] -rotate-45 text-center">
   <div class="my-auto">PUBLIC<br>ACCESS</div>
 </div>
