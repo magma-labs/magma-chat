@@ -10,6 +10,11 @@ export default class extends Controller {
     else {
       this.element.classList.remove("selected")
     }
+    // on double click, put "Hello" in the chat_first_message field and fire its change event
+    this.element.addEventListener("dblclick", (event) => {
+      document.querySelector("#chat_first_message").value = "Hello"
+      document.querySelector("#chat_first_message").dispatchEvent(new Event('change', { bubbles: true }))
+    })
   }
 
   select() {
@@ -23,5 +28,6 @@ export default class extends Controller {
 
   setPlaceholder(name) {
     document.querySelector("#chat_first_message").setAttribute ("placeholder", "Start a new chat with the " + name)
+    document.querySelector("#chat_first_message").focus()
   }
 }

@@ -1,3 +1,20 @@
+# == Schema Information
+#
+# Table name: users
+#
+#  id               :uuid             not null, primary key
+#  name             :string           default(""), not null
+#  email            :string           not null
+#  image_url        :string
+#  oauth_uid        :string           not null
+#  oauth_provider   :string           not null
+#  oauth_token      :string
+#  oauth_expires_at :datetime
+#  chats_count      :integer          default(0), not null
+#  created_at       :datetime         not null
+#  updated_at       :datetime         not null
+#  admin            :boolean          default(FALSE), not null
+#
 class User < ApplicationRecord
   has_many :chats, dependent: :destroy
 

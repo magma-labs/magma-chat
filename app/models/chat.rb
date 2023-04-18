@@ -1,3 +1,18 @@
+# == Schema Information
+#
+# Table name: chats
+#
+#  id         :uuid             not null, primary key
+#  title      :string           not null
+#  engine     :string           not null
+#  transcript :jsonb            not null
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#  analysis   :jsonb            not null
+#  grow       :boolean          default(FALSE), not null
+#  user_id    :uuid             default("b48d0808-271f-451e-a190-8610009df363"), not null
+#  bot_id     :uuid
+#
 class Chat < ApplicationRecord
   attribute :first_message
   attribute :run_analysis_after_saving, :boolean, default: false
