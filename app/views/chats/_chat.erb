@@ -1,15 +1,14 @@
-<%= link_to chat_path(chat), class: "chatnav flex items-start gap-3 w-full #{@chat == chat ? "active" : ""}" do %>
-  <svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"
-       class="h-4 w-4 mt-1" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg">
-    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-  </svg>
+<%= link_to chat_path(chat), class: "chatnav flex items-start gap-0 w-full #{@chat == chat ? "active" : ""}" do %>
+  <%= image_tag chat.bot.image_url, class: "w-10 h-8 object-cover -ml-3" %>
   <div class="flex flex-col flex-1 w-full">
     <div class="flex justify-stretch flex-1 max-h-[60px] md:max-h-[22px] text-ellipsis overflow-hidden break-all relative">
       <div class="w-full text-gray-400 text-sm hover:text-yellow-500"><%= chat.title.capitalize %></div>
       <div class="absolute inset-y-0 right-0 w-8 z-10 bg-gradient-to-l from-gray-900"></div>
     </div>
-    <div class="text-gray-600 text-sm flex gap-2 items-center">
-      <span><%= distance_of_time_in_words_to_now(chat.created_at) %> ago</span>
+    <div class="text-gray-600 text-xs flex gap-2 items-center">
+      <span>
+        <%= chat.bot.name %>
+        <%= distance_of_time_in_words_to_now(chat.created_at) %> ago</span>
       <svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"
            class="h-4 w-4 hover:text-red-500" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"
            data-reflex="click->Chat#destroy" data-id="<%= chat.id %>">

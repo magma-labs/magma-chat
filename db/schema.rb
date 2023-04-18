@@ -10,9 +10,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_04_17_211010) do
+ActiveRecord::Schema[7.0].define(version: 2023_04_17_234133) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "bots", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "name", null: false
+    t.text "directive", default: "", null: false
+    t.text "description"
+    t.integer "auto_archive_mins", default: 0, null: false
+    t.integer "chats_count", default: 0, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["name"], name: "index_bots_on_name"
+  end
 
   create_table "chats", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "title", null: false
@@ -23,6 +34,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_17_211010) do
     t.jsonb "analysis", default: {}, null: false
     t.boolean "grow", default: false, null: false
     t.uuid "user_id", default: "b48d0808-271f-451e-a190-8610009df363", null: false
+    t.uuid "bot_id"
+    t.index ["bot_id"], name: "index_chats_on_bot_id"
     t.index ["engine"], name: "index_chats_on_engine"
     t.index ["title"], name: "index_chats_on_title"
     t.index ["user_id"], name: "index_chats_on_user_id"
@@ -54,6 +67,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_17_211010) do
     t.integer "chats_count", default: 0, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "admin", default: false, null: false
   end
 
 end

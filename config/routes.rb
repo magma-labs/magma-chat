@@ -1,5 +1,8 @@
 Rails.application.routes.draw do
   resources :home, only: [:index]
+
+  resources :bots
+
   resources :chats do
     collection do
       post :search

@@ -3,13 +3,16 @@ class ChatsController < ApplicationController
   before_action :require_user
   rescue_from ActiveRecord::RecordNotFound, with: :index
 
-
   def index
     @chats ||= current_user.chats.order("updated_at DESC")
   end
 
+  def new
+    @chat = current_user.chats.new
+  end
+
   def create
-    current_user.chats.create!(title: chat_params[:first_message], engine: chat_params[:engine]).then do |chat|
+    current_user.chats.create!(chat_params).then do |chat|
       redirect_to [chat]
     end
   end
@@ -35,6 +38,6 @@ class ChatsController < ApplicationController
   private
 
   def chat_params
-    params.require(:chat).permit(:first_message, :engine)
+    params.require(:chat).permit(:first_message, :engine, :bot_id)
   end
 end

@@ -3,8 +3,11 @@ class Chat < ApplicationRecord
   attribute :run_analysis_after_saving, :boolean, default: false
 
   belongs_to :user
+  belongs_to :bot, optional: true, counter_cache: true
 
-  after_commit :prompt!, on: :create
+  before_create :set_title
+
+  after_commit :prompt!, on: :create, if: :first_message
   after_commit :reanalyze, on: :update, if: :run_analysis_after_saving
   after_commit :reindex, on: :update
 
@@ -14,7 +17,19 @@ class Chat < ApplicationRecord
     super.deep_symbolize_keys
   end
 
-  def prompt!(message: title, visible: true, sender: user)
+  def bot
+    super || Bot.default
+  end
+
+  def bot_id
+    super || Bot.default.id
+  end
+
+  def directive
+    bot.directive
+  end
+
+  def prompt!(message: first_message, visible: true, sender: user)
     Rails.logger.info("PROMPT: #{message}")
     if visible
       if sender.kind_of? User
@@ -74,4 +89,15 @@ class Chat < ApplicationRecord
   def transcript
     super.map(&:deep_symbolize_keys)
   end
+
+  private
+
+  def set_title
+    if first_message.blank?
+      self.title = "Conversation with #{bot.name}"
+    else
+      self.title = first_message
+    end
+  end
+
 end
