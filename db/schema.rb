@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_04_17_234133) do
+ActiveRecord::Schema[7.0].define(version: 2023_04_18_164756) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -22,7 +22,10 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_17_234133) do
     t.integer "chats_count", default: 0, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "type", default: "Bot", null: false
+    t.jsonb "properties", default: {}, null: false
     t.index ["name"], name: "index_bots_on_name"
+    t.index ["type"], name: "index_bots_on_type"
   end
 
   create_table "chats", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
