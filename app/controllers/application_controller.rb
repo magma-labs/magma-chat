@@ -9,11 +9,6 @@ class ApplicationController < ActionController::Base
     session[:user_id] && User.find_by(id: session[:user_id])
   end
 
-  def require_admin
-    require_user
-    redirect_to root_path unless current_user.admin
-  end
-
   def require_user
     if current_user
       cookies.encrypted[:user_id] = current_user&.id

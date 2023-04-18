@@ -45,11 +45,11 @@ class Chat < ApplicationRecord
     ChatPromptJob.perform_later(self, message, visible)
   end
 
-  def regenerate!
+  def redo!(message)
     # todo: delete the last response and prompt again with the same message
     transcript.pop # remove the last GPT response
     last_prompt = transcript.pop.deep_symbolize_keys # remove the last user prompt
-    prompt!(message: last_prompt[:content], user: last_prompt[:user])
+    prompt!(message: message.presence || last_prompt[:content], sender: last_prompt[:user])
   end
 
   def reanalyze

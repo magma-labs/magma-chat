@@ -37,7 +37,7 @@
 <% end %>
 
 <% content_for :right do %>
-  <%= cable_ready_updates_for @chat, html_options: { class: "p-3 md:p-5 analysis text-sm space-y-2 w-full h-full text-gray-300 flex flex-col gap-2 z-10 absolute" } do %>
+  <%= cable_ready_updates_for @chat, html_options: { class: "p-4 analysis text-sm space-y-2 w-full h-full text-gray-300 flex flex-col gap-2 z-10 absolute" } do %>
     <% unless @chat.analysis.blank? %>
       <% unless @chat.analysis[:summary].blank? %>
         <div>
@@ -80,7 +80,7 @@
       <% end %>
     <% end %>
   <% end %>
-  <%= image_tag @chat.bot.image_url, class: "object-fit absolute bottom-0 opacity-80" %>
+  <%= image_tag @chat.bot.image_url, class: "object-fit absolute bottom-0 opacity-60" %>
 <% end %>
 
 <% content_for :footer do %>

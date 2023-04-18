@@ -1,0 +1,50 @@
+<%= form_with(model: @bot, local: true) do |form| %>
+  <div class="container mx-auto">
+    <%= link_to [:bots], class: "flex gap-3 items-center" do %>
+      <%= image_tag("logo.png", class: "w-12 object-fit sm:m-auto") %>
+      <span class="hidden sm:inline text-2xl flex-1 text-gray-100 tracking-widest text-gray-950">MagmaChat</span>
+    <% end %>
+    <div class="flex border-b-2 border-black items-end mb-6">
+      <div class="flex-1 flex flex-col gap-4 pt-12">
+        <div class="">
+          <%= form.label :name, class: "block text-gray-700 text-sm font-bold mb-2" %>
+          <%= form.text_field :name, class: " border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" %>
+        </div>
+        <div class="pb-2">
+          <%= form.label :description, class: "block text-gray-700 text-sm font-bold mb-2" %>
+          <%= form.text_area :description, rows: 3, class: " border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" %>
+        </div>
+      </div>
+      <div class="">
+        <%= image_tag @bot.image_url, class: "object-cover w-32 sm:w-72" %>
+      </div>
+    </div>
+    <div class="">
+      <div class="mb-4">
+        <%= form.label :directive, class: "block text-gray-700 text-sm font-bold mb-2" %>
+        <%= form.text_area :directive, rows: 6, class: "shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" %>
+        <div class="text-gray-500 text-sm">The prompt sent to GPT to set the role of the assistant whenever a new conversation is started.</div>
+      </div>
+      <div class="mb-4">
+        <div class="mb-4">
+          <label for="bot_auto_archive_mins" class="block text-gray-700 text-sm font-bold mb-2">
+            Auto Archive (<output id="auto_archive_mins_output"><%= @bot.auto_archive_mins %> mins</output>)
+          </label>
+          <input type="range" name="bot[auto_archive_mins]" id="bot_auto_archive_mins" min="0" max="60" step="1"
+                 oninput="document.getElementById('auto_archive_mins_output').innerText = this.value + ' mins'"
+                 list="auto_archive_mins_stops" value="<%= @bot.auto_archive_mins %>"/>
+          <datalist id="auto_archive_mins_stops">
+            <option value="0">Disabled</option>
+            <option value="5">5</option>
+            <option value="20">20</option>
+            <option value="60">60</option>
+          </datalist>
+          <div class="text-gray-500 text-sm max-w-prose">Useful for task-oriented, one or few-shot interactions like translators. Sets a time period after which the conversation will be automatically archived. Leave at 0 to disable.</div>
+        </div>
+      </div>
+      <div class="flex">
+        <%= form.submit "Save Changes", class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" %>
+      </div>
+    </div>
+  </div>
+<% end %>

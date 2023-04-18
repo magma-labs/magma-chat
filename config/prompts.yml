@@ -1,6 +1,6 @@
 chats:
   analyze: |
-    Analyze the conversation so far and return a JSON object with the following keys:
+    Analyze the conversation so far and return ONLY a JSON object with the following keys:
 
     `title`: an appropriate title
     `summary`: one paragraph summary
@@ -11,3 +11,4 @@ chats:
 
     You must ONLY return a valid, well-formatted JSON object
     that I can parse with no additional conversation or commentary.
+    Do NOT wrap the JSON code in markdown tags.

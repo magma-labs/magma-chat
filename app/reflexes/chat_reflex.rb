@@ -56,8 +56,9 @@ class ChatReflex < StimulusReflex::Reflex
         destroy
       when /^\/clear/
         chat.update!(transcript: [])
-      when /^\/regenerate/
-        chat.regenerate! # todo: take a temperature argument
+      when /^\/redo/
+        message = value.split("/redo").last&.strip
+        chat.redo!(message)
       when /^\/whisper/
         # message = value.split("/whisper").last&.strip.presence
         # chat.prompt!(message: message, visible: false)
