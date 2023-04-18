@@ -25,7 +25,7 @@
   <div class="message pt-10 pl-16">
     <div id="loading" class="text-lg sm:max-w-[70%] mx-auto flex items-start gap-6 relative"><%# = render "loading" %></div>
   </div>
-  <% unless params[:message] %><span data-controller="scroll" data-action="scroll#scroll"></span><% end %>
+  <% unless params[:message] || action_name["readonly"] %><span data-controller="scroll" data-action="scroll#scroll"></span><% end %>
 <% end %>
 
 <% if @chat.public_access && current_user %>
