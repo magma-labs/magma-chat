@@ -15,11 +15,18 @@
            data-action="input->autocomplete#input blur->autocomplete#blur"
            data-reflex="change->Chat#prompt" data-id="<%= @chat&.id %>"/>
   <% end %>
-  <div class="py-1 px-2 text-xs text-gray-400 flex justify-start items-center">
-    <input id="grow" type="checkbox" class="bg-gray-400 m-1 mr-2 rounded-sm"
-            <%= @chat.grow ? 'checked' : '' %> data-id="<%= @chat&.id %>"
-            data-controller="grow" data-action="click->grow#toggle"/>
-    <span>Multiple line input (cmd+enter to send)</span>
+  <div class="py-1 px-2 text-xs text-gray-400 flex justify-between items-center">
+    <div>
+      <input id="grow" type="checkbox" class="bg-gray-400 m-1 mr-2 rounded-sm"
+              <%= @chat.grow ? 'checked' : '' %> data-id="<%= @chat&.id %>"
+              data-controller="grow" data-action="click->grow#toggle"/>
+      <span>Multiple line input (cmd+enter to send)</span>
+    </div>
+    <% if @chat.public_access? %>
+      <%= link_to readonly_url(@chat), readonly_url(@chat),
+                  data: { controller: "clipboard", action: "click->clipboard#href" },
+                  class: "font-medium text-yellow-500", target: "_blank" %>
+    <% end %>
   </div>
 </div>
 <div id="autocompleteList"
@@ -33,6 +40,17 @@
     <div><span class="font-medium">/redo</span> <em class="pl-2 text-gray-300">revised prompt</em></div>
     <div class="text-gray-500 text-xs">Discard the last prompt and try again</div>
   </div>
+  <% if @chat.public_access? %>
+    <div data-name="/private">
+      <div><span class="font-medium">/private</span>
+      <div class="text-gray-500 text-xs">Make this conversation private again</div>
+    </div>
+  <% else %>
+    <div data-name="/public">
+      <div><span class="font-medium">/public</span>
+      <div class="text-gray-500 text-xs">Make this conversation public</div>
+    </div>
+  <% end %>
   <div data-name="/clear">
     <div><span class="font-medium">/clear</span></div>
     <div class="text-gray-500 text-xs">Clear the current conversation transcript</div>

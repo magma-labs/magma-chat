@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_04_18_164756) do
+ActiveRecord::Schema[7.0].define(version: 2023_04_18_223407) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -38,8 +38,10 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_18_164756) do
     t.boolean "grow", default: false, null: false
     t.uuid "user_id", default: "b48d0808-271f-451e-a190-8610009df363", null: false
     t.uuid "bot_id"
+    t.boolean "public_access", default: false, null: false
     t.index ["bot_id"], name: "index_chats_on_bot_id"
     t.index ["engine"], name: "index_chats_on_engine"
+    t.index ["public_access"], name: "index_chats_on_public_access"
     t.index ["title"], name: "index_chats_on_title"
     t.index ["user_id"], name: "index_chats_on_user_id"
   end

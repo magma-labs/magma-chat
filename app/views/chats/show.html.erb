@@ -28,6 +28,12 @@
   <% unless params[:message] %><span data-controller="scroll" data-action="scroll#scroll"></span><% end %>
 <% end %>
 
+<% if @chat.public_access && current_user %>
+<div class="absolute text-[9vw] text-red-600 opacity-20 font-black z-40 top-[20%] left-[20%] -rotate-45 text-center">
+  <div class="my-auto">PUBLIC<br>ACCESS</div>
+</div>
+<% end %>
+
 <% content_for :right do %>
   <%= cable_ready_updates_for @chat, html_options: { class: "p-4 analysis text-sm space-y-2 w-full h-full text-gray-300 flex flex-col gap-2 z-10 absolute" } do %>
     <div>
@@ -67,7 +73,8 @@
         <div>
           <label class="mb-1">Suggestions</label>
           <% @chat.analysis_next.each do |sugg| %>
-            <div data-reflex="click->Chat#suggested" data-id="<%= @chat&.id %>" data-value="<%= sugg %>"
+            <div data-id="<%= @chat&.id %>" data-value="<%= sugg %>"
+                 <% if current_user %>data-reflex="click->Chat#suggested"<% end %>
                  class="cursor-pointer hover:text-white mb-2">
                 <%= sugg %>
             </div>
@@ -81,5 +88,5 @@
 <% end %>
 
 <% content_for :footer do %>
-  <%= render "chats/footer" %>
+  <%= render "chats/footer" if current_user %>
 <% end %>

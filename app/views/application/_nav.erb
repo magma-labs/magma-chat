@@ -1,5 +1,4 @@
-<% if current_user %>
-  <% @latest_chats = current_user.chats.order(updated_at: :desc).limit(10) %>
+<% if current_user && @latest_chats %>
   <div class="text-base font-medium flex items-center gap-3 justify-between w-full p-2 my-1 sm:p-0">
     <%= link_to [:chats], class: "flex gap-3" do %>
       <%= image_tag("logo.png", class: "w-4 object-fit sm:m-auto") %>

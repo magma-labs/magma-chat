@@ -59,6 +59,12 @@ class ChatReflex < StimulusReflex::Reflex
       when /^\/redo/
         message = value.split("/redo").last&.strip
         chat.redo!(message)
+      when /^\/public/
+        chat.update!(public_access: true)
+        cable_ready.redirect_to(url: "/chats/#{chat.id}").broadcast
+      when /^\/private/
+        chat.update!(public_access: false)
+        cable_ready.redirect_to(url: "/chats/#{chat.id}").broadcast
       when /^\/whisper/
         # message = value.split("/whisper").last&.strip.presence
         # chat.prompt!(message: message, visible: false)
@@ -70,7 +76,6 @@ class ChatReflex < StimulusReflex::Reflex
       when /^\/help/
         # todo: implement
       end
-
     else
       yield
     end

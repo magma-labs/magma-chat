@@ -3,15 +3,20 @@
 # Table name: bots
 #
 #  id                :uuid             not null, primary key
-#  name              :string           not null
-#  directive         :text             default(""), not null
-#  description       :text
 #  auto_archive_mins :integer          default(0), not null
 #  chats_count       :integer          default(0), not null
+#  description       :text
+#  directive         :text             default(""), not null
+#  name              :string           not null
+#  properties        :jsonb            not null
+#  type              :string           default("Bot"), not null
 #  created_at        :datetime         not null
 #  updated_at        :datetime         not null
-#  type              :string           default("Bot"), not null
-#  properties        :jsonb            not null
+#
+# Indexes
+#
+#  index_bots_on_name  (name)
+#  index_bots_on_type  (type)
 #
 class Bot < ApplicationRecord
   has_many :chats, dependent: :nullify
