@@ -32,7 +32,9 @@
         </nav>
       <% end %>
       <% if content_for?(:right) %>
-        <aside class="hidden sm:block sm:w-[20%] bg-gray-900 relative"><%= yield :right %></aside>
+        <aside class="sm:w-[20%] bg-gray-900 relative h-16 sm:h-screen overflow-clip">
+          <%= yield :right %>
+        </aside>
       <% end %>
     </div>
   </body>
