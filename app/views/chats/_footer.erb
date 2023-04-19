@@ -2,7 +2,7 @@
   <% if @chat.grow %>
     <div class="grow-wrap grid">
       <textarea id="prompt_textarea" type="text" class="w-full rounded-md bg-gray-700 text-white pl-3"
-            placeholder="Send a message..." autocomplete="off" rows="1"
+            placeholder="Send a message or type '/' for more options..." autocomplete="off" rows="1"
             onKeyUp="this.parentNode.dataset.replicatedValue = this.value"
             data-controller="autocomplete chat"
             data-action="input->autocomplete#input blur->autocomplete#blur keydown->chat#keydown"
@@ -10,7 +10,7 @@
     </div>
   <% else %>
     <input id="prompt_text" type="text" class="w-full rounded-md bg-gray-700 text-white p-[16px]"
-           placeholder="Send a message..." autocomplete="off"
+           placeholder="Send a message or type '/' for more options..." autocomplete="off"
            data-controller="autocomplete chat"
            data-action="input->autocomplete#input blur->autocomplete#blur"
            data-reflex="change->Chat#prompt" data-id="<%= @chat&.id %>"/>
@@ -23,9 +23,13 @@
       <span>Multiple line input (cmd+enter to send)</span>
     </div>
     <% if @chat.public_access? %>
-      <%= link_to readonly_url(@chat), readonly_url(@chat),
-                  data: { controller: "clipboard", action: "click->clipboard#href" },
-                  class: "font-medium text-yellow-500", target: "_blank" %>
+      <div>
+        Available to public at
+        <%= link_to "this URL", readonly_url(@chat),
+                    data: { controller: "clipboard", action: "click->clipboard#href" },
+                    class: "font-medium text-yellow-500", target: "_blank" %>
+        (click to copy)
+      </div>
     <% end %>
   </div>
 </div>
