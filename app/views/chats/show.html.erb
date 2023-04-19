@@ -10,30 +10,8 @@
   <% end %>
 <% end %>
 
-<%= cable_ready_updates_for @chat, html_options: { class: "flex flex-col gap-0" } do %>
-  <% @chat.transcript.each_with_index do |message, index| %>
-    <div class="message <%= message[:role] %> w-full p-4 <%= "highlight" if params[:message] == index.to_s %>">
-      <div class="text-lg sm:max-w-[70%] mx-auto flex items-start gap-6">
-        <% if message[:role]["user"] %>
-          <div class="flex-shrink-0 relative h-[36px] w-[36px] rounded-sm text-white flex items-center justify-center mt-1">
-            <img src="<%= message.dig(:user, :image_url) %>" alt="" class="object-fit rounded-md">
-          </div>
-        <% else %>
-          <div class="relative h-[36px] w-[36px] rounded-md text-white flex items-center justify-center mt-1" style="background-color: rgb(16, 163, 127);">
-            <%= image_tag @chat.bot.image_url, class: "object-cover" %>
-          </div>
-        <% end %>
-        <div class="flex-1 max-w-full">
-          <%= markdown(message[:content]) %>
-          <div class="text-gray-500 text-xs">
-            <%= message.dig(:user, :name) %>
-            <%= "#{distance_of_time_in_words_to_now(Time.at(message.dig(:timestamp)))} ago" if message.dig(:timestamp) %>
-            <% if params[:message] == index %><span data-controller="scroll" data-action="scroll#scroll"></span><% end %>
-          </div>
-        </div>
-      </div>
-    </div>
-  <% end %>
+<%= cable_ready_updates_for @chat, :messages, html_options: { class: "flex flex-col gap-0" } do %>
+  <%= render @chat.messages %>
   <div class="message pt-10 pl-16">
     <div id="loading" class="text-lg sm:max-w-[70%] mx-auto flex items-start gap-6 relative"><%# = render "loading" %></div>
   </div>

@@ -55,13 +55,17 @@ class ChatReflex < StimulusReflex::Reflex
       when /^\/delete/
         destroy
       when /^\/clear/
-        chat.update!(transcript: [])
+        chat.messages.destroy_all
       when /^\/redo/
-        message = value.split("/redo").last&.strip
-        chat.redo!(message)
+        if chat.messages.any?
+          message = value.split("/redo").last&.strip
+          chat.redo!(current_user, message)
+        end
       when /^\/public/
-        chat.update!(public_access: true)
-        cable_ready.redirect_to(url: "/chats/#{chat.id}").broadcast
+        if chat.messages.any?
+          chat.update!(public_access: true)
+          cable_ready.redirect_to(url: "/chats/#{chat.id}").broadcast
+        end
       when /^\/private/
         chat.update!(public_access: false)
         cable_ready.redirect_to(url: "/chats/#{chat.id}").broadcast

@@ -21,7 +21,7 @@ class ChatsController < ApplicationController
 
   def search
     # todo: add user scoping as filter
-    @search = ChatSearch.tensor(params[:q])
+    @search = ChatSearch.message_content(params[:q])
   end
 
   def tag

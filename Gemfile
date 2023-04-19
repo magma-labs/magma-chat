@@ -62,6 +62,7 @@ gem "httparty"
 gem "omniauth"
 gem "omniauth-google-oauth2"
 gem "omniauth-rails_csrf_protection"
+gem "pg_search"
 gem "redcarpet"
 gem "redis-session-store", "~> 0.11.5"
 gem "ruby-openai" # https://github.com/alexrudall/ruby-openai

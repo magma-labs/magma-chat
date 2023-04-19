@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  get 'api/index'
   resources :home, only: [:index]
 
   resources :bots
@@ -17,6 +18,8 @@ Rails.application.routes.draw do
 
   get "/auth/:provider/callback", to: "sessions#create"
   get "/logout", to: "sessions#destroy", as: :logout
+
+  post "/api", to: "api#index", as: :api
 
   # Defines the root path route ("/")
   root "home#index"

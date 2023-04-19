@@ -19,7 +19,7 @@
               <div class="text-sm text-gray-600">
                 <%= result.chat.summary %>
                 <% result.chat.tags.each do |tag| %>
-                  <%= link_to "##{tag}", tag_path(tag) %>&nbsp;
+                  <%= link_to("##{tag}", tag_path(tag)) %>&nbsp;
                 <% end %>
               </div>
             <% end %>
@@ -38,7 +38,7 @@
         <div class="result_messages expando-collapsed space-y-2 px-3 pb-3">
           <% result.messages.each do |message| %>
             <div class="text-sm text-gray-600 message rounded-md p-2 <%= message.role %> opacity-80 hover:opacity-100 sm:mr-[20%]">
-              <%= message.content %>
+              <%= highlight(message.content, @search.query) %>
               <%= link_to "link", [result.chat, { message: message.id.split("-").last }] %>
             </div>
           <% end %>

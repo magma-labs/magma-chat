@@ -1,0 +1,15 @@
+<div class="message <%= message.role %> w-full p-4 <%= "highlight" if params[:message] == message.id %>">
+  <div class="text-lg sm:max-w-[70%] mx-auto flex items-start gap-6">
+    <div class="flex-shrink-0 relative h-[36px] w-[36px] rounded-md  text-white flex items-center justify-center mt-1 bg-gray-800">
+      <img src="<%= message.sender_image_url %>" alt="" class="object-fit rounded-md">
+    </div>
+    <div class="flex-1 max-w-full">
+      <%= markdown(message.content) %>
+      <div class="text-gray-500 text-xs">
+        <%= message.sender_name %>
+        <%= "#{distance_of_time_in_words_to_now(message.created_at)} ago" %>
+        <% if params[:message] == message.id %><span data-controller="scroll" data-action="scroll#scroll"></span><% end %>
+      </div>
+    </div>
+  </div>
+</div>

@@ -40,25 +40,27 @@
     <div><span class="font-medium">/new</span><em class="pl-2 text-gray-300">optional first message</em></div>
     <div class="text-gray-500 text-xs">Start a new conversation</div>
   </div>
-  <div data-name="/redo">
-    <div><span class="font-medium">/redo</span> <em class="pl-2 text-gray-300">revised prompt</em></div>
-    <div class="text-gray-500 text-xs">Discard the last prompt and try again</div>
-  </div>
-  <% if @chat.public_access? %>
-    <div data-name="/private">
-      <div><span class="font-medium">/private</span>
-      <div class="text-gray-500 text-xs">Make this conversation private again</div>
+  <% if @chat.messages.any? %>
+    <div data-name="/clear">
+      <div><span class="font-medium">/clear</span></div>
+      <div class="text-gray-500 text-xs">Clear the current conversation transcript</div>
     </div>
-  <% else %>
-    <div data-name="/public">
-      <div><span class="font-medium">/public</span>
-      <div class="text-gray-500 text-xs">Make this conversation public</div>
+    <div data-name="/redo">
+      <div><span class="font-medium">/redo</span> <em class="pl-2 text-gray-300">revised prompt</em></div>
+      <div class="text-gray-500 text-xs">Discard the last prompt and try again</div>
     </div>
+    <% if @chat.public_access? %>
+      <div data-name="/private">
+        <div><span class="font-medium">/private</span>
+        <div class="text-gray-500 text-xs">Make this conversation private again</div>
+      </div>
+    <% else %>
+      <div data-name="/public">
+        <div><span class="font-medium">/public</span>
+        <div class="text-gray-500 text-xs">Make this conversation public</div>
+      </div>
+    <% end %>
   <% end %>
-  <div data-name="/clear">
-    <div><span class="font-medium">/clear</span></div>
-    <div class="text-gray-500 text-xs">Clear the current conversation transcript</div>
-  </div>
   <div data-name="/delete">
     <div><span class="font-medium">/delete</span></div>
     <div class="text-gray-500 text-xs">Delete the conversation entirely</div>

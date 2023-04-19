@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_04_18_223407) do
+ActiveRecord::Schema[7.0].define(version: 2023_04_19_025049) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -46,6 +46,26 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_18_223407) do
     t.index ["user_id"], name: "index_chats_on_user_id"
   end
 
+  create_table "messages", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "type", default: "Message", null: false
+    t.uuid "chat_id", null: false
+    t.string "sender_type"
+    t.uuid "sender_id"
+    t.string "role"
+    t.text "content"
+    t.string "sender_name"
+    t.string "sender_image_url"
+    t.jsonb "properties", default: {}, null: false
+    t.integer "rating", default: 0, null: false
+    t.boolean "visible", default: true, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["chat_id"], name: "index_messages_on_chat_id"
+    t.index ["role"], name: "index_messages_on_role"
+    t.index ["sender_type", "sender_id"], name: "index_messages_on_sender"
+    t.index ["type"], name: "index_messages_on_type"
+  end
+
   create_table "thoughts", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "type"
     t.uuid "user_id", null: false
@@ -75,4 +95,5 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_18_223407) do
     t.boolean "admin", default: false, null: false
   end
 
+  add_foreign_key "messages", "chats"
 end

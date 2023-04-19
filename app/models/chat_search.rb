@@ -9,6 +9,15 @@ class ChatSearch
 
   # TODO: Scope searches to user's chats ONLY
 
+  def self.message_content(query)
+    new(Message.search_content(query).group_by(&:chat_id).map { |chat_id, messages|
+      chat_result = OpenStruct.new(
+        chat: Chat.find(chat_id),
+        messages: messages
+      )
+    }, query)
+  end
+
   def self.tensor(query)
     response = Marqo.client.search("chats", query)
     response.deep_symbolize_keys!
@@ -23,10 +32,8 @@ class ChatSearch
   end
 
   def self.tag(query)
-    response = Marqo.client.lexsearch("chats", [:tags], query)
-    response.deep_symbolize_keys!
-    new(response.dig(:hits).group_by { |hit| hit[:chat_id] }.map { |chat_id, hits|
-      chat_result = OpenStruct.new(chat: Chat.find(chat_id), messages: [])
-    }, "tag: #{response[:query]}")
+    new(Chat.search_tags(query).map { |chat|
+      OpenStruct.new(chat: chat, messages: [])
+    }, "tag: #{query}")
   end
 end

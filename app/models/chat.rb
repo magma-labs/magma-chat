@@ -23,19 +23,24 @@
 #  index_chats_on_user_id        (user_id)
 #
 class Chat < ApplicationRecord
-  attribute :first_message
-  attribute :run_analysis_after_saving, :boolean, default: false
+  include PgSearch::Model
 
-  belongs_to :user
+  attribute :first_message
+
   belongs_to :bot, optional: true, counter_cache: true
+  belongs_to :user # todo: rename to owner or initiator
+
+  has_many :messages, -> { order(created_at: :asc) }, dependent: :destroy, enable_updates: true
 
   before_create :set_title
 
   after_commit :prompt!, on: :create, if: :first_message
-  after_commit :reanalyze, on: :update, if: :run_analysis_after_saving
-  after_commit :reindex, on: :update
+  #after_commit :reindex, on: :update
 
   enable_cable_ready_updates on: [:update]
+
+  pg_search_scope :search_tags, against: :analysis,
+    using: { tsearch: { prefix: true } }
 
   def analysis
     super.deep_symbolize_keys
@@ -49,39 +54,28 @@ class Chat < ApplicationRecord
     super || Bot.default.id
   end
 
+  def bot_replied!(content, visible)
+    messages.create(sender: bot, role: "assistant", content: content, visible: visible, run_analysis_after_saving: true)
+  end
+
   def directive
     bot.directive
   end
 
   def prompt!(message: first_message, visible: true, sender: user)
     Rails.logger.info("PROMPT: #{message}")
-    if visible
-      if sender.kind_of? User
-        sender = { id: sender.id, image_url: sender.image_url, name: sender.name }
-      end
-      # should update the transcript for the user with the prompt
-      self.transcript += [{ role: "user", content: message, timestamp: Time.now.to_i, user: sender }]
-      save!
-    end
-
-    # should update the transcript for the user with the reply
-    # todo: move to after_commit to prevent race condition missing latest message
-    ChatPromptJob.perform_later(self, message, visible)
+    messages.create(sender: sender, role: "user", content: message, visible: visible)
   end
 
-  def redo!(message)
-    # todo: delete the last response and prompt again with the same message
-    transcript.pop # remove the last GPT response
-    last_prompt = transcript.pop.deep_symbolize_keys # remove the last user prompt
-    prompt!(message: message.presence || last_prompt[:content], sender: last_prompt[:user])
-  end
-
-  def reanalyze
-    ChatAnalysisJob.perform_later(self)
+  def redo!(sender, message)
+    messages.by_bots.last.destroy
+    last_prompt = messages.by_user(sender).last.destroy
+    prompt!(message: message.presence || last_prompt.content, sender: sender)
   end
 
   def reindex
-    ChatReindexJob.perform_later(self)
+    # todo: reconsider whether every message should be store in marqo
+    # ChatReindexJob.perform_later(self)
   end
 
   def language
@@ -97,8 +91,8 @@ class Chat < ApplicationRecord
   end
 
   def messages_for_gpt
-    transcript.map do |message|
-      { role: message[:role], content: message[:content] }
+    messages.map do |message|
+      { role: message.role, content: message.content }
     end
   end
 
@@ -108,10 +102,6 @@ class Chat < ApplicationRecord
 
   def tags
     analysis[:tags].presence || []
-  end
-
-  def transcript
-    super.map(&:deep_symbolize_keys)
   end
 
   private
