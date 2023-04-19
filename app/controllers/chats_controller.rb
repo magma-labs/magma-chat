@@ -1,8 +1,7 @@
 class ChatsController < ApplicationController
   # send not found to new
-  before_action :require_user, except: [:readonly]
-  before_action :load_chat, only: [:show]
-  before_action :load_latest_chats, except: [:readonly]
+  before_action :require_user, except: [:show, :readonly]
+  before_action :load_latest_chats, except: [:show, :readonly]
 
   rescue_from ActiveRecord::RecordNotFound, with: :index
 
@@ -32,8 +31,20 @@ class ChatsController < ApplicationController
   end
 
   def show
-    if @chat.id != params[:id]
-      redirect_to [@chat]
+    if current_user
+      @chat ||= current_user.chats.find(params[:id])
+      if @chat.id != params[:id]
+        redirect_to [@chat]
+      end
+      load_latest_chats
+    else
+      Chat.find(params[:id]).then do |chat|
+        if chat.public_access?
+          redirect_to readonly_path(chat)
+        else
+          redirect_to root_path, notice: "Chat not found"
+        end
+      end
     end
   end
 
@@ -50,10 +61,6 @@ class ChatsController < ApplicationController
 
   def chat_params
     params.require(:chat).permit(:first_message, :engine, :bot_id)
-  end
-
-  def load_chat
-    @chat ||= current_user.chats.find(params[:id])
   end
 
   def load_latest_chats
