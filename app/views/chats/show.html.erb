@@ -9,8 +9,11 @@
     <meta property="og:author" content="<%= @chat.user.name %>">
   <% end %>
 <% end %>
-
 <%= cable_ready_updates_for @chat, :messages, html_options: { class: "flex flex-col gap-0" } do %>
+  <div class="bg-magma-red-400 h-12 flex items-center">
+    <h2 class="pl-8 font-bold text-lg leading-5"><%= @chat.title %></h2>
+  </div>
+
   <%= render @chat.messages %>
   <div class="message pt-10 pl-16">
     <div id="loading" class="text-lg sm:max-w-[70%] mx-auto flex items-start gap-6 relative"><%# = render "loading" %></div>

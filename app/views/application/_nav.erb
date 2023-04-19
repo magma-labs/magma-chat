@@ -1,12 +1,12 @@
 <% if current_user && @latest_chats %>
   <div class="text-base font-medium flex items-center gap-3 justify-between w-full p-2 my-1 sm:p-0">
     <%= link_to [:chats], class: "flex gap-3" do %>
-      <%= image_tag("logo.png", class: "w-4 object-fit sm:m-auto") %>
-      <span class="hidden sm:inline text-lg flex-1 text-gray-100 tracking-widest">MagmaChat</span>
+      <%= image_tag("nav_logo.svg", class: "object-fit sm:m-auto") %>
     <% end %>
     <a href="/chats/new" class="text-gray-400 text-sm hover:text-gray-200" title="New chat">➕</a>
   </div>
   <div class="hidden sm:flex sm:flex-col gap-2">
+    <label class="block text-gray-400 font-medium text-xs mb-2">Latests Chats (<%= @latest_chats.length %>)</label>
     <%= render @latest_chats %>
   </div>
   <div class="hidden sm:block">
