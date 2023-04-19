@@ -1,3 +1,15 @@
+<% content_for :meta do %>
+  <% if @chat.public_access? %>
+    <meta property="og:title" content="<%= @chat.title %>">
+    <meta property="og:description" content="<%= @chat.summary %>">
+    <meta property="og:image" content="<%= @chat.bot.image_url %>">
+    <meta property="og:url" content="<%= readonly_url(@chat) %>">
+    <meta property="og:site_name" content="Magma Chat by Magma Labs">
+    <meta property="og:type" content="website">
+    <meta property="og:author" content="<%= @chat.user.name %>">
+  <% end %>
+<% end %>
+
 <%= cable_ready_updates_for @chat, html_options: { class: "flex flex-col gap-0" } do %>
   <% @chat.transcript.each_with_index do |message, index| %>
     <div class="message <%= message[:role] %> w-full p-4 <%= "highlight" if params[:message] == index.to_s %>">
