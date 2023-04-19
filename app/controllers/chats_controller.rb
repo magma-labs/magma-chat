@@ -21,7 +21,7 @@ class ChatsController < ApplicationController
 
   def search
     # todo: add user scoping as filter
-    @search = ChatSearch.message_content(params[:q])
+    @search = ChatSearch.message_content(current_user, params[:q])
   end
 
   def tag
@@ -32,9 +32,13 @@ class ChatsController < ApplicationController
 
   def show
     if current_user
-      @chat ||= current_user.chats.find(params[:id])
+      if current_user.admin?
+        @chat ||= Chat.find(params[:id])
+      else
+        @chat ||= current_user.chats.find(params[:id])
+      end
       if @chat.id != params[:id]
-        redirect_to [@chat]
+        return redirect_to [@chat]
       end
       load_latest_chats
     else

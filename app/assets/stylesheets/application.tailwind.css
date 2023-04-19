@@ -55,9 +55,16 @@ body {
   }
 
   .expando-collapsed {
-      height: 0;
-      opacity: 0;
-      transition: height 0.2s ease-out, opacity 0.2s ease-out;
+    height: 0;
+    opacity: 0;
+    overflow: hidden;
+    transition: height 0.5s ease-in-out, opacity 0.5s ease-in-out;
+  }
+
+  .expando-expanded {
+    height: auto;
+    opacity: 1;
+    transition: height 0.5s ease-in-out, opacity 0.5s ease-in-out;
   }
 
   .grow-wrap::after {

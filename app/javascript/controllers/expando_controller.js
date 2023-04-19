@@ -7,6 +7,7 @@ export default class extends Controller {
     var target = this.element.querySelector(element.dataset.collapsible);
     console.log(element, target)
     target.classList.toggle('expando-collapsed');
+    target.classList.toggle('expando-expanded');
     element.classList.toggle('rotate-90');
   }
 }

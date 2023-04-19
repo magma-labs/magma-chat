@@ -1,0 +1,33 @@
+<div class="flex-col gap-2 card" data-controller="expando">
+  <div class="flex flex-col p-3">
+    <div class="flex flex-col">
+      <div class="text-gray-800 font-medium"><%= link_to result.chat.title, [result.chat] %></div>
+      <% if result.chat.summary.present? %>
+        <div class="text-sm text-gray-600">
+          <%= result.chat.summary %>
+          <% result.chat.tags.each do |tag| %>
+            <%= link_to("##{tag}", tag_path(tag)) %>&nbsp;
+          <% end %>
+        </div>
+      <% end %>
+      <div class="text-xs text-gray-500 mt-1 flex gap-2 items-center">
+        <% if result.messages.any? %>
+          <div class="text-gray-700 cursor-pointer" data-action="click->expando#toggle" data-collapsible=".result_messages">▶︎</div>
+        <% end %>
+        <%= result.chat.created_at.strftime("%b %d, %Y") %> -
+        <%= result.chat.transcript.count %> messages
+        <% if result.messages.any? %>
+          (<%= pluralize result.messages.count, "hit" %>)
+        <% end %>
+      </div>
+    </div>
+  </div>
+  <div class="result_messages expando-collapsed space-y-2 px-3 pb-3">
+    <% result.messages.each do |message| %>
+      <div class="text-sm text-gray-600 message rounded-md p-2 <%= message.role %> opacity-80 hover:opacity-100 sm:mr-[20%]">
+        <%= highlight(message.content, @search.query) %>
+        <%= link_to "link", [result.chat, { message: message.id.split("-").last }] %>
+      </div>
+    <% end %>
+  </div>
+</div>

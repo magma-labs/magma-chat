@@ -30,6 +30,12 @@
       <label>Title</label>
       <%= @chat.title %>
     </div>
+    <% if current_user != @chat.user %>
+      <div>
+        <label>User</label>
+        <%= @chat.user.name %>
+      </div>
+    <% end %>
     <% unless @chat.analysis.blank? %>
       <% unless @chat.analysis[:summary].blank? %>
         <div>
@@ -82,5 +88,5 @@
 <% end %>
 
 <% content_for :footer do %>
-  <%= render "chats/footer" if current_user %>
+  <%= render "chats/footer" if current_user == @chat.user %>
 <% end %>
