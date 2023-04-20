@@ -54,6 +54,9 @@ class ChatReflex < ApplicationReflex
         destroy
       when /^\/clear/
         chat.messages.destroy_all
+      when /^\/grow/
+        chat.toggle!(:grow)
+        cable_ready.redirect_to(url: "/chats/#{chat.id}").broadcast
       when /^\/redo/
         if chat.messages.any?
           message = value.split("/redo").last&.strip

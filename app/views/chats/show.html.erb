@@ -18,17 +18,21 @@
   <% unless params[:message] || action_name["readonly"] %><span data-controller="scroll" data-action="scroll#scroll"></span><% end %>
 <% end %>
 
-<% if @chat.public_access && current_user == @chat.user %>
-<div class="absolute text-[9vw] text-red-600 opacity-20 font-black z-40 top-[20%] left-[20%] -rotate-45 text-center">
-  <div class="my-auto">PUBLIC<br>ACCESS</div>
-</div>
-<% end %>
-
 <% content_for :right do %>
   <%= cable_ready_updates_for @chat, html_options: { class: "p-4 analysis text-sm space-y-2 w-full h-full text-gray-300 flex flex-col gap-2 z-10 absolute" } do %>
     <div>
       <label>Title</label>
       <%= @chat.title %>
+      <% if @chat.public_access? && current_user == @chat.user %>
+        <div class="text-xs text-gray-400">
+          Available to public at
+          <%= link_to "this URL", readonly_url(@chat), class: "text-xs font-medium text-yellow-500", target: "_blank" %>
+          <span class="pl-1 opacity-75 hover:opacity-100 cursor-pointer"
+                data-content="<%= readonly_url(@chat) %>"
+                data-controller="clipboard" data-action="click->clipboard#content",
+                title="Copy to clipboard">📋</span>
+        </div>
+      <% end %>
     </div>
     <% if current_user != @chat.user %>
       <div>

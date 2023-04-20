@@ -1,4 +1,4 @@
-<div class="w-full p-4 shadow">
+<div class="w-full p-3 shadow">
   <div class="grow-wrap grid">
     <textarea id="prompt_textarea" type="text" class="w-full rounded-md bg-gray-700 text-white pl-3"
           placeholder="Send a message or type '/' for more options..." autocomplete="off" rows="1"
@@ -9,55 +9,49 @@
             data-grow="true"
           <% end %>
           data-id="<%= @chat&.id %>"></textarea>
-  </div>
-  <div class="py-1 px-2 text-xs text-gray-400 flex justify-between items-center">
-    <div>
-      <input id="grow" type="checkbox" class="bg-gray-400 m-1 mr-2 rounded-sm"
-              <%= @chat.grow ? 'checked' : '' %> data-id="<%= @chat&.id %>"
-              data-controller="grow" data-action="click->grow#toggle"/>
-      <span>Multi-line input (cmd+enter to send)</span>
-    </div>
-    <% if @chat.public_access? %>
-      <div>
-        Available to public at
-        <%= link_to "this URL", readonly_url(@chat),
-                    data: { controller: "clipboard", action: "click->clipboard#href" },
-                    class: "font-medium text-yellow-500", target: "_blank" %>
-        (click to copy)
-      </div>
-    <% end %>
+    <button title="Send message" id="prompt_submit"
+            class="absolute p-6 rounded-md hover:text-white text-gray-500 bottom-2 right-1 opacity-70">
+      <svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5 mr-1" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg">
+        <line x1="22" y1="2" x2="11" y2="13"></line>
+        <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+      </svg>
+    </button>
   </div>
 </div>
 <div id="autocompleteList"
      class="autocomplete-items absolute bg-gray-800 rounded-lg border-l-[40px] border-l-gray-900
-            p-4 w-[80%] flex hidden flex-col gap-2 text-white cursor-pointer">
+            p-4 w-[80%] flex hidden flex-col gap-3 text-white cursor-pointer">
   <div data-name="/new">
     <div><span class="font-medium">/new</span><em class="pl-2 text-gray-300">optional first message</em></div>
-    <div class="text-gray-500 text-xs">Start a new conversation</div>
+    <div class="text-gray-500 text-sm">Start a new conversation</div>
   </div>
   <% if @chat.messages.any? %>
     <div data-name="/clear">
       <div><span class="font-medium">/clear</span></div>
-      <div class="text-gray-500 text-xs">Clear the current conversation transcript</div>
+      <div class="text-gray-500 text-sm">Clear the current conversation transcript</div>
     </div>
     <div data-name="/redo">
       <div><span class="font-medium">/redo</span> <em class="pl-2 text-gray-300">revised prompt</em></div>
-      <div class="text-gray-500 text-xs">Discard the last prompt and try again</div>
+      <div class="text-gray-500 text-sm">Discard the last prompt and try again</div>
     </div>
     <% if @chat.public_access? %>
       <div data-name="/private">
-        <div><span class="font-medium">/private</span>
-        <div class="text-gray-500 text-xs">Make this conversation private again</div>
+        <div><span class="font-medium">/private</span></div>
+        <div class="text-gray-500 text-sm">Make this conversation private again</div>
       </div>
     <% else %>
       <div data-name="/public">
-        <div><span class="font-medium">/public</span>
-        <div class="text-gray-500 text-xs">Make this conversation public</div>
+        <div><span class="font-medium">/public</span></div>
+        <div class="text-gray-500 text-sm">Make this conversation public</div>
       </div>
     <% end %>
   <% end %>
+  <div data-name="/grow">
+    <div><span class="font-medium">/grow</span></div>
+    <div class="text-gray-500 text-sm">Toggles input "grow" mode. Submit with cmd+enter</div>
+  </div>
   <div data-name="/delete">
     <div><span class="font-medium">/delete</span></div>
-    <div class="text-gray-500 text-xs">Delete the conversation entirely</div>
+    <div class="text-gray-500 text-sm">Delete the conversation entirely</div>
   </div>
 </div>

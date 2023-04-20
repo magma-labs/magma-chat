@@ -6,7 +6,7 @@ export default class extends ApplicationController {
     this.list = document.getElementById('autocompleteList');
 
     this.element.addEventListener('change', this.blur.bind(this));
-    this.element.addEventListener('keydown', this.handleTabKey.bind(this));
+    //this.element.addEventListener('keydown', this.handleTabKey.bind(this));
 
 
     for (const item of this.element.children) {

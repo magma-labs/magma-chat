@@ -102,4 +102,10 @@ body {
   [data-controller='botselect'].selected {
     @apply bg-white border-red-700 !important;
   }
+
+  textarea[data-grow="true"] {
+    /* vertical gradient from gray 700 to 900 at bottom */
+    @apply bg-gradient-to-b from-gray-700 to-gray-800 !important;
+  }
+
 }
