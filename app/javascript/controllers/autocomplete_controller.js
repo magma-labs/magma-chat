@@ -42,17 +42,20 @@ export default class extends ApplicationController {
     }
   }
 
-  handleTabKey(event) {
-    if (event.key === 'Tab') {
-      const visibleItems = Array.from(this.list.children).filter(item => !item.classList.contains('hidden'));
+  // TODO: This is not working. Why?
+  // TODO: Defer fixing until we have up/down arrows for selection
+  //
+  // handleTabKey(event) {
+  //   if (event.key === 'Tab') {
+  //     const visibleItems = Array.from(this.list.children).filter(item => !item.classList.contains('hidden'));
 
-      if (visibleItems.length === 1) {
-        // event.preventDefault(); // Prevent the input from losing focus
-        this.element.value = visibleItems[0].dataset.name;
-        this.blur();
-      }
-    }
-  }
+  //     if (visibleItems.length === 1) {
+  //       event.preventDefault(); // Prevent the input from losing focus
+  //       this.element.value = visibleItems[0].dataset.name;
+  //       this.blur();
+  //     }
+  //   }
+  // }
 
   blur() {
     setTimeout(() => {

@@ -13,10 +13,11 @@ export default class extends ApplicationController {
   }
 
   keydown(event) {
-    if (event.metaKey && event.keyCode === 13) {
-      event.preventDefault();
-      console.log('User typed cmd/ctrl + enter!');
-      this.element.blur()
+    if(event.keyCode === 13) {
+      if (event.metaKey || (!this.element.dataset.grow && !event.shiftKey)) {
+        event.preventDefault();
+        this.stimulate('ChatReflex#prompt')
+      }
     }
   }
 

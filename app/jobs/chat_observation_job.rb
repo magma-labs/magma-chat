@@ -4,8 +4,12 @@ class ChatObservationJob < ApplicationJob
       unless json.starts_with?("{") && json.end_with?("}")
         json = extract_json(json)
       end
-      JSON.parse(json, symbolize_names: true).then do |data|
-        chat.bot.observed!(chat, data[:observations])
+      if json.blank?
+        Rails.logger.warn "No JSON found in GPT response to observation for Chat: #{chat.id}"
+      else
+        JSON.parse(json, symbolize_names: true).then do |data|
+          chat.bot.observed!(chat, data[:observations])
+        end
       end
     end
   end

@@ -1,20 +1,15 @@
 <div class="w-full p-4 shadow">
-  <% if @chat.grow %>
-    <div class="grow-wrap grid">
-      <textarea id="prompt_textarea" type="text" class="w-full rounded-md bg-gray-700 text-white pl-3"
-            placeholder="Send a message or type '/' for more options..." autocomplete="off" rows="1"
-            onKeyUp="this.parentNode.dataset.replicatedValue = this.value"
-            data-controller="autocomplete chat"
-            data-action="input->autocomplete#input blur->autocomplete#blur keydown->chat#keydown"
-            data-reflex="change->Chat#prompt" data-id="<%= @chat&.id %>"></textarea>
-    </div>
-  <% else %>
-    <input id="prompt_text" type="text" class="w-full rounded-md bg-gray-700 text-white p-[16px]"
-           placeholder="Send a message or type '/' for more options..." autocomplete="off"
-           data-controller="autocomplete chat"
-           data-action="input->autocomplete#input blur->autocomplete#blur"
-           data-reflex="change->Chat#prompt" data-id="<%= @chat&.id %>"/>
-  <% end %>
+  <div class="grow-wrap grid">
+    <textarea id="prompt_textarea" type="text" class="w-full rounded-md bg-gray-700 text-white pl-3"
+          placeholder="Send a message or type '/' for more options..." autocomplete="off" rows="1"
+          onKeyUp="this.parentNode.dataset.replicatedValue = this.value"
+          data-controller="autocomplete chat"
+          data-action="input->autocomplete#input blur->autocomplete#blur keydown->chat#keydown"
+          <% if @chat.grow? %>
+            data-grow="true"
+          <% end %>
+          data-id="<%= @chat&.id %>"></textarea>
+  </div>
   <div class="py-1 px-2 text-xs text-gray-400 flex justify-between items-center">
     <div>
       <input id="grow" type="checkbox" class="bg-gray-400 m-1 mr-2 rounded-sm"
