@@ -32,5 +32,5 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   root "home#index"
 
-  mount Sidekiq::Web, at: '/sidekiq', constraints: LoggedConstraint
+  mount Sidekiq::Web, at: '/sidekiq', constraints: AdminConstraint
 end
