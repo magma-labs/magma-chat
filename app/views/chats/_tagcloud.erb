@@ -1,0 +1,11 @@
+<div class="hidden sm:block">
+  <% @tags = current_user.tag_cloud %>
+  <label class="block text-gray-400 font-medium text-xs mb-2">Popular Tags (<%= @tags.length %>)</label>
+  <div style="font-size: 4px">
+    <% @tags.each do |tag, count| %>
+      <%= link_to tag, tag_path(tag), class: "inline-block text-gray-400 px-1 hover:text-yellow-500",
+                                      style: "font-size: #{count_to_em(count)}em;
+                                              font-weight: #{(count*10).clamp(200,500)}" %>
+    <% end %>
+  </div>
+</div>

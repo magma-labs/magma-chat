@@ -4,22 +4,13 @@
       <%= image_tag("logo.png", class: "w-4 object-fit sm:m-auto") %>
       <span class="hidden sm:inline text-lg flex-1 text-gray-100 tracking-widest">MagmaChat</span>
     <% end %>
-    <a href="/chats/new" class="text-gray-400 text-sm hover:text-gray-200" title="New chat">➕</a>
+    <a href="/chats/new" class="text-gray-500 text-xs border bg-slate-800 border-gray-600
+     hover:border-gray-400 p-1 sm:mr-2 rounded-md hover:text-gray-200" title="New chat">+ New Chat</a>
   </div>
   <div class="hidden sm:flex sm:flex-col gap-2">
     <%= render @latest_chats %>
   </div>
-  <div class="hidden sm:block">
-    <% @tags = current_user.tag_cloud %>
-    <label class="block text-gray-400 font-medium text-xs mb-2">Popular Tags (<%= @tags.length %>)</label>
-    <div style="font-size: 4px">
-      <% @tags.each do |tag, count| %>
-        <%= link_to tag, tag_path(tag), class: "inline-block text-gray-400 px-1 hover:text-yellow-500",
-                                        style: "font-size: #{count_to_em(count)}em;
-                                                font-weight: #{(count*10).clamp(200,500)}" %>
-      <% end %>
-    </div>
-  </div>
+
   <div class="hidden sm:block mt-auto text-xs px-1 py-2">
     <div class="font-medium">
       <%= current_user.email %>
@@ -33,9 +24,9 @@
   <%= link_to "/logout", class: "sm:hidden text-gray-400 hover:text-gray-200 p-2" do %>
     <svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"
           class="h-5 w-5" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg">
-      <path d="M21 12L13 12" stroke="#323232" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-      <path d="M18 15L20.913 12.087V12.087C20.961 12.039 20.961 11.961 20.913 11.913V11.913L18 9" stroke="#323232" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-      <path d="M16 5V4.5V4.5C16 3.67157 15.3284 3 14.5 3H5C3.89543 3 3 3.89543 3 5V19C3 20.1046 3.89543 21 5 21H14.5C15.3284 21 16 20.3284 16 19.5V19.5V19" stroke="#323232" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M21 12L13 12" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M18 15L20.913 12.087V12.087C20.961 12.039 20.961 11.961 20.913 11.913V11.913L18 9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M16 5V4.5V4.5C16 3.67157 15.3284 3 14.5 3H5C3.89543 3 3 3.89543 3 5V19C3 20.1046 3.89543 21 5 21H14.5C15.3284 21 16 20.3284 16 19.5V19.5V19" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
     </svg>
   <% end %>
 <% end %>

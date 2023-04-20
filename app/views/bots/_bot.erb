@@ -6,7 +6,10 @@
   </div>
   <div class="flex flex-col gap-1 p-4 h-full">
     <div class="text-gray-800 font-bold">
-      <%= bot.name %> / <%= bot.role %>
+      <%= bot.name %>
+      <div class="text-sm text-gray-500">
+        <%= bot.role %>
+      </div>
     </div>
     <div class="text-sm text-gray-700"><%= truncate bot.intro, length: 100 %></div>
   </div>

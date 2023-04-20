@@ -8,13 +8,13 @@
   <% end %>
   <div class="flex flex-col gap-2 px-3 pb-12">
     <% @chats.each do |chat| %>
-      <div class="flex justify-between items-center card p-3 clickable-region">
-        <div class="flex gap-2 items-center">
+      <div class="flex justify-between items-bottom card clickable-region">
+        <div class="flex flex-1 gap-2 items-center p-4">
           <div class="flex flex-col">
             <div class="text-gray-800 font-medium"><%= link_to chat.title, [chat], class: "region-link" %></div>
             <% if chat.summary.present? %>
               <div class="text-sm text-gray-600">
-                <%= chat.summary %>
+                <%= truncate chat.summary, length: 200 %>
                 <% chat.tags.each do |tag| %>
                   <%= link_to "##{tag}", tag_path(tag) %>&nbsp;
                 <% end %>
@@ -26,6 +26,10 @@
             </div>
           </div>
         </div>
+        <div class="flex gap-2 items-center relative w-28">
+          <%= image_tag(chat.bot.image_url, class: "h-full object-cover") %>
+        </div>
+
       </div>
     <% end %>
 </div>
