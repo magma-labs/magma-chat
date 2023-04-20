@@ -5,7 +5,10 @@ export default class extends ApplicationController {
     super.connect()
     console.log('Chat controller connected', this.element)
     this.element.focus()
-    document.getElementById('prompt_submit').addEventListener('click', this.prompt.bind(this))
+    var submitButton = document.getElementById('prompt_submit')
+    if(submitButton) {
+      submitButton.addEventListener('click', this.prompt.bind(this))
+    }
   }
 
   submit(event) {
