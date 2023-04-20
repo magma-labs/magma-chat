@@ -7,6 +7,9 @@ class ChatsController < ApplicationController
 
   def index
     @chats ||= current_user.chats.order("updated_at DESC")
+    if @chats.empty?
+      redirect_to new_chat_path
+    end
   end
 
   def new
