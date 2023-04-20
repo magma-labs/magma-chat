@@ -1,3 +1,5 @@
+require 'sidekiq/web'
+
 Rails.application.routes.draw do
   get 'api/index'
   resources :home, only: [:index]
@@ -29,4 +31,6 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   root "home#index"
+
+  mount Sidekiq::Web => "/sidekiq"
 end

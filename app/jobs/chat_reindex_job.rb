@@ -1,4 +1,6 @@
 class ChatReindexJob < ApplicationJob
+  queue_as :default
+
   INDEX = "chats"
 
   def perform(chat)

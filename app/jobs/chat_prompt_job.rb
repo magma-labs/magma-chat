@@ -1,4 +1,6 @@
 class ChatPromptJob < ApplicationJob
+  queue_as :default
+
   def perform(chat, message, visible)
     max_tokens = [200, message.length * 2].max
     Gpt.chat(directive: chat.directive,
