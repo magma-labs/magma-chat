@@ -21,8 +21,10 @@
               </div>
             <% end %>
             <div class="text-xs text-gray-500 mt-1">
-              <%= chat.created_at.strftime("%b %d, %Y") %> -
-              <%= chat.transcript.count %> messages
+              Started <%= chat.created_at.strftime("%b %d, %Y") %> -
+              <%# TODO: added a counter cache to chat %>
+              <%= chat.messages.count %> messages with
+              <%= chat.bot.name %>,  <%= chat.bot.role %>
             </div>
           </div>
         </div>
