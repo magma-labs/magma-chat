@@ -1,5 +1,5 @@
 class ChatPromptJob < ApplicationJob
-  queue_as :default
+  queue_as :high_priority_queue
 
   def perform(chat, message, visible)
     max_tokens = [200, message.length * 2].max

@@ -1,0 +1,4 @@
+:queues:
+  - [high_priority_queue, 5]
+  - [default, 3]
+  - [low_priority_queue, 1]
