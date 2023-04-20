@@ -28,13 +28,17 @@ class Thought < ApplicationRecord
   scope :by_bot, ->(bot) { where(bot: bot) }
   scope :by_user, ->(user) { where(subject: user) }
 
+  scope :by_decayed_score, -> {
+    # assigns a higher score to memory objects that were recently created so that events from a moment ago or this morning are likely to remain in the agent’s attentional sphere
+    select("thoughts.*, ROUND(POW(2, (-EXTRACT(EPOCH FROM (NOW() - created_at)) / 2592000)) * ((importance - 10) / 90.0) * 100, 2) as decayed_score").order("decayed_score DESC")
+  }
+
   after_commit :store_vector, on: %i[create update]
   after_commit :delete_vector, on: %i[destroy]
 
   def brief_with_timestamp
     "[#{created_at.strftime('%d/%m/%Y %H:%M')}]:#{brief.strip.gsub(/\.$/,"")}"
   end
-
 
   private
 

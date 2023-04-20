@@ -28,6 +28,7 @@ class Bot < ApplicationRecord
   # todo: need an attribute for desired response size in tokens
 
   has_many :chats, dependent: :nullify
+  has_many :thoughts, dependent: :destroy
   has_many :observations, dependent: :destroy
 
   before_create :set_intro
@@ -53,7 +54,7 @@ class Bot < ApplicationRecord
   end
 
   def top_memories_of(user)
-    observations.by_user(user).order(importance: :desc).limit(20).map(&:brief_with_timestamp)
+    observations.by_user(user).by_decayed_score.limit(20).map(&:brief_with_timestamp)
   end
 
   def self.default
