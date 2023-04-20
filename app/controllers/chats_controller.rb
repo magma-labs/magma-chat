@@ -70,7 +70,7 @@ class ChatsController < ApplicationController
   def load_latest_chats
     @latest_chats = current_user.chats.order(updated_at: :desc)
     if @chat
-      @latest_chats = @latest_chats.where.not(id: @chat.id)
+      @latest_chats = @latest_chats.where.not(id: @chat.id).limit(10)
     end
     @latest_chats = @latest_chats.limit(10)
   end

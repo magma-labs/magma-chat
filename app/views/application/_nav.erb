@@ -2,13 +2,24 @@
   <div class="text-base font-medium flex items-center gap-3 justify-between w-full p-2 my-1 sm:p-0">
     <%= link_to [:chats], class: "flex gap-3" do %>
       <%= image_tag("logo.png", class: "w-4 object-fit sm:m-auto") %>
-      <span class="hidden sm:inline text-lg flex-1 text-gray-100 tracking-widest">MagmaChat</span>
+      <span class="hidden sm:inline flex-1 text-gray-100 tracking-widest">MagmaChat</span>
     <% end %>
     <a href="/chats/new" class="text-gray-500 text-xs border bg-slate-800 border-gray-600
-     hover:border-gray-400 p-1 sm:mr-2 rounded-md hover:text-gray-200" title="New chat">+ New Chat</a>
+     hover:border-gray-400 p-1 sm:mr-2 rounded-md hover:text-gray-200" title="New chat">+ New <span class="hidden xl:inline">Chat</span></a>
   </div>
-  <div class="hidden sm:flex sm:flex-col gap-2">
-    <%= render @latest_chats %>
+  <div class="hidden sm:flex sm:flex-col gap-2 w-full">
+    <label class="block text-gray-400 font-medium text-xs mb-2">Most Recent</label>
+    <% @latest_chats.group_by(&:bot_id).each do |_, chats| %>
+      <div>
+        <div class="flex items-end justify-between h-8 border-b border-gray-500 mb-1">
+          <div class="font-medium">
+            <%= [chats.first.bot.name, chats.first.bot.role.presence].compact.join(", ") %>
+          </div>
+          <%= image_tag chats.first.bot.image_url, class: "w-12 object-cover -ml-3" %>
+        </div>
+        <%= render chats %>
+      </div>
+    <% end %>
   </div>
 
   <div class="hidden sm:block mt-auto text-xs px-1 py-2">
