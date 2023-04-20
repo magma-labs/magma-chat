@@ -16,7 +16,7 @@ class Marqo
       headers: { 'Content-Type' => 'application/json' },
       body: [doc.merge({_id: id})].to_json
     }
-    url = "/indexes/#{index.parameterize}/documents"
+    url = "/indexes/#{index.to_s.parameterize}/documents"
     if non_tensor_fields.any?
       field_array = non_tensor_fields.map { |f| "non_tensor_fields=#{f}" }
       url += "?#{field_array.join("&")}"
@@ -33,7 +33,7 @@ class Marqo
       headers: { 'Content-Type' => 'application/json' },
       body: { q: query, limit: limit }.to_json
     }
-    self.class.post("/indexes/#{index_name.parameterize}/search", options)
+    self.class.post("/indexes/#{index_name.to_s.parameterize}/search", options)
   end
 
   def lexsearch(index_name, attributes, query)
@@ -46,16 +46,16 @@ class Marqo
         searchMethod: "LEXICAL"
       }.to_json
     }
-    self.class.post("/indexes/#{index_name.parameterize}/search", options)
+    self.class.post("/indexes/#{index_name.to_s.parameterize}/search", options)
   end
 
-  def delete(index_name, id)
+  def delete(index_name, id_or_ids)
     options = {
       basic_auth: @auth,
       headers: { 'Content-Type' => 'application/json' },
-      body: { ids: [id].flatten }.to_json
+      body: [id].flatten.to_json
     }
-    self.class.post("/indexes/#{index_name.parameterize}/documents/delete-batch", options)
+    self.class.post("/indexes/#{index_name.to_s.parameterize}/documents/delete-batch", options)
   end
 
   def remove(index_name)
@@ -63,7 +63,7 @@ class Marqo
       basic_auth: @auth,
       headers: { 'Content-Type' => 'application/json' }
     }
-    self.class.delete("/indexes/#{index_name.parameterize}", options)
+    self.class.delete("/indexes/#{index_name.to_s.parameterize}", options)
   end
 
   def self.client

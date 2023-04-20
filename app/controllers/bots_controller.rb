@@ -1,4 +1,5 @@
 class BotsController < AdminController
+  skip_before_action :verify_authenticity_token, only: [:promote]
   before_action :set_bot, except: [:index, :new, :create]
 
   def index
@@ -23,16 +24,6 @@ class BotsController < AdminController
     end
   end
 
-  def destroy
-    Bot.find(params[:id]).then do |bot|
-      if bot.chats.any?
-        redirect_to bot_path(bot), alert: "Cannot delete bot with chats"
-      else
-        bot.destroy!
-        redirect_to bots_path
-      end
-    end
-  end
 
   private
 

@@ -20,7 +20,7 @@
       <input id="grow" type="checkbox" class="bg-gray-400 m-1 mr-2 rounded-sm"
               <%= @chat.grow ? 'checked' : '' %> data-id="<%= @chat&.id %>"
               data-controller="grow" data-action="click->grow#toggle"/>
-      <span>Multiple line input (cmd+enter to send)</span>
+      <span>Multi-line input (cmd+enter to send)</span>
     </div>
     <% if @chat.public_access? %>
       <div>

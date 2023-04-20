@@ -33,6 +33,7 @@ class Chat < ApplicationRecord
   has_many :messages, -> { order(created_at: :asc) }, dependent: :destroy, enable_cable_ready_updates: true
 
   before_create :set_title
+  after_create :add_context_messages
 
   after_commit :prompt!, on: :create, if: :first_message
   #after_commit :reindex, on: :update
@@ -105,6 +106,31 @@ class Chat < ApplicationRecord
   end
 
   private
+
+  def add_context_messages
+    prompts = Prompts.get("chats.context_user", {
+      bot_name: bot.name,
+      user_name: user.name,
+      date: Date.today.strftime("%B %d, %Y"),
+      time: Time.now.strftime("%I:%M %p")
+    })
+    top_memories = bot.top_memories_of(user)
+    if top_memories.any?
+      prompts += Prompts.get("chats.context_top_memories", { m: top_memories.to_sentence })
+    end
+    messages.create(
+      sender: user, role: "user",
+      content: prompts,
+      skip_broadcast: true,
+      visible: false
+    )
+    messages.create(
+      sender: bot, role: "assistant",
+      content: Prompts.get("chats.context_reply"),
+      skip_broadcast: true,
+      visible: false
+    )
+  end
 
   def set_title
     if first_message.blank?

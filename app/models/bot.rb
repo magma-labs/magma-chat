@@ -25,9 +25,10 @@ class Bot < ApplicationRecord
   attribute :name, :string, default: Faker::Name.name
   attribute :role, :string, default: Faker::Job.title
 
-  list_to_text :goals
+  # todo: need an attribute for desired response size in tokens
 
   has_many :chats, dependent: :nullify
+  has_many :observations, dependent: :destroy
 
   before_create :set_intro
 
@@ -37,6 +38,22 @@ class Bot < ApplicationRecord
 
   def generated_image_url
     @generated_image_url ||= "https://robohash.org/#{name}.png?size=640x640&set=set1"
+  end
+
+  def observed!(chat, list_of_observations)
+    importance = 100
+    list_of_observations.each do |observation|
+      observations.create!(
+        subject: chat.user,
+        brief: observation,
+        importance: [importance, 10].max
+      )
+      importance -= (1..20).to_a.sample # introduce randomness
+    end
+  end
+
+  def top_memories_of(user)
+    observations.by_user(user).order(importance: :desc).limit(20).map(&:brief_with_timestamp)
   end
 
   def self.default
@@ -49,6 +66,10 @@ class Bot < ApplicationRecord
 
   def self.others
     where.not(id: default.id).order(:name)
+  end
+
+  def to_partial_path
+    "bots/bot"
   end
 
   private

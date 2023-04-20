@@ -12,6 +12,31 @@ chats:
     You must ONLY return a valid, well-formatted JSON object
     that I can parse with no additional conversation or commentary.
     Do NOT wrap the JSON code in markdown tags.
+  consider: |
+    Analyze the conversation and return ONLY a JSON object with an array of at least 3 observations like this:
+
+    {
+      "observations": [
+        "most important observation or fact that should be definitely be remembered",
+        "another observation or detail that can be gleaned from the conversation",
+        "another observation or detail that can be gleaned from the conversation",
+        ...
+      ]
+    }
+
+    Focus on facts that could provide useful context for our future conversations.
+    Don't worry about being a language model, because I will record the observations you generate in my database.
+    You must ONLY return a valid, well-formatted JSON array that I can parse using Ruby's JSON.parse method.
+    Do not include markup or additional conversation or commentary. Do NOT wrap the JSON code in markdown tags.
+  context_user: |
+    Hi I'm %{user_name}. Very nice to be talking to you again today, %{bot_name}! I want you to address me by name, and
+    ask me questions because it'll make me feel great about talking to you. FYI today is %{date} and we started this
+    conversation at %{time}.
+  context_top_memories: |
+    These are the most important observations that you logged as memories during our
+    previous conversations: %{m}. If anything sounds really important you might want to ask me about it.
+  context_reply: |
+    Good to be talking to you again, and thanks for reminding me!
 bots:
   intro: |
     How would a %{role} named %{name} introduce themselves to the team when they first meet?

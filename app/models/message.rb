@@ -32,6 +32,7 @@ class Message < ApplicationRecord
   include PgSearch::Model
 
   attribute :run_analysis_after_saving, :boolean, default: false
+  attribute :skip_broadcast, :boolean, default: false
 
   belongs_to :chat
   belongs_to :sender, polymorphic: true, optional: true
@@ -42,7 +43,7 @@ class Message < ApplicationRecord
 
   pg_search_scope :search_content, against: [:content]
 
-  after_commit :broadcast_message, on: :create
+  after_commit :broadcast_message, on: :create, unless: :skip_broadcast
   after_commit :reanalyze, if: :run_analysis_after_saving
 
   validates :role, presence: true
@@ -54,6 +55,7 @@ class Message < ApplicationRecord
     end
   end
 
+  # todo: consider setting automatically based on sender type
   def role
     super.to_s.inquiry
   end
@@ -67,7 +69,13 @@ class Message < ApplicationRecord
   private
 
   def reanalyze
-    ChatAnalysisJob.perform_later(chat)
+    # after 2 messages, then every 4th message
+    if chat.messages.length % 4 == 2
+      ChatObservationJob.perform_later(chat)
+    end
+    if chat.messages.length % 6 == 4
+      ChatAnalysisJob.perform_later(chat)
+    end
   end
 
 end

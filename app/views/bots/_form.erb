@@ -37,11 +37,13 @@
           <%= form.text_area :directive, rows: 6, class: "shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" %>
           <div class="text-gray-500 text-sm">The prompt sent to GPT to set the role of the assistant whenever a new conversation is started.</div>
         </div>
-        <div class="mb-4">
-          <%= form.label :goals_text, "Goals (for autonomous agents)", class: "block text-gray-700 text-sm font-bold mb-2" %>
-          <%= form.text_area :goals_text, rows: 6, class: "shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" %>
-          <div class="text-gray-500 text-sm">Give the bot goals that it should work on independently.</div>
-        </div>
+        <% if @bot.kind_of? Agent %>
+          <div class="mb-4">
+            <%= form.label :goals_text, "Goals (for autonomous agents)", class: "block text-gray-700 text-sm font-bold mb-2" %>
+            <%= form.text_area :goals_text, rows: 6, class: "shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" %>
+            <div class="text-gray-500 text-sm">Give the bot goals that it should work on independently.</div>
+          </div>
+        <% end %>
         <div class="mb-4">
           <div class="mb-4">
             <label for="bot_auto_archive_mins" class="block text-gray-700 text-sm font-bold mb-2">
@@ -62,8 +64,11 @@
       <% end %>
       <div class="flex gap-4">
         <%= form.submit "Save Changes", class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" %>
+        <% unless @bot.kind_of? Agent %>
+          <%= link_to "Promote to Agent", "#", data: { reflex: "click->Bot#promote", id: @bot.id }, class: "bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" %>
+        <% end %>
         <% if @bot.persisted? && @bot.chats.empty? %>
-          <%= button_to "Delete", bot_path(@bot), method: :delete, class: "bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" %>
+          <%= link_to "Delete", "#", data: { reflex: "click->Bot#destroy", id: @bot.id }, class: "bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" %>
         <% else %>
           <div class="bg-gray-500 text-gray-400 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline cursor-not-allowed">Delete</div>
         <% end %>

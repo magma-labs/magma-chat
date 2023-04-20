@@ -2,7 +2,13 @@ Rails.application.routes.draw do
   get 'api/index'
   resources :home, only: [:index]
 
-  resources :bots
+  resources :agents, controller: "bots", type: "Agent"
+
+  resources :bots do
+    member do
+      post :promote
+    end
+  end
 
   resources :chats do
     collection do

@@ -1,12 +1,10 @@
 # frozen_string_literal: true
 
-class ChatReflex < StimulusReflex::Reflex
+class ChatReflex < ApplicationReflex
   attr_reader :chat
   attr_reader :value
 
   before_reflex :load_chat
-
-  delegate :current_user, to: :connection
 
   def prompt(message: value)
     slash_filter do
