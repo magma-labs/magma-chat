@@ -10,7 +10,7 @@
   <% end %>
 <% end %>
 
-<%= cable_ready_updates_for @chat, :messages, html_options: { class: "flex flex-col gap-0" } do %>
+<%= cable_ready_updates_for @chat, :messages, html_options: { class: "flex flex-col gap-0 mb-12" } do %>
   <%= render @chat.messages %>
   <div class="message pt-10 pl-16">
     <div id="loading" class="text-lg sm:max-w-[70%] mx-auto flex items-start gap-6 relative"><%# = render "loading" %></div>

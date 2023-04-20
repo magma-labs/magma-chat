@@ -15,19 +15,22 @@
   </head>
 
   <body class="min-h-screen flex flex-col overflow-clip">
-    <div class="flex-1 flex flex-col sm:flex-row">
-      <main class="flex-1 flex flex-col h-screen top-0 bottom-0 max-h-[100vh] overflow-y-auto bg-gray-600 scroll-smooth relative">
+    <div class="flex-1 flex flex-col sm:flex-row h-full">
+      <main class="flex-1 flex flex-col min-h-full top-0 bottom-0 max-h-[100vh] overflow-y-auto bg-gray-600 scroll-smooth relative pt-12 sm:pt-0">
         <% if content_for?(:header) %>
           <header class="hidden sm:block bg-gradient-to-r from-orange-600 to-red-700 h-12 sticky top-0 z-10 overflow-hidden shadow-xl"><%= yield :header %></header>
         <% end %>
-        <div class="flex-1 max-h-screen overflow-auto"><%= yield %></div>
+        <div class="flex-1 overflow-auto h-screen">
+          <%= yield %>
+        </div>
         <% if content_for?(:footer) %>
-          <footer class="sticky top-[100vh]"><%= yield :footer %></footer>
+          <footer class="absolute bottom-0 w-full"><%= yield :footer %></footer>
         <% end %>
       </main>
       <% if current_user %>
-        <nav class="order-first sm:w-[20%] bg-gray-800 bg-gradient-to-l from-gray-900 text-gray-300 flex
-              sm:flex-col gap-3 items-center sm:items-start h-12 sm:h-screen sm:relative
+        <nav class="order-first sm:w-[20%] bg-gray-800 bg-gradient-to-l from-gray-900 text-gray-300
+              absolute sm:relative w-full h-12
+              flex sm:flex-col sm:gap-3 items-center sm:items-start sm:h-screen
               sm:overflow-y-auto sm:max-h-screen sm:min-w-[250px]">
           <%= render "nav" %>
         </nav>
