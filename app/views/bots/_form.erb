@@ -1,4 +1,4 @@
-<%= form_with(model: @bot, local: true) do |form| %>
+<%= form_with(model: @bot.becomes(Bot), local: true) do |form| %>
   <div class="container mx-auto">
     <%= link_to [:bots], class: "flex gap-3 items-center" do %>
       <%= image_tag("logo.svg", class: "w-12 object-fit sm:m-auto") %>
