@@ -1,4 +1,6 @@
 class ChatObservationJob < ApplicationJob
+  queue_as :default
+
   def perform(chat)
     Gpt.chat(prompt: Prompts.get("chats.consider"), transcript: chat.messages_for_gpt.last(4)).then do |json|
       unless json.starts_with?("{") && json.end_with?("}")

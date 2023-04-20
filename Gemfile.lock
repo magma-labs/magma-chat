@@ -93,6 +93,7 @@ GEM
       regexp_parser (>= 1.5, < 3.0)
       xpath (~> 3.2)
     concurrent-ruby (1.2.2)
+    connection_pool (2.4.0)
     crass (1.0.6)
     date (3.3.3)
     debug (1.7.2)
@@ -218,6 +219,8 @@ GEM
     rake (13.0.6)
     redcarpet (3.6.0)
     redis (4.8.1)
+    redis-client (0.14.1)
+      connection_pool
     redis-session-store (0.11.5)
       actionpack (>= 6, < 8)
       redis (>= 3, < 6)
@@ -250,6 +253,11 @@ GEM
       rexml (~> 3.2, >= 3.2.5)
       rubyzip (>= 1.2.2, < 3.0)
       websocket (~> 1.0)
+    sidekiq (7.0.9)
+      concurrent-ruby (< 2)
+      connection_pool (>= 2.3.0)
+      rack (>= 2.2.4)
+      redis-client (>= 0.11.0)
     snaky_hash (2.0.1)
       hashie
       version_gem (~> 1.1, >= 1.1.1)
@@ -334,6 +342,7 @@ DEPENDENCIES
   rspec-rails
   ruby-openai
   selenium-webdriver
+  sidekiq
   sprockets-rails
   stimulus-rails
   stimulus_reflex (~> 3.5.0.pre10)
