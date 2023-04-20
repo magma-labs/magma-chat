@@ -12,6 +12,10 @@ module.exports = {
       fontFamily: {
         sans: ['Inter var', ...defaultTheme.fontFamily.sans],
       },
+      colors: {
+        'magma-red': '#F84848',
+        'magma-red-400': '#D42C24'
+      }
     },
   },
   plugins: [

@@ -1,11 +1,10 @@
 <% if current_user && @latest_chats %>
   <div class="text-base font-medium flex items-center gap-3 justify-between w-full sm:p-0">
     <%= link_to [:chats], class: "flex gap-3 p-4" do %>
-      <%= image_tag("logo.png", class: "w-4 object-fit sm:m-auto") %>
-      <span class="hidden sm:inline flex-1 text-gray-100 tracking-widest">MagmaChat</span>
+      <%= image_tag("nav_logo.svg", class: "h-6 xl:h-10 object-fit sm:m-auto") %>
     <% end %>
-    <a href="/chats/new" class="text-gray-500 text-xs border bg-slate-800 border-gray-600
-     hover:border-gray-400 p-1 sm:mr-4 rounded-md hover:text-gray-200" title="New chat">+ New <span class="hidden xl:inline">Chat</span></a>
+    <a href="/chats/new" class="text-gray-500 text-sm border bg-slate-800 border-gray-600 sm:-mt-2
+     hover:border-gray-400 p-1 sm:mr-4 rounded-md hover:text-gray-200" title="New chat">+&nbsp;New&nbsp;<span class="hidden xl:inline">Chat</span></a>
   </div>
   <div class="hidden sm:flex sm:flex-col gap-2 w-full overflow-y-auto h-full p-4">
     <% @latest_chats.group_by(&:bot_id).each do |_, chats| %>
