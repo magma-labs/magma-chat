@@ -30,7 +30,7 @@ class Chat < ApplicationRecord
   belongs_to :bot, optional: true, counter_cache: true
   belongs_to :user # todo: rename to owner or initiator
 
-  has_many :messages, -> { order(created_at: :asc) }, dependent: :destroy, enable_updates: true
+  has_many :messages, -> { order(created_at: :asc) }, dependent: :destroy, enable_cable_ready_updates: true
 
   before_create :set_title
 

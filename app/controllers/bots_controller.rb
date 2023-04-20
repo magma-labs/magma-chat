@@ -7,7 +7,7 @@ class BotsController < AdminController
   end
 
   def new
-    @bot = new_bot
+    @bot = Bot.new
   end
 
   def create
@@ -23,10 +23,21 @@ class BotsController < AdminController
     end
   end
 
+  def destroy
+    Bot.find(params[:id]).then do |bot|
+      if bot.chats.any?
+        redirect_to bot_path(bot), alert: "Cannot delete bot with chats"
+      else
+        bot.destroy!
+        redirect_to bots_path
+      end
+    end
+  end
+
   private
 
   def bot_params
-    params.require(:bot).permit(:name, :description, :directive, :auto_archive_mins)
+    params.require(:bot).permit(:name, :role, :image_url, :intro, :directive, :goals_text, :auto_archive_mins)
   end
 
   def set_bot
@@ -34,6 +45,6 @@ class BotsController < AdminController
   end
 
   def new_bot
-    Bot.new(id: "new", name: "New Bot", description: "Create a new bot from scratch")
+    Bot.new(id: "new", name: "New Bot", intro: "Create a new bot from scratch")
   end
 end

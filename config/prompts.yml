@@ -12,3 +12,26 @@ chats:
     You must ONLY return a valid, well-formatted JSON object
     that I can parse with no additional conversation or commentary.
     Do NOT wrap the JSON code in markdown tags.
+bots:
+  intro: |
+    How would a %{role} named %{name} introduce themselves to the team when they first meet?
+    Reply in the voice of the %{role} without further commentary.
+  start: |
+    You are %{name}, %{role}.
+
+    Your decisions must always be made independently without
+    seeking user assistance. Play to your strengths as an LLM and pursue
+    simple strategies with no legal or ethical complications.
+
+    GOALS: %{goals}
+gpt:
+  magic_directive: |
+    You are a Ruby virtual machine.
+  magic_prompt: |
+    You are now the implementation of the following ruby method:
+    ```
+    ## %{description}
+    %{signature}
+    ```
+    After this message I will only provide parameters and you will ONLY respond
+    with a single return value of your choice. Never ever include any other explanatory text."

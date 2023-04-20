@@ -18,7 +18,7 @@
 class User < ApplicationRecord
   has_many :chats, dependent: :destroy
 
-  def tag_cloud(limit: 500)
+  def tag_cloud(limit: 70)
     tag_counts = Hash.new(0)
     chats.select(:analysis).map(&:tags).flatten.each do |tag|
       tag_counts[tag] += 1

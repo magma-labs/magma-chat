@@ -58,6 +58,7 @@ gem "bootsnap", require: false
 gem "action-cable-redis-backport", "~> 1"
 gem "cable_ready", "~> 5.0.0.pre10"
 gem "dotenv", "~> 2.8"
+gem "faker"
 gem "httparty"
 gem "omniauth"
 gem "omniauth-google-oauth2"
@@ -93,4 +94,7 @@ group :test do
   gem "capybara"
   gem "selenium-webdriver"
   gem "webdrivers"
+
+  # todo: see if this gem works with the latest version of stimulus_reflex
+  # gem "stimulus_reflex_testing"
 end

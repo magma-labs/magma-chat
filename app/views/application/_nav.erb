@@ -24,7 +24,11 @@
     <div class="font-medium">
       <%= current_user.email %>
     </div>
-    <%= link_to "Sign out", "/logout", class: "text-gray-400 hover:text-yellow-500 block" %>
+    <div class="flex gap-2">
+      <%= link_to "Bots", "/bots", class: "text-gray-400 hover:text-yellow-500 block" if current_user.admin? %>
+      <%= link_to "Sign out", "/logout", class: "text-gray-400 hover:text-yellow-500 block" %>
+    </div>
+
   </div>
   <%= link_to "/logout", class: "sm:hidden text-gray-400 hover:text-gray-200 p-2" do %>
     <svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"

@@ -7,7 +7,7 @@
       <a href="/bots/<%= bot.id.presence || 'new' %>" class="region-link"><%= bot.name %></a>
     </div>
     <div class="text-sm text-gray-700">
-      <%= bot.description %>
+      <%= bot.intro %>
     </div>
     <div class="text-xs italic text-gray-700">
       <%= truncate bot.directive, length: 200 %>
