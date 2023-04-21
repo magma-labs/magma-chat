@@ -1,10 +1,10 @@
 .three-balls {
   width: 70px;
-  text-align: center;
   position: absolute;
   left: 0;
   right: 0;
-  top: 45%;
+  bottom: -10px;
+  height: 36px;
 }
 
 .three-balls .ball {
@@ -29,62 +29,62 @@
 
 @keyframes bouncedelay {
   0% {
-    bottom: 0;
+    bottom: -10px;
     background-color: #ff9346;
   }
   16.66% {
-    bottom: 40px;
+    bottom: 30px;
     background-color: #FB6542;
   }
   33.33% {
-    bottom: 0px;
+    bottom: -10px;
     background-color: #FB6542;
   }
   50% {
-    bottom: 40px;
+    bottom: 30px;
     background-color: #FFBB00;
   }
   66.66% {
-    bottom: 0px;
+    bottom: -10px;
     background-color: #FFBB00;
   }
   83.33% {
-    bottom: 40px;
+    bottom: 30px;
     background-color: #f46b03;
   }
   100% {
-    bottom: 0;
+    bottom: -10px;
     background-color: #f4033b;
   }
 }
 
 @-webkit-keyframes bouncedelay {
   0% {
-    bottom: 0;
+    bottom: -10px;
     background-color: #c900e8;
   }
   16.66% {
-    bottom: 40px;
+    bottom: 30px;
     background-color: #FB6542;
   }
   33.33% {
-    bottom: 0px;
+    bottom: -10px;
     background-color: #FB6542;
   }
   50% {
-    bottom: 40px;
+    bottom: 30px;
     background-color: #FFBB00;
   }
   66.66% {
-    bottom: 0px;
+    bottom: -10px;
     background-color: #FFBB00;
   }
   83.33% {
-    bottom: 40px;
+    bottom: 30px;
     background-color: #f4f403;
   }
   100% {
-    bottom: 0;
+    bottom: -10px;
     background-color: #f47b03;
   }
 }

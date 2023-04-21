@@ -1,14 +1,24 @@
 class ChatPromptJob < ApplicationJob
   queue_as :high_priority_queue
 
-  def perform(chat, message, visible)
-    max_tokens = [200, message.length * 2].max
+  def perform(chat, content, visible)
+    # create a blank assistant message to so that it shows
+    # thinking animation and keeps the order of messages correctly
+    message = chat.messages.create(
+      sender: chat.bot,
+      role: "assistant",
+      content: "",
+      visible: visible,
+      run_analysis_after_saving: false
+    )
+
+    max_tokens = [200, content.length * 2].max
     Gpt.chat(directive: chat.directive,
-             prompt: message,
+             prompt: content,
              max_tokens: max_tokens,
              transcript: chat.messages_for_gpt).then do |reply|
-      chat.bot_replied!(reply, visible)
+      message.update!(content: reply, run_analysis_after_saving: true)
     end
-    # todo: error handling
+    # todo: error handling, probably put it into the message content
   end
 end

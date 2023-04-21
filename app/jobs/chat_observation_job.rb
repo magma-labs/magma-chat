@@ -3,6 +3,7 @@ class ChatObservationJob < ApplicationJob
 
   def perform(chat)
     Gpt.chat(prompt: Prompts.get("chats.consider"), transcript: chat.messages_for_gpt.last(4)).then do |json|
+      return if json.blank? # todo: error handling
       unless json.starts_with?("{") && json.end_with?("}")
         json = extract_json(json)
       end

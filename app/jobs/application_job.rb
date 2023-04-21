@@ -1,6 +1,8 @@
 class ApplicationJob < ActiveJob::Base
   include CableReady::Broadcaster
 
+  sidekiq_options retry: false
+
   # Automatically retry jobs that encountered a deadlock
   retry_on ActiveRecord::Deadlocked
 

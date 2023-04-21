@@ -41,6 +41,9 @@ class Message < ApplicationRecord
   scope :by_users, -> { where(role: "user") }
   scope :by_user, ->(user) { where(sender: user) }
 
+  # scope that filters out nil or empty content
+  scope :with_content, -> { where.not(content: [nil, ""]) }
+
   pg_search_scope :search_content, against: [:content]
 
   after_commit :broadcast_message, on: :create, unless: :skip_broadcast

@@ -10,16 +10,13 @@
   <% end %>
 <% end %>
 
-<%= cable_ready_updates_for @chat, :messages, html_options: { class: "flex flex-col gap-0 mb-12" } do %>
+<%= cable_ready_updates_for @chat, :messages, html_options: { class: "flex flex-col gap-0 mb-24", data: { controller: "newmessage" } } do %>
   <%= render @chat.messages %>
-  <div class="message pt-10 pl-16">
-    <div id="loading" class="text-lg sm:max-w-[70%] mx-auto flex items-start gap-6 relative"><%# = render "loading" %></div>
-  </div>
   <% unless params[:message] || action_name["readonly"] %><span data-controller="scroll" data-action="scroll#scroll"></span><% end %>
 <% end %>
 
 <% content_for :right do %>
-  <%= cable_ready_updates_for @chat, html_options: { class: "p-4 analysis text-sm space-y-2 w-full h-full text-gray-300 flex flex-col gap-2 z-10 absolute" } do %>
+  <%= cable_ready_updates_for @chat, html_options: { class: "p-4 analysis text-sm space-y-2 w-full h-full text-gray-300 flex flex-col gap-2 z-10 absolute", } do %>
     <div>
       <label>Title</label>
       <%= @chat.title %>

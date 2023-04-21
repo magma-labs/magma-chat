@@ -55,10 +55,6 @@ class Chat < ApplicationRecord
     super || Bot.default.id
   end
 
-  def bot_replied!(content, visible)
-    messages.create(sender: bot, role: "assistant", content: content, visible: visible, run_analysis_after_saving: true)
-  end
-
   def directive
     bot.directive
   end
@@ -92,7 +88,7 @@ class Chat < ApplicationRecord
   end
 
   def messages_for_gpt
-    messages.map do |message|
+    messages.with_content.map do |message|
       { role: message.role, content: message.content }
     end
   end
