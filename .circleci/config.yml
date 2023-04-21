@@ -1,0 +1,57 @@
+version: 2.1
+
+orbs:
+  ruby: circleci/ruby@2.0.0
+
+workflows:
+  magma_chat:
+    jobs:
+      - build
+      - tests-unit:
+          requires:
+            - build
+
+commands:
+  install-dependencies:
+    description: Install dependencies
+    steps:
+      - checkout
+      - ruby/install-deps
+  setup-database:
+    description: Setup database
+    steps:
+      - run:
+          command: dockerize -wait tcp://localhost:5432 -timeout 1m
+          name: Wait for DB
+      - run:
+          command: bundle exec rails db:schema:load --trace
+          name: Load DB schema
+
+jobs:
+  build:
+    docker:
+      - image: cimg/ruby:3.2.1-browsers
+    steps:
+      - install-dependencies
+
+  tests-unit:
+    docker:
+      - image: cimg/ruby:3.2.1
+      - image: cimg/postgres:15.2
+        environment:
+          POSTGRES_USER: postgres
+          POSTGRES_DB: magma_chat_test
+          POSTGRES_PASSWORD: magma_chat
+    environment:
+      DATABASE_URL: postgres://postgres:magma_chat@127.0.0.1:5432/magma_chat_test
+      BUNDLE_JOBS: 3
+      BUNDLE_RETRY: 3
+      RAILS_ENV: test
+    steps:
+      - install-dependencies
+      - setup-database
+      - run:
+          command: bundle exec rspec --format progress --format RspecJunitFormatter -o ~/rspec/rspec.xml
+          when: always
+      - store_test_results:
+          path: ~/rspec

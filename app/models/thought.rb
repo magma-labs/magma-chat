@@ -43,7 +43,7 @@ class Thought < ApplicationRecord
   private
 
   def store_vector
-    fields = attributes.slice(:type, :brief, :bot_id, :subject_id, :subject_type, :importance)
+    fields = attributes.symbolize_keys.slice(:type, :brief, :bot_id, :subject_id, :subject_type, :importance)
     document = content.merge(fields)
     Marqo.client.store(
       index: INDEX, id: id, doc: document,

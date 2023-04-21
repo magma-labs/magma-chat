@@ -76,6 +76,10 @@ class Bot < ApplicationRecord
   private
 
   def set_intro
-    self.intro = Gpt.chat(prompt: Prompts.get("bots.intro", {name: name, role: role}), max_tokens: 120, temperature: 0.8)
+    self.intro = Gpt.chat(
+      prompt: Prompts.get("bots.intro", {name: name, role: role}),
+      max_tokens: 120,
+      temperature: 0.8
+    )
   end
 end

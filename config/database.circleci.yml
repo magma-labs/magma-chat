@@ -1,0 +1,7 @@
+test:
+  user: postgres
+  password:
+  host: 127.0.0.1
+  database: magma_chat_test
+  adapter: postgresql
+  encoding: unicode
