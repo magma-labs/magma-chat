@@ -1,0 +1,22 @@
+<div class="hidden sm:flex justify-between items-center gap-4 shadow sticky top-0 z-50 bg-slate-800 p-4">
+  <h1 class="text-2xl font-medium"><%= d("Settings") %></h1>
+</div>
+<div class="flex flex-col gap-4 p-4">
+  <%= dynamic_copy("Welcome to User Settings! Here, you can customize your account preferences,
+                    manage your privacy settings, and tailor your experience within the application to better suit your needs.
+                    If you have any questions or need assistance, please visit our Help Center or contact our support team", classes: "max-w-prose") %>
+  <%= form_with(model: current_user, url: settings_path, method: :patch, class: "text-gray-300 max-w-prose space-y-4" ) do |f| %>
+    <% current_user.settings.to_h.each do |key, val| %>
+      <div class="flex flex-col gap-1">
+        <%= f.label key, d(key.to_s.titleize) %>
+        <%= f.text_field key, class: "rounded-md text-gray-800", list: "languages" %>
+        <datalist id="languages">
+          <% Rails.cache.fetch(:languages) { [] }.sort.each do |lang| %>
+            <option value="<%= lang %>">
+          <% end %>
+        </datalist>
+    </div>
+    <% end %>
+    <%= f.submit d("Save"), class: "btn btn-primary" %>
+  <% end %>
+</div>

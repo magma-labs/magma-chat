@@ -9,7 +9,7 @@
     </div>
     <div class="text-gray-600 text-xs flex gap-2 items-center">
       <span>
-        <%= distance_of_time_in_words_to_now(chat.updated_at) %> ago</span>
+        <%= d(distance_of_time_in_words_to_now(chat.updated_at) + "ago").downcase %></span>
     </div>
   </div>
 <% end %>

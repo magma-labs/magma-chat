@@ -1,5 +1,7 @@
 <div class="card flex cursor-pointer border-4 px-4 w-full items-end relative"
      data-id="<%= bot.id %>" data-name="<%= bot.name %>"
+     data-placeholder="<%= d("Start a new chat with #{bot.name}") %>"
+     data-hello="<%= hello_in_user_language %>"
      data-controller="botselect" data-action="click->botselect#select">
   <div class="max-w-[100px]">
     <%= image_tag bot.image_url, class: "object-fit" %>
@@ -8,9 +10,9 @@
     <div class="text-gray-800 font-bold">
       <%= bot.name %>
       <div class="text-sm text-gray-500">
-        <%= bot.role %>
+        <%= d(bot.role) %>
       </div>
     </div>
-    <div class="text-sm text-gray-700"><%= truncate bot.intro, length: 100 %></div>
+    <div class="text-sm text-gray-700"><%= d(truncate(bot.intro, length: 100)) %></div>
   </div>
 </div>

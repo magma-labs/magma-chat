@@ -12,7 +12,7 @@ export default class extends Controller {
     }
     // on double click, put "Hello" in the chat_first_message field and fire its change event
     this.element.addEventListener("dblclick", (event) => {
-      document.querySelector("#chat_first_message").value = "Hello"
+      document.querySelector("#chat_first_message").value = this.element.dataset.hello
       document.querySelector("#chat_first_message").dispatchEvent(new Event('change', { bubbles: true }))
     })
   }
@@ -23,11 +23,11 @@ export default class extends Controller {
       element.classList.remove("selected")
     })
     this.element.classList.add("selected")
-    this.setPlaceholder(this.element.dataset.name)
+    this.setPlaceholder(this.element.dataset.placeholder)
   }
 
-  setPlaceholder(name) {
-    document.querySelector("#chat_first_message").setAttribute ("placeholder", "Start a new chat with the " + name)
+  setPlaceholder(placeholder) {
+    document.querySelector("#chat_first_message").setAttribute("placeholder", placeholder)
     document.querySelector("#chat_first_message").focus()
   }
 }

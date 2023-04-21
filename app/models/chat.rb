@@ -112,7 +112,7 @@ class Chat < ApplicationRecord
     })
     top_memories = bot.top_memories_of(user)
     if top_memories.any?
-      prompts += Prompts.get("chats.context_top_memories", { m: top_memories.to_sentence })
+      prompts += Prompts.get("chats.context_top_memories", { m: top_memories.to_sentence, lang: user.settings.preferred_language })
     end
     messages.create(
       sender: user, role: "user",
@@ -122,7 +122,7 @@ class Chat < ApplicationRecord
     )
     messages.create(
       sender: bot, role: "assistant",
-      content: Prompts.get("chats.context_reply"),
+      content: Prompts.get("chats.context_reply", lang: user.settings.preferred_language),
       skip_broadcast: true,
       visible: false
     )

@@ -3,20 +3,26 @@
 # Table name: users
 #
 #  id               :uuid             not null, primary key
-#  name             :string           default(""), not null
+#  admin            :boolean          default(FALSE), not null
+#  chats_count      :integer          default(0), not null
 #  email            :string           not null
 #  image_url        :string
-#  oauth_uid        :string           not null
+#  name             :string           default(""), not null
+#  oauth_expires_at :datetime
 #  oauth_provider   :string           not null
 #  oauth_token      :string
-#  oauth_expires_at :datetime
-#  chats_count      :integer          default(0), not null
+#  oauth_uid        :string           not null
+#  settings         :jsonb            not null
 #  created_at       :datetime         not null
 #  updated_at       :datetime         not null
-#  admin            :boolean          default(FALSE), not null
 #
 class User < ApplicationRecord
+  delegate_missing_to :settings
   has_many :chats, dependent: :destroy
+
+  def settings
+    RecursiveOpenStruct.new(super, recurse_over_arrays: true)
+  end
 
   def tag_cloud(limit: 70)
     tag_counts = Hash.new(0)
@@ -25,7 +31,6 @@ class User < ApplicationRecord
     end
     tag_counts.sort_by {|k, v| v}.reverse.take(limit).to_h
   end
-
 
   def self.from_omniauth(auth)
     auth.deep_symbolize_keys!

@@ -18,7 +18,7 @@
 <% content_for :right do %>
   <%= cable_ready_updates_for @chat, html_options: { class: "p-4 analysis text-sm space-y-2 w-full h-full text-gray-300 flex flex-col gap-2 z-10 absolute", } do %>
     <div>
-      <label>Title</label>
+      <label><%= d("Title") %></label>
       <%= @chat.title %>
       <% if @chat.public_access? && current_user == @chat.user %>
         <div class="text-xs text-gray-400">
@@ -40,25 +40,13 @@
     <% unless @chat.analysis.blank? %>
       <% unless @chat.analysis[:summary].blank? %>
         <div>
-          <label>Summary</label>
+          <label><%= d("Summary") %></label>
           <%= @chat.analysis[:summary] %>&nbsp;
-        </div>
-      <% end %>
-      <% unless true || @chat.analysis[:sentiment].blank? %>
-        <div>
-          <label>Sentiment</label>
-          <%= @chat.analysis[:sentiment]&.titleize %>&nbsp;
-        </div>
-      <% end %>
-      <% unless true || @chat.analysis[:language].blank? %>
-        <div>
-          <label>Language</label>
-          <%= @chat.analysis[:language] %>&nbsp;
         </div>
       <% end %>
       <% unless @chat.tags.empty? %>
         <div>
-          <label class="mb-1">Tags</label>
+          <label class="mb-1"><%= d("Tags") %></label>
           <div>
             <% @chat.tags.each do |tag| %>
               <span class="tag"><%= tag %></span>
@@ -68,7 +56,7 @@
       <% end %>
       <% unless @chat.analysis_next.empty? %>
         <div>
-          <label class="mb-1">Suggestions</label>
+          <label class="mb-1"><%= d("Suggested Topics") %></label>
           <% @chat.analysis_next.each do |sugg| %>
             <div data-id="<%= @chat&.id %>" data-value="<%= sugg %>"
                  <% if current_user %>data-reflex="click->Chat#suggested"<% end %>

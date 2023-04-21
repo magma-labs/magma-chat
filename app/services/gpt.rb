@@ -38,11 +38,13 @@ module Gpt
   ## `temp`: (Optional) The temperature to use. Defaults to 1.0.
   ## `max_tokens`: (Optional) The maximum number of tokens to return. Defaults to 100.
   def magic(signature:, description:, args:, model: "gpt-3.5-turbo", temp: 1.0, max_tokens: 100)
-    messages = [
-      message(:user, Prompts.get("gpt.magic_prompt", { signature: signature, description: description })),
-      message(:assistant, "Understood. Waiting for arguments")
-    ]
-    chat(directive: Prompts.get("gpt.magic_directive"), prompt: args.join(", "), temperature: temp, transcript: messages)
+    Rails.cache.fetch(key([signature, description, args, model, temp, max_tokens]), expires_in: 10.days) do
+      messages = [
+        message(:user, Prompts.get("gpt.magic_prompt", { signature: signature, description: description })),
+        message(:assistant, "Understood. Waiting for arguments")
+      ]
+      chat(directive: Prompts.get("gpt.magic_directive"), prompt: args.join(", "), temperature: temp, transcript: messages)
+    end
   end
 
   private

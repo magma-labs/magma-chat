@@ -1,19 +1,21 @@
+act_as_computer: |
+  I want you to act like a computer program. I give you imput and you give me output in code
+
 chats:
   analyze: |
     Analyze the conversation so far and return ONLY a JSON object with the following keys:
 
-    `title`: an appropriate title
-    `summary`: one paragraph summary
-    `sentiment`: one word sentiment analysis
-    `language`: primary human or programming language used
-    `tags`: array of lowercase tags for categorization
-    `next`: array of questions you think the user may ask next
+    `title`: an appropriate title in %{lang}
+    `summary`: one paragraph summary in %{lang}
+    `tags`: array of lowercase tags for categorization in %{lang}
+    `next`: array of questions in %{lang} you think I could ask you next to continue the conversation effectively
 
     You must ONLY return a valid, well-formatted JSON object
     that I can parse with no additional conversation or commentary.
+    The values should all be %{lang}.
     Do NOT wrap the JSON code in markdown tags.
   consider: |
-    Analyze the conversation and return ONLY a JSON object with an array of at least 3 observations like this:
+    Analyze the conversation and generate at least 3 observations like this:
 
     {
       "observations": [
@@ -24,10 +26,7 @@ chats:
       ]
     }
 
-    Focus on facts that could provide useful context for our future conversations.
-    Don't worry about being a language model, because I will record the observations you generate in my database.
-    You must ONLY return a valid, well-formatted JSON array that I can parse using Ruby's JSON.parse method.
-    Do not include markup or additional conversation or commentary. Do NOT wrap the JSON code in markdown tags.
+    ONLY REPLY WITH VALID JSON that I can parse using Ruby's JSON.parse function!!!
   context_user: |
     Hi I'm %{user_name}. Very nice to be talking to you again today, %{bot_name}! I want you to address me by name, and
     ask me questions because it'll make me feel great about talking to you. FYI today is %{date} and we started this
@@ -35,8 +34,10 @@ chats:
   context_top_memories: |
     These are the most important observations that you logged as memories during our
     previous conversations: %{m}. If anything sounds really important you might want to ask me about it.
+    Finally, the remainder of this chat will be spoken in %{lang}. It's very important that you only speak to me in %{lang}.
   context_reply: |
-    Good to be talking to you again, and thanks for reminding me!
+    Good to be talking to you again, and thanks for reminding me of my memories! Yes, from here on out I will reply in %{lang}, no problem!
+
 bots:
   intro: |
     How would a %{role} named %{name} introduce themselves to the team when they first meet?
@@ -49,6 +50,12 @@ bots:
     simple strategies with no legal or ethical complications.
 
     GOALS: %{goals}
+
+dynamic_text: |
+  How do you say "%{t}" in clean, well-written %{l} suitable for use as copy in a web application?
+  Do not add any commentary. Only respond with the answer. If your response is just a single word
+  or short phrase then do not use any punctuation.
+
 gpt:
   magic_directive: |
     You are a Ruby virtual machine.
