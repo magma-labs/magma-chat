@@ -30,4 +30,39 @@
 # available at https://guides.rubyonrails.org/i18n.html.
 
 en:
-  hello: "Hello world"
+  settings:
+    preferred_language:
+      title: Preferred Language
+      admin:
+        field: text_field
+        field_args:
+          -
+            class: rounded-md text-gray-800
+        help_text: Choose
+      user:
+        field: select
+        field_args:
+        - - Baby Talk
+          - Deutsch
+          - Ebonics
+          - Emoji
+          - English
+          - Español
+          - Esperanto
+          - Français
+          - Hindi हिन्दी
+          - Indonesian
+          - Italiano
+          - Japanese - 日本語
+          - Klingon
+          - Korean - 한국어
+          - Mandarin Chinese - 中文
+          - Português
+          - Russian - Русский
+          - Sindarin
+          - Standard Arabic العربية
+          - Tiếng Việt
+          - Trumpisms
+          - Türkçe
+        - {}
+        - { class: "rounded-md text-gray-800" }

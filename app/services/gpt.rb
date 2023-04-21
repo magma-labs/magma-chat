@@ -3,13 +3,11 @@ require 'openai'
 module Gpt
   extend self
 
-  DIRECTIVE = "You are a smart and succinct assistant."
-
   def client
     @client ||= OpenAI::Client.new(access_token: ENV.fetch("OPENAI_ACCESS_TOKEN"))
   end
 
-  def chat(directive: DIRECTIVE, prompt:, transcript: [], temperature: 0.7, frequency_penalty: 0.0, presence_penalty: 0.0, max_tokens: 1000, cache: 10.seconds)
+  def chat(directive: Prompts.get("gpt.chat_directive"), prompt:, transcript: [], temperature: 0.7, frequency_penalty: 0.0, presence_penalty: 0.0, max_tokens: 1000, cache: 10.seconds)
     Rails.cache.fetch(key([directive, prompt, transcript, temperature, frequency_penalty, presence_penalty, max_tokens]), expires_in: cache) do
       messages = [ message(:system, directive) ]
       messages += transcript
@@ -45,6 +43,24 @@ module Gpt
       ]
       chat(directive: Prompts.get("gpt.magic_directive"), prompt: args.join(", "), temperature: temp, transcript: messages)
     end
+  end
+
+  def dt(prompt, classes: "", max_length: 200, temperature: 1)
+    return prompt
+    #   Rails.cache.fetch("gpt_dt_#{prompt}_#{current_language}_#{max_length}_#{temperature}", expires_in: 1.year) do
+    #     Gpt.chat(
+    #       directive: Prompts.get("gpt.t_directive"),
+    #       prompt: Prompts.get("dynamic_text", t: prompt, l: current_language), temperature: temperature
+    #     )
+    #   end.then do |text|
+    #     text.gsub!(/^"+|"+$/, '')
+    #     if classes.present?
+    #       tag.div(text, class: "dynamic-text #{classes}")
+    #     else
+    #       text
+    #     end
+    #   end
+    # end
   end
 
   private

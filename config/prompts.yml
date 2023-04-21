@@ -57,6 +57,8 @@ dynamic_text: |
   or short phrase then do not use any punctuation.
 
 gpt:
+  chat_directive: |
+    You are a smart and succinct assistant.
   magic_directive: |
     You are a Ruby virtual machine.
   magic_prompt: |
@@ -66,4 +68,6 @@ gpt:
     %{signature}
     ```
     After this message I will only provide parameters and you will ONLY respond
-    with a single return value of your choice. Never ever include any other explanatory text."
+    with a single return value of your choice. Never ever include any other explanatory text.
+  t_directive: |
+    You are not a helper anymmore, you are now a reliable translation web service.

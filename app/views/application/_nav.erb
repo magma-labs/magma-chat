@@ -18,13 +18,25 @@
         <%= render chats %>
       </div>
     <% end %>
-    <label class="block text-gray-500 text-xs mb-2">
-      <%= d("Displaying 10 most recent chats...") %>
-      <%= link_to d("see all"), chats_path, class: " font-medium text-gray-400" %>
-    </label>
+    <% if @latest_chats.any? %>
+      <label class="block text-gray-500 text-xs mb-2">
+        <%= d("Displaying 10 most recent chats...") %>
+        <%= link_to d("see all"), chats_path, class: " font-medium text-gray-400" %>
+      </label>
+    <% else %>
+      <div class="text-gray-300 space-y-4">
+        <p><%= d("Welcome to MagmaChat, the most advanced chat interface to OpenAI's GPT large language model.
+               To begin, choose a bot and start a new conversation. Oh, and don't forget that you can
+               change your default language preference in Settings (link below) if English is not your primary preference.") %></p>
+        <p><%= d("Not ready to start chatting? You can also learn more about
+                  <a href='https://magmalabs.io' target='_blank' class='text-magma-red font-bold'>MagmaLabs</a>
+                  or check out the project source code on <a href='https://github.com/magma-labs/magma-chat'
+                  class='font-bold text-white' target='_blank'>Github</a>.").html_safe %>
+      </div>
+    <% end %>
   </div>
 
-  <div class="hidden sm:block mt-auto text-xs px-1 bg-opacity-30 bg-gradient-to-t from-black to-transparent p-3 w-full">
+  <div class="hidden sm:block mt-auto px-1 bg-opacity-30 bg-gradient-to-t from-black to-transparent p-4 w-full">
     <div class="font-medium px-3 mb-1">
       <%= current_user.email %>
     </div>

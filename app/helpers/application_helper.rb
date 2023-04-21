@@ -12,6 +12,7 @@ module ApplicationHelper
     tag.div(Markdown.new(text.to_s, *options).to_html.gsub(/<p><\/p>/, '').html_safe, class: "markdown max-w-full")
   end
 
+  # proxy to Gpt.t
   def dynamic_copy(prompt, classes: "", max_length: 200, temperature: 1)
     Rails.cache.fetch("dynamic_text_#{prompt}_#{current_language}_#{max_length}_#{temperature}", expires_in: 1.year) do
       Gpt.chat(
