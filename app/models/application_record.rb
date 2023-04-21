@@ -11,8 +11,7 @@ class ApplicationRecord < ActiveRecord::Base
     end
 
     define_method("#{attr_name}_text=") do |value|
-      send("#{attr_name}=", value.to_s.strip.split("\n\n+").reject(&:blank?))
+      send("#{attr_name}=", value.to_s.strip.split(/\n\n+/).reject(&:blank?))
     end
   end
-
 end

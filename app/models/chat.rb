@@ -43,6 +43,8 @@ class Chat < ApplicationRecord
   pg_search_scope :search_tags, against: :analysis,
     using: { tsearch: { prefix: true } }
 
+  delegate :directive, to: :bot
+
   def analysis
     super.deep_symbolize_keys
   end
@@ -53,10 +55,6 @@ class Chat < ApplicationRecord
 
   def bot_id
     super || Bot.default.id
-  end
-
-  def directive
-    bot.directive
   end
 
   def prompt!(message: first_message, visible: true, sender: user)
