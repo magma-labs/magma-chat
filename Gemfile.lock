@@ -262,6 +262,8 @@ GEM
       rspec-mocks (~> 3.11)
       rspec-support (~> 3.11)
     rspec-support (3.12.0)
+    rspec_junit_formatter (0.6.0)
+      rspec-core (>= 2, < 4, != 2.12.0)
     ruby-openai (3.7.0)
       httparty (>= 0.18.1)
     ruby2_keywords (0.0.5)
@@ -371,6 +373,7 @@ DEPENDENCIES
   redis (~> 4.0)
   redis-session-store (~> 0.11.5)
   rspec-rails
+  rspec_junit_formatter
   ruby-openai
   selenium-webdriver
   sidekiq

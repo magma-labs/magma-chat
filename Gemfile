@@ -100,6 +100,7 @@ group :test do
   gem "webdrivers"
   gem "simplecov", require: false
   gem 'factory_bot_rails'
+  gem 'rspec_junit_formatter'
 
   # todo: see if this gem works with the latest version of stimulus_reflex
   # gem "stimulus_reflex_testing"
