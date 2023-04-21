@@ -37,6 +37,7 @@ jobs:
   tests-unit:
     docker:
       - image: cimg/ruby:3.2.1
+      - image: cimg/redis:6.2.6
       - image: cimg/postgres:15.2
         environment:
           POSTGRES_USER: postgres
