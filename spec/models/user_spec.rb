@@ -1,3 +1,21 @@
+# == Schema Information
+#
+# Table name: users
+#
+#  id               :uuid             not null, primary key
+#  admin            :boolean          default(FALSE), not null
+#  chats_count      :integer          default(0), not null
+#  email            :string           not null
+#  image_url        :string
+#  name             :string           default(""), not null
+#  oauth_expires_at :datetime
+#  oauth_provider   :string           not null
+#  oauth_token      :string
+#  oauth_uid        :string           not null
+#  settings         :jsonb            not null
+#  created_at       :datetime         not null
+#  updated_at       :datetime         not null
+#
 require 'rails_helper'
 
 RSpec.describe User, type: :model do

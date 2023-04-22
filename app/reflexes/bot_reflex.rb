@@ -10,6 +10,14 @@ class BotReflex < ApplicationReflex
     morph :nothing
   end
 
+  def publish
+    @bot.update(published_at: Time.now)
+  end
+
+  def unpublish
+    @bot.update(published_at: nil)
+  end
+
   def destroy
     if @bot.chats.empty?
       @bot.destroy!

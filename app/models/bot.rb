@@ -10,16 +10,18 @@
 #  image_url         :string
 #  intro             :text
 #  name              :string           not null
-#  properties        :jsonb            not null
+#  published_at      :datetime
 #  role              :string
+#  settings          :jsonb            not null
 #  type              :string           default("Bot"), not null
 #  created_at        :datetime         not null
 #  updated_at        :datetime         not null
 #
 # Indexes
 #
-#  index_bots_on_name  (name)
-#  index_bots_on_type  (type)
+#  index_bots_on_name          (name)
+#  index_bots_on_published_at  (published_at)
+#  index_bots_on_type          (type)
 #
 class Bot < ApplicationRecord
   attribute :name, :string, default: Faker::Name.name
@@ -32,6 +34,8 @@ class Bot < ApplicationRecord
   has_many :observations, dependent: :destroy
 
   before_create :set_intro
+
+  scope :published, -> { where.not(published_at: nil) }
 
   def image_url
     super || generated_image_url

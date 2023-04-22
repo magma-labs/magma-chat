@@ -62,8 +62,13 @@
           </div>
         </div>
       <% end %>
-      <div class="flex gap-4">
+      <div class="flex gap-4 bg-">
         <%= form.submit "Save Changes", class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" %>
+        <% if @bot.published_at.blank? %>
+          <%= link_to "Publish", "#", data: { reflex: "click->Bot#publish", id: @bot.id }, class: "bg-orange-600 hover:bg-orange-400 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" %>
+        <% else %>
+          <%= link_to "Unpublish", "#", data: { reflex: "click->Bot#unpublish", id: @bot.id }, class: "bg-yellow-500 hover:bg-yellow-400 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" %>
+        <% end %>
         <% unless @bot.kind_of? Agent %>
           <%= link_to "Promote to Agent", "#", data: { reflex: "click->Bot#promote", id: @bot.id }, class: "bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" %>
         <% end %>

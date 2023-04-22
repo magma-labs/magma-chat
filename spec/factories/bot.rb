@@ -2,6 +2,6 @@ FactoryBot.define do
   factory :bot do
     goals { {} }
     name { 'My Bot' }
-    properties { {} }
+    settings { {} }
   end
 end
