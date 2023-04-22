@@ -2,7 +2,9 @@ class ChatAnalysisJob < ApplicationJob
   queue_as :default
 
   def perform(chat)
-    Gpt.chat(prompt: Prompts.get("chats.analyze", lang: chat.user.settings.preferred_language), transcript: chat.messages_for_gpt).then do |json|
+    prompt = Prompts.get("chats.analyze", lang: chat.user.settings.preferred_language)
+    prompt_tokens = TikToken.count(prompt)
+    Gpt.chat(prompt: prompt, transcript: chat.messages_for_gpt(prompt_tokens)).then do |json|
       puts
       puts "🔥🔥🔥 #{json} 🔥🔥🔥"
       puts

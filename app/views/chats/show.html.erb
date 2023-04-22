@@ -70,6 +70,9 @@
         </div>
       <% end %>
     <% end %>
+    <div class="text-xs text-gray-500">
+      <%= @chat.total_token_count %> tokens consumed in this chat
+    </div>
   <% end %>
   <div class="hidden sm:block">
     <%= image_tag @chat.bot.image_url, class: "object-fit absolute bottom-0 opacity-60" %>

@@ -72,6 +72,21 @@ class Message < ApplicationRecord
     self.sender_image_url = sender.image_url
   end
 
+  def self.up_to_token_limit(chat, max_tokens)
+    subquery =
+      select("*, SUM(tokens_count) OVER (ORDER BY created_at DESC) AS running_total")
+        .where(chat_id: chat.id)
+        .from("messages")
+        .to_sql
+
+    select("*")
+      .from("(#{subquery}) AS subquery")
+      .where("running_total <= ?", max_tokens)
+      .order("subquery.created_at desc")
+      .to_a
+      .reverse
+  end
+
   private
 
   def calculate_tokens
