@@ -1,6 +1,6 @@
 common: &defaults
   name: magma-chat
-  key: ENV.fetch("SCOUT_KEY:")
+  key: ENV.fetch("SCOUT_KEY")
   monitor: true
 
 test:
