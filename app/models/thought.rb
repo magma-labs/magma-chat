@@ -25,6 +25,7 @@ class Thought < ApplicationRecord
   belongs_to :bot
   belongs_to :subject, polymorphic: true, optional: true
 
+  scope :latest, -> { order(created_at: :desc) }
   scope :by_bot, ->(bot) { where(bot: bot) }
   scope :by_user, ->(user) { where(subject: user) }
 

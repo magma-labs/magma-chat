@@ -16,6 +16,9 @@
 <% end %>
 
 <% content_for :right do %>
+  <% if current_user.blank? %>
+    <div class="pt-6"><%= link_to image_tag("nav_logo.svg", class: "h-6 xl:h-10 object-fit sm:m-auto"), root_path %></div>
+  <% end %>
   <%= cable_ready_updates_for @chat, html_options: { class: "p-4 analysis text-sm space-y-2 w-full h-full text-gray-300 flex flex-col gap-2 z-10 absolute", } do %>
     <div>
       <label><%= d("Title") %></label>

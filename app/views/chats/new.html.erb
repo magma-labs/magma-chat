@@ -3,7 +3,7 @@
 </div>
 <div class="grid xl:grid-cols-3 gap-4 p-4">
   <%= render Bot.published %>
-  <%= render Bot.unpublished if current_user.admin? %>
+  <%= render Bot.unpublished if current_admin? %>
 </div>
 
 <% content_for :footer do %>

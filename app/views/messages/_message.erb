@@ -15,7 +15,7 @@
             </div>
         <% end %>
       </div>
-      <% if current_user.admin? %>
+      <% if current_admin? %>
         <div class="text-xs p-2 cursor-pointer" data-reflex="click->Message#destroy" data-id="<%= message.id %>">🗑</div>
       <% end %>
     </div>

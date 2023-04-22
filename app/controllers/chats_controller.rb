@@ -35,7 +35,7 @@ class ChatsController < ApplicationController
 
   def show
     if current_user
-      if current_user.admin?
+      if current_admin?
         @chat ||= Chat.find(params[:id])
       else
         @chat ||= current_user.chats.find(params[:id])

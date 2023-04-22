@@ -1,9 +1,14 @@
 class ApplicationController < ActionController::Base
   include CableReady::Broadcaster
 
+  helper_method :current_admin?
   helper_method :current_user
 
   protected
+
+  def current_admin?
+    !!current_user&.admin?
+  end
 
   def current_user
     session[:user_id] && User.find_by(id: session[:user_id])

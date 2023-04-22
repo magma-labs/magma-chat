@@ -42,7 +42,7 @@
     </div>
     <div class="flex gap-2 px-3">
       <%= link_to d("Settings"), "/settings", class: "text-gray-400 hover:text-yellow-500 block" %>
-      <%= link_to "Bots", "/bots", class: "text-gray-400 hover:text-yellow-500 block" if current_user.admin? %>
+      <%= link_to "Bots", "/bots", class: "text-gray-400 hover:text-yellow-500 block" if current_admin? %>
       <%= link_to d("Sign out"), "/logout", class: "text-gray-400 hover:text-yellow-500 block" %>
     </div>
 
