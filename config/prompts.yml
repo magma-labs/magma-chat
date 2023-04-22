@@ -1,5 +1,5 @@
 act_as_computer: |
-  I want you to act like a computer program. I give you imput and you give me output in code
+  I want you to act like a computer program. I give you input and you produce output in code without additional commentary.
 
 chats:
   analyze: |
@@ -15,17 +15,25 @@ chats:
     The values should all be %{lang}.
     Do NOT wrap the JSON code in markdown tags.
   consider: |
-    Analyze the conversation and generate at least 3 observations like this:
+    Analyze our conversation so far and generate observations, with importance ratings from 1 to 100 like this:
 
     {
       "observations": [
-        "most important observation or fact that should be definitely be remembered",
-        "another observation or detail that can be gleaned from the conversation",
-        "another observation or detail that can be gleaned from the conversation",
-        ...
+        {
+          importance: 100,
+          brief: "super important observation or fact about me",
+          about: "user"
+        },
+        {
+          importance: 50,
+          brief: "an observation about our current conversation",
+          about: "conversation"
+        },
+        ...include as many observations as needed, but don't make things up!
       ]
     }
 
+    Do not generate sample observations or commentary. If you have no observations then I want you to return an empty array.
     ONLY REPLY WITH VALID JSON that I can parse using Ruby's JSON.parse function!!!
   context_user: |
     Hi I'm %{user_name}. Very nice to be talking to you again today, %{bot_name}! I want you to address me by name, and

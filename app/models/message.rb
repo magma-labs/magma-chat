@@ -10,6 +10,7 @@
 #  sender_image_url :string
 #  sender_name      :string
 #  sender_type      :string
+#  tokens_count     :integer          default(0), not null
 #  type             :string           default("Message"), not null
 #  visible          :boolean          default(TRUE), not null
 #  created_at       :datetime         not null
@@ -46,6 +47,8 @@ class Message < ApplicationRecord
 
   pg_search_scope :search_content, against: [:content]
 
+  before_save :calculate_tokens
+
   after_commit :broadcast_message, on: :create, unless: :skip_broadcast
   after_commit :reanalyze, if: :run_analysis_after_saving
 
@@ -70,6 +73,10 @@ class Message < ApplicationRecord
   end
 
   private
+
+  def calculate_tokens
+    self.tokens_count = TikToken.count(content.to_s.encode('UTF-8', 'UTF-8', invalid: :replace, undef: :replace))
+  end
 
   def reanalyze
     # after 2 messages, then every 4th message

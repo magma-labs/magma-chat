@@ -11,6 +11,7 @@
           <%= markdown(message.content) %>
             <div class="text-gray-500 text-xs">
               <%= d("#{distance_of_time_in_words_to_now(message.updated_at)} ago").downcase %>
+              ・ <%= message.tokens_count %> tokens
               <% if params[:message] == message.id %><span data-controller="scroll" data-action="scroll#scroll"></span><% end %>
             </div>
         <% end %>

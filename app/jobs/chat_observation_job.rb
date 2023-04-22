@@ -2,7 +2,12 @@ class ChatObservationJob < ApplicationJob
   queue_as :default
 
   def perform(chat)
-    Gpt.chat(directive: Prompts.get("act_as_computer"), prompt: Prompts.get("chats.consider"), transcript: chat.messages_for_gpt.last(4)).then do |json|
+    Gpt.chat(
+      directive: Prompts.get("act_as_computer"),
+      prompt: Prompts.get("chats.consider"),
+      transcript: chat.messages_for_gpt.last(6),
+      temperature: 0.2
+    ).then do |json|
       if json.blank?
         Rails.logger.warn "No JSON found in GPT response to observation for Chat: #{chat.id}"
       else

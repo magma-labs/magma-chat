@@ -156,7 +156,7 @@ html {
 
 .message pre {
   /* TODO: Add syntax highlighting like til.magmalabs.io has */
-  overflow-x: hidden;
+  overflow-x: auto;
   max-width: 100%;
   font-size: 14px;
   font-family: monospace;

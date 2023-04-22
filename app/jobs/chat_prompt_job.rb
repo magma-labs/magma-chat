@@ -12,10 +12,9 @@ class ChatPromptJob < ApplicationJob
       run_analysis_after_saving: false
     )
 
-    max_tokens = [200, content.length * 2].max
     Gpt.chat(directive: chat.directive,
              prompt: content,
-             max_tokens: max_tokens,
+             max_tokens: 500,
              transcript: chat.messages_for_gpt).then do |reply|
       message.update!(content: reply, run_analysis_after_saving: true)
     end

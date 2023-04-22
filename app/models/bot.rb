@@ -47,14 +47,20 @@ class Bot < ApplicationRecord
   end
 
   def observed!(chat, list_of_observations)
-    importance = 100
-    list_of_observations.each do |observation|
-      observations.create!(
-        subject: chat.user,
-        brief: observation,
-        importance: [importance, 10].max
-      )
-      importance -= (1..20).to_a.sample # introduce randomness
+    list_of_observations.each do |params|
+      subject_name = params.delete(:about)
+      observations.build(params).then do |observation|
+        observation.subject = subject_name["conversation"] ? chat : chat.user
+        if observation.save
+          # no problem
+        else
+          # todo: is there a less clumsy more expressive way of doing this?
+          observations.find_by(subject: observation.subject, brief: params[:brief]).then do |eo|
+            eo.increment!(:importance, params[:importance].to_i)
+          end
+        end
+
+      end
     end
   end
 

@@ -10,6 +10,7 @@
 #  sender_image_url :string
 #  sender_name      :string
 #  sender_type      :string
+#  tokens_count     :integer          default(0), not null
 #  type             :string           default("Message"), not null
 #  visible          :boolean          default(TRUE), not null
 #  created_at       :datetime         not null

@@ -20,6 +20,4 @@
 #  index_thoughts_on_subject  (subject_type,subject_id)
 #
 class Observation < Thought
-
-
 end
