@@ -90,7 +90,10 @@ class Chat < ApplicationRecord
   end
 
   def messages_for_gpt(tokens_in_prompt)
-    max_tokens = 3000 - tokens_in_prompt # todo: move to setting or constant
+    puts
+    puts "tokens_in_prompt: #{tokens_in_prompt}"
+    puts
+    max_tokens = 1500 - tokens_in_prompt # todo: move to setting or constant
     Message.up_to_token_limit(self, max_tokens).map do |message|
       { role: message.role, content: message.content }
     end

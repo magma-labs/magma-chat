@@ -4,7 +4,7 @@ class ChatAnalysisJob < ApplicationJob
   def perform(chat)
     prompt = Prompts.get("chats.analyze", lang: chat.user.settings.preferred_language)
     prompt_tokens = TikToken.count(prompt)
-    Gpt.chat(prompt: prompt, transcript: chat.messages_for_gpt(prompt_tokens)).then do |json|
+    Gpt.chat(prompt: prompt, max_tokens: 200, transcript: chat.messages_for_gpt(prompt_tokens + 200)).then do |json|
       puts
       puts "🔥🔥🔥 #{json} 🔥🔥🔥"
       puts
