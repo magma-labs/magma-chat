@@ -6,9 +6,9 @@ chats:
     Analyze the conversation so far and return ONLY a JSON object with the following keys:
 
     `title`: an appropriate title in %{lang}
-    `summary`: one paragraph summary in %{lang}
-    `tags`: array of lowercase tags for categorization in %{lang}
-    `next`: array of questions in %{lang} you think I could ask you next to continue the conversation effectively
+    `summary`: one paragraph summary in %{lang} that provides a brief overview of the conversation and highlights any significant points
+    `tags`: array of lowercase tags in %{lang} that represent the main themes of our conversation
+    `next`: array of questions in %{lang} you think the user could ask the assistant next
 
     You must ONLY return a valid, well-formatted JSON object
     that I can parse with no additional conversation or commentary.

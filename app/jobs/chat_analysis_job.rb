@@ -6,7 +6,7 @@ class ChatAnalysisJob < ApplicationJob
       puts
       puts "🔥🔥🔥 #{json} 🔥🔥🔥"
       puts
-      JSON.parse(json.match(/.*?(\{.*\})/m)[0], symbolize_names: true).then do |data|
+      JSON.parse(json.match(/.*?(\{.*\})/m)[1], symbolize_names: true).then do |data|
         Rails.logger.info(data)
         chat.title = data[:title] if data[:title]
         chat.analysis = chat.analysis.merge(data)

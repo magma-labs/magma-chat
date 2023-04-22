@@ -9,7 +9,7 @@ class ChatObservationJob < ApplicationJob
         puts
         puts "🔥🔥🔥 #{json} 🔥🔥🔥"
         puts
-        JSON.parse(json.match(/.*?(\{.*\})/m)[0], symbolize_names: true).then do |data|
+        JSON.parse(json.match(/.*?(\{.*\})/m)[1], symbolize_names: true).then do |data|
           chat.bot.observed!(chat, data[:observations])
         end
       end
