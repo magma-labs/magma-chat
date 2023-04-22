@@ -36,6 +36,7 @@ class Bot < ApplicationRecord
   before_create :set_intro
 
   scope :published, -> { where.not(published_at: nil) }
+  scope :unpublished, -> { where(published_at: nil) }
 
   def image_url
     super || generated_image_url
