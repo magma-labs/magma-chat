@@ -73,6 +73,7 @@ GEM
     annotate (3.2.0)
       activerecord (>= 3.2, < 8.0)
       rake (>= 10.4, < 14.0)
+    ast (2.4.2)
     bindex (0.8.1)
     bootsnap (1.16.0)
       msgpack (~> 1.2)
@@ -132,6 +133,13 @@ GEM
     jbuilder (2.11.5)
       actionview (>= 5.0.0)
       activesupport (>= 5.0.0)
+    judoscale-rails (1.4.0)
+      judoscale-ruby (= 1.4.0)
+      railties
+    judoscale-ruby (1.4.0)
+    judoscale-sidekiq (1.4.0)
+      judoscale-ruby (= 1.4.0)
+      sidekiq (>= 5.0)
     jwt (2.7.0)
     loofah (2.20.0)
       crass (~> 1.0.2)
@@ -186,6 +194,8 @@ GEM
     omniauth-rails_csrf_protection (1.0.1)
       actionpack (>= 4.2)
       omniauth (~> 2.0)
+    parser (3.2.2.0)
+      ast (~> 2.4.1)
     pg (1.4.6)
     pg_search (2.3.6)
       activerecord (>= 5.2)
@@ -268,6 +278,8 @@ GEM
       httparty (>= 0.18.1)
     ruby2_keywords (0.0.5)
     rubyzip (2.3.2)
+    scout_apm (5.3.3)
+      parser
     selenium-webdriver (4.8.6)
       rexml (~> 3.2, >= 3.2.5)
       rubyzip (>= 1.2.2, < 3.0)
@@ -359,6 +371,8 @@ DEPENDENCIES
   httparty
   importmap-rails
   jbuilder
+  judoscale-rails
+  judoscale-sidekiq
   omniauth
   omniauth-google-oauth2
   omniauth-rails_csrf_protection
@@ -375,6 +389,7 @@ DEPENDENCIES
   rspec-rails
   rspec_junit_formatter
   ruby-openai
+  scout_apm
   selenium-webdriver
   sidekiq
   simplecov

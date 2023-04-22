@@ -105,3 +105,9 @@ group :test do
   # todo: see if this gem works with the latest version of stimulus_reflex
   # gem "stimulus_reflex_testing"
 end
+
+group :production do
+  gem "judoscale-rails"
+  gem "judoscale-sidekiq"
+  gem 'scout_apm'
+end
