@@ -60,8 +60,6 @@ gem "cable_ready", "~> 5.0.0.pre10"
 gem "dotenv", "~> 2.8"
 gem "faker"
 gem "httparty"
-gem "judoscale-rails"
-gem "judoscale-sidekiq"
 gem "omniauth"
 gem "omniauth-google-oauth2"
 gem "omniauth-rails_csrf_protection"
@@ -70,7 +68,6 @@ gem "recursive-open-struct"
 gem "redcarpet"
 gem "redis-session-store", "~> 0.11.5"
 gem "ruby-openai" # https://github.com/alexrudall/ruby-openai
-gem 'scout_apm'
 gem 'sidekiq'
 gem "stimulus_reflex", "~> 3.5.0.pre10"
 gem "tiktoken_ruby", "~> 0.0.4"
@@ -107,4 +104,10 @@ group :test do
 
   # todo: see if this gem works with the latest version of stimulus_reflex
   # gem "stimulus_reflex_testing"
+end
+
+group :production do
+  gem "judoscale-rails"
+  gem "judoscale-sidekiq"
+  gem 'scout_apm'
 end
