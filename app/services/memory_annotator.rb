@@ -19,7 +19,7 @@ class MemoryAnnotator
         next if search_result.hits.empty?
         chat.messages.create!(
           sender: chat.user,
-          content: compile_content(search_result.query, hits)
+          content: compile_content(search_result.query, hits),
           skip_broadcast: true,
           visible: false
         )
