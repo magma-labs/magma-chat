@@ -34,7 +34,7 @@ RSpec.describe Thought, type: :model do
 
     let(:timestamp) { Time.current }
 
-    let(:expected_value) { "[#{timestamp.strftime('%d/%m/%Y %H:%M')}]:brief" }
+    let(:expected_value) { "[#{timestamp.strftime('%d/%m/%Y %H:%M')}] brief" }
 
     it 'concatenates timestamp with brief' do
       expect(instance.brief_with_timestamp).to eq expected_value

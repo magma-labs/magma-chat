@@ -78,8 +78,7 @@ conversation_analyzer:
     Given the following messages exchanged in a conversation
     between a %{user_name} and a %{bot_role} named %{bot_name},
     what questions should %{bot_name} ask themselves before formulating
-    an answer that is prudent and does not make assumptions? Include
-    questions related to past knowledge only.
+    an answer that does not make assumptions? Include numbered questions related to past knowledge only.
 
     LATEST MESSAGES
     ---------------

@@ -110,13 +110,11 @@ class Message < ApplicationRecord
   end
 
   def reanalyze
-    # after 2 messages, then every 4th message
-    if chat.messages.length % 4 == 2
-      ChatObservationJob.perform_later(chat)
-    end
-    if chat.messages.length % 6 == 4
-      ChatAnalysisJob.perform_later(chat)
-    end
+    puts
+    puts "🤓🤓🤓🤓🤓🤓🤓 Reanalyzing chat #{chat.id} after message #{id} 🤓🤓🤓🤓🤓🤓🤓"
+    puts
+    ChatObservationJob.perform_later(chat)
+    ChatAnalysisJob.perform_later(chat)
   end
 
 end

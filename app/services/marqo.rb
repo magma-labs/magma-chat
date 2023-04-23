@@ -6,9 +6,6 @@ class Marqo
   base_uri ENV.fetch('MARQO_URL', "http://localhost:8882")
 
   class SearchResult < RecursiveOpenStruct
-    def initialize(response)
-      super(response, recurse_over_arrays: true)
-    end
   end
 
   # TODO: Add a way to pass in auth
@@ -17,6 +14,12 @@ class Marqo
   end
 
   def store(index:, doc:, id:, non_tensor_fields: [])
+    puts
+    puts "🧠🧠🧠 INDEX: #{index} 🧠🧠🧠"
+    puts "🧠🧠🧠 DOC: #{doc} 🧠🧠🧠"
+    puts "🧠🧠🧠 ID: #{id} 🧠🧠🧠"
+    puts "🧠🧠🧠 NON TENSOR FIELDS: #{non_tensor_fields} 🧠🧠🧠"
+    puts
     options = {
       headers: { 'Content-Type' => 'application/json' },
       body: [doc.merge({_id: id})].to_json
@@ -32,19 +35,24 @@ class Marqo
     end
   end
 
-  def search(index_name, query, filter: "", searchable_attributes: ["*"], attributes: ["*"], limit: 5)
+  def search(index_name, query, filter: nil, limit: 5)
+    puts
+    puts "🔍🔍🔍 #{index_name} 🔍🔍🔍"
+    puts "🔍🔍🔍 #{query} 🔍🔍🔍"
+    puts "🔍🔍🔍 #{filter} 🔍🔍🔍"
+    puts
     options = {
       basic_auth: @auth,
       headers: { 'Content-Type' => 'application/json' },
       body: {
         q: query,
         filter: filter,
-        attributesToRetrieve: attributes,
-        searchableAttributes: searchable_attributes,
+        searchMethod: "TENSOR",
         limit: limit
       }.to_json
     }
-    SearchResult.new(self.class.post("/indexes/#{index_name.to_s.parameterize}/search", options))
+    response = self.class.post("/indexes/#{index_name.to_s.parameterize}/search", options)
+    SearchResult.new(response, recurse_over_arrays: true)
   end
 
   def lexsearch(index_name, attributes, query)

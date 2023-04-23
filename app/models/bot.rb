@@ -67,7 +67,7 @@ class Bot < ApplicationRecord
   end
 
   def top_memories_of(user)
-    observations.by_user(user).by_decayed_score.limit(20).map(&:brief_with_timestamp)
+    observations.by_user(user).by_decayed_score.limit(12).map(&:brief_with_timestamp)
   end
 
   def self.default

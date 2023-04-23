@@ -11,7 +11,7 @@
 <% end %>
 
 <%= cable_ready_updates_for @chat, :messages, html_options: { class: "flex flex-col gap-0 mb-24", data: { controller: "newmessage" } } do %>
-  <%= render @chat.messages.order(:created_at) %>
+  <%= render @chat.messages.order(:updated_at) %>
   <% unless params[:message] || action_name["readonly"] %><span data-controller="scroll" data-action="scroll#scroll"></span><% end %>
 <% end %>
 

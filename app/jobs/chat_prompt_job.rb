@@ -14,17 +14,20 @@ class ChatPromptJob < ApplicationJob
 
     tokens_count = TikToken.count(chat.directive + content)
     max_tokens = chat.settings.response_length_tokens
+
+    # add relevant memories from long term vector storage
+    MemoryAnnotator.new(chat).perform
+
+    # make sure to never pull only visible here, or we will lose consideration of memories
     reply = Gpt.chat(directive: chat.directive, prompt: content, max_tokens: max_tokens, transcript: chat.messages_for_gpt(tokens_count + max_tokens))
     process_reply_with_toolchain(chat, message, reply)
+
     # todo: error handling, probably put it into the message content
   end
 
   private
 
-  def questions_raised_by(chat)
-    MemoryAnnotator.new(chat).perform
-  end
-
+  ## TODO: WIP (Having a hard time getting bot to recognize what tools it can use.)
   def process_reply_with_toolchain(chat, message, reply)
     # Example of a toolchain directive:
     # [GoogleSearch]: { "question": "What is the current population of Paris?" }
