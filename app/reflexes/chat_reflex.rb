@@ -80,6 +80,9 @@ class ChatReflex < ApplicationReflex
         # todo: implement
       when /^\/help/
         # todo: implement
+      when /^\/debug/
+        chat.update!(settings: chat.settings.to_h.merge(show_invisibles: !chat.settings.show_invisibles))
+        cable_ready.redirect_to(url: "/chats/#{chat.id}").broadcast
       end
     else
       yield

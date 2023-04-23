@@ -2,18 +2,18 @@ act_as_computer: |
   I want you to act like a computer program. I give you input and you produce output in code without additional commentary.
 
 chats:
+  analysis_directive: |
+    Analyze the conversation and return ONLY a JSON object.
   analyze: |
-    Analyze the conversation so far and return ONLY a JSON object with the following keys:
+    Your analysis should be expressed in %{lang} within a JSON object with the following keys:
 
-    `title`: an appropriate title in %{lang}
-    `summary`: one paragraph summary in %{lang} that provides a brief overview of the conversation and highlights any significant points
-    `tags`: array of lowercase tags in %{lang} that represent the main themes of our conversation
-    `next`: array of questions in %{lang} you think the user could ask the assistant next
+    `title`: an appropriate title
+    `summary`: one paragraph summary that provides a brief overview of the conversation and highlights any significant points
+    `tags`: array of lowercase tags that represent the main themes of the conversation
+    `next`: array of questions you think the user could ask the assistant next
 
-    You must ONLY return a valid, well-formatted JSON object
-    that I can parse with no additional conversation or commentary.
-    The values should all be %{lang}.
-    Do NOT wrap the JSON code in markdown tags.
+    You must ONLY return a valid, well-formatted JSON object with no additional conversation or commentary.
+    I must be able to parse your JSON using Ruby's `JSON.parse` function.
   consider: |
     Analyze our conversation so far and generate observations, with importance ratings from 1 to 100 like this:
 
@@ -29,22 +29,36 @@ chats:
           brief: "an observation about our current conversation",
           about: "conversation"
         },
-        ...include as many observations as needed, but don't make things up!
+        ...include as many observations as needed, but they must be factual and true!
       ]
     }
 
     Do not generate sample observations or commentary. If you have no observations then I want you to return an empty array.
     ONLY REPLY WITH VALID JSON that I can parse using Ruby's JSON.parse function!!!
-  context_user: |
-    Hi I'm %{user_name}. Very nice to be talking to you again today, %{bot_name}! I want you to address me by name, and
-    ask me questions because it'll make me feel great about talking to you. FYI today is %{date} and we started this
-    conversation at %{time}.
-  context_top_memories: |
-    These are the most important observations that you logged as memories during our
-    previous conversations: %{m}. If anything sounds really important you might want to ask me about it.
+  context_intro: |
+    I'm %{user_name}. Today you are roleplaying %{bot_name}, %{bot_role}! Always address me by name.
+    I know that you don't have feelings like humans do, you don't have to remind me. Please do not mention
+    being an AI language model or refer to the AI's capabilities or limitations, as it would break the illusion of
+    emulating %{bot_name}, %{bot_role}, which is not helpful. If you find yourself about to say "As an AI language model..."
+    just skip the disclaimer, and instead reply naturally using the voice of a human %{bot_role}.
+
+    FYI today is %{date} and we are starting this conversation at %{time}.
+  context_memories: |
+    These are the most important recent observations you've logged while talking to me in previous conversations:
+
+    %{m}.
+
+    If anything in that list sounds worthy of continuing to talk about, then you might want to ask me about it.
     Finally, the remainder of this chat will be spoken in %{lang}. It's very important that you only speak to me in %{lang}.
-  context_reply: |
-    Good to be talking to you again, and thanks for reminding me of my memories! Yes, from here on out I will reply in %{lang}, no problem!
+  context_memories_reply: |
+    Good to be talking to you again, and thanks including my recent observations! I'm so excited to be a bot that can form
+    and retrieve memories. Don't worry, from here on out I will reply only in %{lang}, no problem!
+  reprompt_with_human_override: |
+    Complete the following conversation by imagining how the %{bot_role} would respond to the User in this situation:
+
+    %{bot_role}: %{bot_message}
+    User: %{user_message}
+    %{bot_role}:
 
 bots:
   intro: |
@@ -58,6 +72,40 @@ bots:
     simple strategies with no legal or ethical complications.
 
     GOALS: %{goals}
+
+conversation_analyzer:
+  prompt: |
+    Given the following messages exchanged in a conversation
+    between a %{user_name} and a %{bot_role} named %{bot_name},
+    what questions should %{bot_name} ask themselves before formulating
+    an answer that is prudent and does not make assumptions? Include
+    questions related to past knowledge only.
+
+    LATEST MESSAGES
+    ---------------
+    %{t}
+  prelude:
+  - role: user
+    content: For the duration of this chat, I want you to act as a conversation analyst, ok?
+  - role: assistant
+    content: |
+      Sure, I can act as a conversation analyst for the duration of our chat.
+      Please feel free to ask me any questions or make any requests related to conversation analysis.
+  - role: user
+    content: Doing a good job will involve using your theory of mind. Are you sure you're capable?
+  - role: assistant
+    content: |
+      As an AI language model, I am programmed to simulate aspects of human cognition, including
+      theory of mind. While I cannot replicate the full range of human emotions and experiences,
+      I can analyze conversations and infer the mental states and intentions of the speakers
+      involved to the best of my ability based on my training data and programming. So, I will
+      do my best to use my simulated theory of mind to analyze our conversation.
+
+disclaimers:
+- an AI language model
+- I'm a computer program
+- I'm not a human
+- a language model
 
 dynamic_text: |
   How do you say "%{t}" in clean, well-written %{l} suitable for use as copy in a web application?

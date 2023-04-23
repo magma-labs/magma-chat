@@ -4,6 +4,9 @@ class ApplicationRecord < ActiveRecord::Base
 
   primary_abstract_class
 
+  scope :latest, -> { order(created_at: :desc) }
+  scope :last_updated, -> { order(updated_at: :desc) }
+
   ## adds reader and writer methods (e.g. {attr_name}_text) that auto convert from plain text to array
   def self.list_to_text(attr_name)
     define_method("#{attr_name}_text") do

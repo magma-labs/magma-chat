@@ -17,12 +17,10 @@
 #  updated_at       :datetime         not null
 #
 class User < ApplicationRecord
+  include Settings
+
   delegate_missing_to :settings
   has_many :chats, dependent: :destroy
-
-  def settings
-    RecursiveOpenStruct.new(super, recurse_over_arrays: true)
-  end
 
   def tag_cloud(limit: 70)
     tag_counts = Hash.new(0)

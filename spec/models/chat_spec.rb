@@ -7,6 +7,7 @@
 #  engine        :string           not null
 #  grow          :boolean          default(FALSE), not null
 #  public_access :boolean          default(FALSE), not null
+#  settings      :jsonb            not null
 #  title         :string           not null
 #  transcript    :jsonb            not null
 #  created_at    :datetime         not null

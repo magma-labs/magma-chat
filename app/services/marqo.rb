@@ -5,8 +5,13 @@ class Marqo
 
   base_uri ENV.fetch('MARQO_URL', "http://localhost:8882")
 
-  # TODO: Add a way to pass in auth
+  class SearchResult < RecursiveOpenStruct
+    def initialize(response)
+      super(response, recurse_over_arrays: true)
+    end
+  end
 
+  # TODO: Add a way to pass in auth
   def initialize(auth = { username: 'admin', password: 'admin' })
     @auth = auth
   end
@@ -27,13 +32,19 @@ class Marqo
     end
   end
 
-  def search(index_name, query, limit: 5)
+  def search(index_name, query, filter: "", searchable_attributes: ["*"], attributes: ["*"], limit: 5)
     options = {
       basic_auth: @auth,
       headers: { 'Content-Type' => 'application/json' },
-      body: { q: query, limit: limit }.to_json
+      body: {
+        q: query,
+        filter: filter,
+        attributesToRetrieve: attributes,
+        searchableAttributes: searchable_attributes,
+        limit: limit
+      }.to_json
     }
-    self.class.post("/indexes/#{index_name.to_s.parameterize}/search", options)
+    SearchResult.new(self.class.post("/indexes/#{index_name.to_s.parameterize}/search", options))
   end
 
   def lexsearch(index_name, attributes, query)
@@ -46,7 +57,7 @@ class Marqo
         searchMethod: "LEXICAL"
       }.to_json
     }
-    self.class.post("/indexes/#{index_name.to_s.parameterize}/search", options)
+    SearchResult.new(self.class.post("/indexes/#{index_name.to_s.parameterize}/search", options))
   end
 
   def delete(index_name, id_or_ids)
@@ -68,5 +79,11 @@ class Marqo
 
   def self.client
     @client ||= new
+  end
+
+  private
+
+  def wrap(result)
+    RecursiveOpenStruct.new(hash, recurse_over_arrays: true)
   end
 end

@@ -25,7 +25,6 @@ class Thought < ApplicationRecord
   belongs_to :bot
   belongs_to :subject, polymorphic: true, optional: true
 
-  scope :latest, -> { order(created_at: :desc) }
   scope :by_bot, ->(bot) { where(bot: bot) }
   scope :by_user, ->(user) { where(subject: user) }
 
@@ -41,7 +40,7 @@ class Thought < ApplicationRecord
   validates :brief, presence: true, uniqueness: { scope: %i[type bot_id subject_id subject_type] }
 
   def brief_with_timestamp
-    "[#{created_at.strftime('%d/%m/%Y %H:%M')}]:#{brief.strip.gsub(/\.$/,"")}"
+    "[#{created_at.strftime('%d/%m/%Y %H:%M')}] #{brief.strip.gsub(/\.$/,"")}"
   end
 
   private

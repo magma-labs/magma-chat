@@ -7,6 +7,7 @@
 #  engine        :string           not null
 #  grow          :boolean          default(FALSE), not null
 #  public_access :boolean          default(FALSE), not null
+#  settings      :jsonb            not null
 #  title         :string           not null
 #  transcript    :jsonb            not null
 #  created_at    :datetime         not null
@@ -24,19 +25,20 @@
 #
 class Chat < ApplicationRecord
   include PgSearch::Model
+  include Settings
 
   attribute :first_message
 
   belongs_to :bot, optional: true, counter_cache: true
   belongs_to :user # todo: rename to owner or initiator
 
-  has_many :messages, -> { order(created_at: :asc) }, dependent: :destroy, enable_cable_ready_updates: true
+  has_many :messages, dependent: :destroy, enable_cable_ready_updates: true
 
   before_create :set_title
+  before_create :set_visibility
   after_create :add_context_messages
 
   after_commit :prompt!, on: :create, if: :first_message
-  #after_commit :reindex, on: :update
 
   enable_cable_ready_updates on: [:update]
 
@@ -68,11 +70,6 @@ class Chat < ApplicationRecord
     prompt!(message: message.presence || last_prompt.content, sender: sender)
   end
 
-  def reindex
-    # todo: reconsider whether every message should be store in marqo
-    # ChatReindexJob.perform_later(self)
-  end
-
   def language
     analysis[:language]
   end
@@ -89,18 +86,34 @@ class Chat < ApplicationRecord
     messages.sum(:tokens_count)
   end
 
-  def messages_for_gpt(tokens_in_prompt)
+  def messages_for_gpt(tokens_in_prompt, only_visible: false)
     puts
     puts "tokens_in_prompt: #{tokens_in_prompt}"
     puts
     max_tokens = 1500 - tokens_in_prompt # todo: move to setting or constant
-    Message.up_to_token_limit(self, max_tokens).map do |message|
+    Message.up_to_token_limit(self, max_tokens, only_visible: only_visible).map do |message|
       { role: message.role, content: message.content }
     end
   end
 
   def analysis_next
     analysis[:next] || []
+  end
+
+  def reprompt_with_human_override!(message)
+    # grab the last two visible messages in correct order
+    last_messages = self.messages.reload.latest.limit(3).to_a.reverse
+    prompt = Prompts.get("chats.reprompt_with_human_override", {
+      bot_role: bot.role,
+      bot_message: last_messages.first.content,
+      user_message: last_messages.second.content
+    })
+    Gpt.chat(prompt: prompt, temperature: 1.2).then do |response|
+      puts
+      puts "😇😇😇 #{response}"
+      puts
+      message.update!(content: response, visible: true)
+    end
   end
 
   def tags
@@ -110,28 +123,30 @@ class Chat < ApplicationRecord
   private
 
   def add_context_messages
-    prompts = Prompts.get("chats.context_user", {
+    context_intro_prompt = Prompts.get("chats.context_intro",
       bot_name: bot.name,
+      bot_role: bot.role,
       user_name: user.name,
       date: Date.today.strftime("%B %d, %Y"),
       time: Time.now.strftime("%I:%M %p")
-    })
+    )
+    add_hidden_user_message(context_intro_prompt)
+
     top_memories = bot.top_memories_of(user)
     if top_memories.any?
-      prompts += Prompts.get("chats.context_top_memories", { m: top_memories.to_sentence, lang: user.settings.preferred_language })
+      context_memories_prompt = Prompts.get("chats.context_memories", { m: top_memories.join("\n\n"), lang: user.settings.preferred_language })
+      add_hidden_user_message(context_memories_prompt)
+      add_hidden_bot_message(Prompts.get("chats.context_memories_reply", lang: user.settings.preferred_language))
     end
-    messages.create(
-      sender: user, role: "user",
-      content: prompts,
-      skip_broadcast: true,
-      visible: false
-    )
-    messages.create(
-      sender: bot, role: "assistant",
-      content: Prompts.get("chats.context_reply", lang: user.settings.preferred_language),
-      skip_broadcast: true,
-      visible: false
-    )
+
+  end
+
+  def add_hidden_bot_message(content)
+    messages.create(sender: bot, role: "assistant", content: content, skip_broadcast: true, visible: false)
+  end
+
+  def add_hidden_user_message(content)
+    messages.create(sender: user, role: "user", content: content, skip_broadcast: true, visible: false)
   end
 
   def set_title
@@ -140,6 +155,14 @@ class Chat < ApplicationRecord
     else
       self.title = first_message
     end
+  end
+
+  def set_visibility
+    self.settings = settings.to_h.merge(show_invisibles: !settings.show_invisibles) if user.admin?
+  end
+
+  def prefix_timestamp_to_content(message)
+    "[#{message.updated_at.strftime("%m/%d/%y %I:%M %p")}] #{message.content}"
   end
 
 end

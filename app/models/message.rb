@@ -32,6 +32,8 @@
 class Message < ApplicationRecord
   include PgSearch::Model
 
+  # URGENT TODO: Introduce subtypes for UserMessage, BotMessage, etc.
+
   attribute :run_analysis_after_saving, :boolean, default: false
   attribute :skip_broadcast, :boolean, default: false
 
@@ -42,12 +44,17 @@ class Message < ApplicationRecord
   scope :by_users, -> { where(role: "user") }
   scope :by_user, ->(user) { where(sender: user) }
 
+  # scopes for visibility
+  scope :visible, -> { where(visible: true) }
+  scope :invisible, -> { where(visible: false) }
+
   # scope that filters out nil or empty content
   scope :with_content, -> { where.not(content: [nil, ""]) }
 
   pg_search_scope :search_content, against: [:content]
 
   before_save :calculate_tokens
+  before_update :override_disclaimers, if: -> { role.assistant? }
 
   after_commit :broadcast_message, on: :create, unless: :skip_broadcast
   after_commit :reanalyze, if: :run_analysis_after_saving
@@ -72,10 +79,10 @@ class Message < ApplicationRecord
     self.sender_image_url = sender.image_url
   end
 
-  def self.up_to_token_limit(chat, max_tokens)
+  def self.up_to_token_limit(chat, max_tokens, only_visible:)
     subquery =
       select("*, SUM(tokens_count) OVER (ORDER BY created_at DESC) AS running_total")
-        .where(chat_id: chat.id)
+        .where(chat_id: chat.id, visible: [true, only_visible])
         .from("messages")
         .to_sql
 
@@ -91,6 +98,15 @@ class Message < ApplicationRecord
 
   def calculate_tokens
     self.tokens_count = TikToken.count(content.to_s.encode('UTF-8', 'UTF-8', invalid: :replace, undef: :replace))
+  end
+
+  def override_disclaimers
+    # todo: can we make this work in user's language not just English?
+    regex = Regexp.new(Prompts.get("disclaimers").join("|"))
+    if match = content.match(regex)
+      self.visible = false
+      chat.reprompt_with_human_override!(self)
+    end
   end
 
   def reanalyze

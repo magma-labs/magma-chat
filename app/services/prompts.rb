@@ -12,7 +12,12 @@ module Prompts
     prompt = prompts.dig(*key.split('.'))
     raise "not found" if prompt.blank?
 
-    # interpolate the args into the string
-    prompt % args
+    if prompt.is_a?(String)
+      prompt % args # interpolate the args into the string
+    elsif prompt.is_a?(Hash)
+      prompt.with_indifferent_access
+    else
+      prompt
+    end
   end
 end

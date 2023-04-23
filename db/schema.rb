@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_04_22_050433) do
+ActiveRecord::Schema[7.0].define(version: 2023_04_23_180625) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -44,6 +44,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_22_050433) do
     t.uuid "user_id", default: "b48d0808-271f-451e-a190-8610009df363", null: false
     t.uuid "bot_id"
     t.boolean "public_access", default: false, null: false
+    t.jsonb "settings", default: {"show_invisibles"=>false, "response_length_tokens"=>400}, null: false
     t.index ["bot_id"], name: "index_chats_on_bot_id"
     t.index ["engine"], name: "index_chats_on_engine"
     t.index ["public_access"], name: "index_chats_on_public_access"

@@ -24,6 +24,8 @@
 #  index_bots_on_type          (type)
 #
 class Bot < ApplicationRecord
+  include Settings
+
   attribute :name, :string, default: Faker::Name.name
   attribute :role, :string, default: Faker::Job.title
 

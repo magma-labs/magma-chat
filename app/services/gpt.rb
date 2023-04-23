@@ -23,6 +23,7 @@ module Gpt
       Rails.logger.info("GPT REQUEST: #{params}")
       client.chat(parameters: params).then do |response|
         Rails.logger.info("GPT RESPONSE: #{response}")
+        # todo: raise application level errors so that they can be handled differently than normal replies
         response.dig("error","message") || response.dig("choices", 0, "message", "content")
       end
     end

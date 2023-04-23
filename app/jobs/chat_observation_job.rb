@@ -8,18 +8,24 @@ class ChatObservationJob < ApplicationJob
     Gpt.chat(
       directive: directive,
       prompt: prompt,
-      transcript: chat.messages_for_gpt(tokens_count + 200).take(6),
+      transcript: chat.messages_for_gpt(tokens_count + 200, only_visible: true).take(6),
       temperature: 0.5,
-      max_tokens: 200,
-    ).then do |json|
-      if json.blank?
-        Rails.logger.warn "No JSON found in GPT response to observation for Chat: #{chat.id}"
+      max_tokens: 300,
+    ).then do |response|
+      if response.blank?
+        Rails.logger.warn "😵😵😵 No response to observation for Chat: #{chat.id}"
       else
         puts
-        puts "🔥🔥🔥 #{json} 🔥🔥🔥"
+        puts "🔥🔥🔥 #{response} 🔥🔥🔥"
         puts
-        JSON.parse(json.match(/.*?(\{.*\})/m)[1], symbolize_names: true).then do |data|
-          chat.bot.observed!(chat, data[:observations])
+        json_match = response.match(/.*?(\{.*\})/m)
+        if json_match
+          JSON.parse(json_match[1], symbolize_names: true).then do |data|
+            chat.bot.observed!(chat, data[:observations])
+          end
+        else
+          Rails.logger.warn "😵😵😵 No observation for Chat: #{chat.id}"
+          Rails.logger.warn "😵😵😵 GPT said: #{response}"
         end
       end
     end
