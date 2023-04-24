@@ -54,4 +54,11 @@
     <div><span class="font-medium">/delete</span></div>
     <div class="text-gray-500 text-sm">Delete the conversation entirely</div>
   </div>
+  <% if current_user.admin? %>
+    <div data-name="/debug">
+      <div><span class="font-medium">/debug</span></div>
+      <div class="text-gray-500 text-sm">Toggle display of hidden messages (Admin Only)</div>
+    </div>
+  <% end %>
+
 </div>
