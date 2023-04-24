@@ -75,6 +75,7 @@ class Bot < ApplicationRecord
       bot.directive = "You are a smart and friendly general purpose chatbot."
       bot.intro = "I'm a friendly bot that helps you get things done."
       bot.auto_archive_mins = 0
+      bot.published_at = Time.now
     end
   end
 
