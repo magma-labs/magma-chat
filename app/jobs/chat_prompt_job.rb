@@ -4,7 +4,7 @@ class ChatPromptJob < ApplicationJob
   def perform(chat, content, visible)
     # create a blank assistant message to so that it shows
     # thinking animation and keeps the order of messages correctly
-    message = chat.messages.create(type: "BotMessage", content: "", visible: visible, run_analysis_after_saving: false)
+    message = chat.messages.create(role: "assistant", content: "", visible: visible, run_analysis_after_saving: false)
 
     # add relevant memories from long term vector storage
     MemoryAnnotator.new(chat).perform
@@ -43,7 +43,7 @@ class ChatPromptJob < ApplicationJob
         # bot included some extra commentary along with its tool invocations, so put them in the chat
         message.update!(content: reply_without_directives, run_analysis_after_saving: true)
         # keep the toolchain directives in a separate invisible message
-        chat.messages.create!(type: "BotMessage", content: directives_string, visible: false, run_analysis_after_saving: false)
+        chat.bot_message!(directives_string, visible: false, run_analysis_after_saving: false)
       else
         message.update!(content: directives_string, visible: false, run_analysis_after_saving: false)
       end

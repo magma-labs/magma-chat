@@ -93,8 +93,8 @@ RSpec.describe Chat do
     let(:chat) { create(:chat, bot: bot, user: user) }
 
     it 'deletes last messages and calls prompt! with message', :aggregate_failures do
-      chat.messages.create!(role: "user", content: "Foo")
-      chat.messages.create!(role: "assistant", content: "Bar")
+      chat.user_message!("Foo")
+      chat.bot_message!("Bar")
       chat.redo!(user, "Hello")
       expect(chat.messages.count).to eq 2
     end

@@ -19,7 +19,7 @@ class MemoryAnnotator
       else
         memory = compile_content(search_result.query, search_result.hits)
         Rails.logger.debug("💡 Creating Memory Message for #{memory} 💡")
-        chat.messages.create!(role: "user", content: memory, skip_broadcast: true, visible: false)
+        chat.user_message!(memory)
       end
     end
   end

@@ -61,7 +61,7 @@ class Chat < ApplicationRecord
 
   def prompt!(message: first_message, visible: true, sender: user)
     Rails.logger.info("USER PROMPT: #{message}")
-    messages.create!(role: "user", sender: sender, content: message, visible: visible)
+    user_message!(message, visible: visible, skip_broadcast: false)
   end
 
   def redo!(sender, message)
@@ -120,6 +120,14 @@ class Chat < ApplicationRecord
     analysis[:tags].presence || []
   end
 
+  def bot_message!(content, run_analysis_after_saving: false, skip_broadcast: true, visible: false)
+    messages.create!(role: "assistant", content: content, skip_broadcast: skip_broadcast, run_analysis_after_saving: run_analysis_after_saving, visible: visible)
+  end
+
+  def user_message!(content, run_analysis_after_saving: false, skip_broadcast: true, visible: false)
+    messages.create!(role: "user", content: content, skip_broadcast: skip_broadcast, visible: visible)
+  end
+
   private
 
   def add_context_messages
@@ -131,23 +139,15 @@ class Chat < ApplicationRecord
       time: Time.now.strftime("%I:%M %p")
     )
 
-    user_message!(content: context_intro_prompt, skip_broadcast: true, visible: false)
+    user_message!(context_intro_prompt, skip_broadcast: true, visible: false)
 
     top_memories = bot.top_memories_of(user)
     if top_memories.any?
       context_memories_prompt = Prompts.get("chats.context_memories", { m: top_memories.join("\n\n"), lang: user.settings.preferred_language })
-      user_message!(content: context_memories_prompt, skip_broadcast: true, visible: false)
+      user_message!(context_memories_prompt, skip_broadcast: true, visible: false)
       context_reply = Prompts.get("chats.context_memories_reply", lang: user.settings.preferred_language)
-      bot_message!(content: context_reply, skip_broadcast: true, visible: false)
+      bot_message!(context_reply, skip_broadcast: true, visible: false)
     end
-  end
-
-  def bot_message!(content:, skip_broadcast:, visible:)
-    messages.create!(role: "assistant", content: content, skip_broadcast: skip_broadcast, visible: visible)
-  end
-
-  def user_message!(content:, skip_broadcast:, visible:)
-    messages.create!(role: "user", content: content, skip_broadcast: skip_broadcast, visible: visible)
   end
 
   def set_title
