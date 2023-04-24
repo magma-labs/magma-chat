@@ -21,7 +21,7 @@
       <% end %>
     </div>
   </div>
-<% elsif message.chat.settings.show_invisibles %>
+<% elsif current_user && current_user.admin? && message.chat.settings.show_invisibles %>
   <div class="message <%= message.role %> w-full p-4 opacity-75 text-gray-500" style="background-color: #cccccc; border-top: 1px solid gray">
     <div class="text-lg xl:max-w-[80%] mx-auto flex items-start gap-6">
       <div class="flex-shrink-0 relative h-[36px] w-[36px] rounded-md flex items-center justify-center mt-1 bg-gray-800">
