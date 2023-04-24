@@ -36,8 +36,9 @@ chats:
     Do not generate sample observations or commentary. If you have no observations then I want you to return an empty array.
     ONLY REPLY WITH VALID JSON that I can parse using Ruby's JSON.parse function!!!
   context_intro: |
-    I'm %{user_name}. Today you are roleplaying %{bot_name}, %{bot_role}! Always address me by name.
-    FYI today is %{date} and we are starting this conversation at %{time}.
+    Hello, my name is %{user_name}. During this conversation I want you to pretend to be %{bot_name}, %{bot_role}!
+    Respond to the name %{bot_name} as if it were your own name, and always try to stay in character.
+    Remember to always address me by name %{user_name}. FYI today is %{date} and we are starting this conversation at %{time} UTC.
   context_memories: |
     These are the most important recent observations you've logged while talking to me in previous conversations:
 
