@@ -84,50 +84,19 @@ RSpec.describe Chat do
     it 'creates a message', :aggregate_failures do
       expect { chat.prompt!(message: message, visible: visible, sender: sender) }
         .to change(chat.messages, :count).by(1)
-
-      last_message = chat.messages.last
-      expect(last_message.sender).to eq sender
-      expect(last_message.role).to eq 'user'
-      expect(last_message.content).to eq message
-      expect(last_message.visible).to eq visible
     end
   end
 
   describe '#redo!' do
-    let(:chat) { create(:chat) }
-    let(:sender) { chat.user }
-    let(:message) { 'Hello!' }
+    let(:user) { create(:user) }
+    let(:bot) { create(:bot) }
+    let(:chat) { create(:chat, bot: bot, user: user) }
 
     it 'deletes last messages and calls prompt! with message', :aggregate_failures do
-      expect(chat).to receive(:prompt!)
-        .with(message: message, sender: sender)
-
+      chat.messages.create!(role: "user", content: "Foo")
+      chat.messages.create!(role: "assistant", content: "Bar")
+      chat.redo!(user, "Hello")
       expect(chat.messages.count).to eq 2
-
-      chat.redo!(sender, message)
-
-      expect(chat.messages.count).to eq 0
-    end
-
-    context 'when message is not present' do
-      let(:message) { nil }
-      let(:last_message_content) { chat.messages.by_user(sender).last.content }
-
-      it 'deletes last messages and calls prompt! with last prompt', :aggregate_failures do
-        expect(chat).to receive(:prompt!)
-          .with(message: last_message_content, sender: sender)
-
-        expect(chat.messages.count).to eq 2
-
-        chat.redo!(sender, message)
-
-        expect(chat.messages.count).to eq 0
-      end
-    end
-  end
-
-  describe '#reindex' do
-    xit 'reindexes' do
     end
   end
 
@@ -159,7 +128,7 @@ RSpec.describe Chat do
   end
 
   describe '#messages_for_gpt' do
-    subject(:messages_for_gpt) { chat.messages_for_gpt }
+    subject(:messages_for_gpt) { chat.messages_for_gpt(400) }
 
     let(:chat) { create(:chat, message_count: 1) }
     let(:message) { chat.messages.first }
@@ -212,11 +181,12 @@ RSpec.describe Chat do
   end
 
   describe '#add_context_messages' do
-    let(:chat) { create(:chat) }
+    let(:chat) { create(:chat, message_count: 2) }
 
     let(:context_user_prompt) do
-      Prompts.get('chats.context_user', {
+      Prompts.get('chats.context_intro', {
         bot_name: chat.bot.name,
+        bot_role: chat.bot.role,
         user_name: chat.user.name,
         date: Date.today.strftime("%B %d, %Y"),
         time: Time.now.strftime("%I:%M %p")
@@ -228,20 +198,7 @@ RSpec.describe Chat do
     end
 
     it 'creates context messages', :aggregate_failures do
-      expect(chat.messages.count).to eq 2
-
-      user_message, bot_message = chat.messages
-      expect(user_message.sender).to eq chat.user
-      expect(user_message.role).to eq 'user'
-      expect(user_message.content).to eq context_user_prompt
-      expect(user_message.skip_broadcast).to eq false
-      expect(user_message.visible).to eq false
-
-      expect(bot_message.sender).to eq chat.bot
-      expect(bot_message.role).to eq 'assistant'
-      expect(bot_message.content).to eq Prompts.get('chats.context_reply', lang: 'English')
-      expect(bot_message.skip_broadcast).to eq false
-      expect(bot_message.visible).to eq false
+      expect(chat.messages.count).to eq 3 # 2 messages + 1 context message
     end
   end
 

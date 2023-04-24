@@ -11,7 +11,6 @@
 #  sender_name      :string
 #  sender_type      :string
 #  tokens_count     :integer          default(0), not null
-#  type             :string           default("Message"), not null
 #  visible          :boolean          default(TRUE), not null
 #  created_at       :datetime         not null
 #  updated_at       :datetime         not null
@@ -23,7 +22,6 @@
 #  index_messages_on_chat_id  (chat_id)
 #  index_messages_on_role     (role)
 #  index_messages_on_sender   (sender_type,sender_id)
-#  index_messages_on_type     (type)
 #
 # Foreign Keys
 #
@@ -66,11 +64,15 @@ RSpec.describe Message, type: :model do
   end
 
   describe '#role' do
-    let(:instance) { build(:message) }
+    let(:instance) { build(:message, role: "user") }
 
     it 'returns role', :aggregate_failures do
       expect(instance.role).to be_a ActiveSupport::StringInquirer
       expect(instance.role.user?).to eq true
+    end
+
+    it 'sets strategy' do
+      expect(instance.strategy).to be_kind_of(Message::UserStrategy)
     end
   end
 
@@ -89,7 +91,7 @@ RSpec.describe Message, type: :model do
     end
   end
 
-  describe '#reanalize' do
+  describe '#reanalyze' do
     let(:message) { create(:message) }
     let(:chat) { message.chat }
 

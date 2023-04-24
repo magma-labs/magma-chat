@@ -69,6 +69,7 @@ gem "redcarpet"
 gem "redis-session-store", "~> 0.11.5"
 gem "ruby-openai" # https://github.com/alexrudall/ruby-openai
 gem 'sidekiq'
+gem 'strategic', '~> 1.2.0'
 gem "stimulus_reflex", "~> 3.5.0.pre10"
 gem "tiktoken_ruby", "~> 0.0.4"
 

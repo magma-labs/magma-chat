@@ -4,19 +4,14 @@ class ChatPromptJob < ApplicationJob
   def perform(chat, content, visible)
     # create a blank assistant message to so that it shows
     # thinking animation and keeps the order of messages correctly
-    message = chat.messages.create(
-      sender: chat.bot,
-      role: "assistant",
-      content: "",
-      visible: visible,
-      run_analysis_after_saving: false
-    )
-
-    tokens_count = TikToken.count(chat.directive + content)
-    max_tokens = chat.settings.response_length_tokens
+    message = chat.messages.create(type: "BotMessage", content: "", visible: visible, run_analysis_after_saving: false)
 
     # add relevant memories from long term vector storage
     MemoryAnnotator.new(chat).perform
+
+    # calculate maximum tokens to ask for in response
+    tokens_count = TikToken.count(chat.directive + content)
+    max_tokens = chat.settings.response_length_tokens
 
     # make sure to never pull only visible here, or we will lose consideration of memories
     reply = Gpt.chat(directive: chat.directive, prompt: content, max_tokens: max_tokens, transcript: chat.messages_for_gpt(tokens_count + max_tokens))
@@ -48,7 +43,7 @@ class ChatPromptJob < ApplicationJob
         # bot included some extra commentary along with its tool invocations, so put them in the chat
         message.update!(content: reply_without_directives, run_analysis_after_saving: true)
         # keep the toolchain directives in a separate invisible message
-        chat.messages.create(sender: chat.bot, role: "assistant", content: directives_string, visible: false, run_analysis_after_saving: false)
+        chat.messages.create!(type: "BotMessage", content: directives_string, visible: false, run_analysis_after_saving: false)
       else
         message.update!(content: directives_string, visible: false, run_analysis_after_saving: false)
       end

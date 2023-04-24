@@ -11,7 +11,6 @@
 #  sender_name      :string
 #  sender_type      :string
 #  tokens_count     :integer          default(0), not null
-#  type             :string           default("Message"), not null
 #  visible          :boolean          default(TRUE), not null
 #  created_at       :datetime         not null
 #  updated_at       :datetime         not null
@@ -23,7 +22,6 @@
 #  index_messages_on_chat_id  (chat_id)
 #  index_messages_on_role     (role)
 #  index_messages_on_sender   (sender_type,sender_id)
-#  index_messages_on_type     (type)
 #
 # Foreign Keys
 #

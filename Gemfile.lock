@@ -317,6 +317,7 @@ GEM
       rack (>= 2, < 4)
       railties (>= 5.2, < 8)
       redis (>= 4.0, < 6.0)
+    strategic (1.2.0)
     tailwindcss-rails (2.0.27-arm64-darwin)
       railties (>= 6.0.0)
     tailwindcss-rails (2.0.27-x86_64-darwin)
@@ -396,6 +397,7 @@ DEPENDENCIES
   sprockets-rails
   stimulus-rails
   stimulus_reflex (~> 3.5.0.pre10)
+  strategic (~> 1.2.0)
   tailwindcss-rails
   tiktoken_ruby (~> 0.0.4)
   turbo-rails

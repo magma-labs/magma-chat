@@ -13,22 +13,13 @@ class MemoryAnnotator
       filter = "bot_id:#{chat.bot.id} AND subject_id:#{chat.user.id}"
       Marqo.client.search("thoughts", question, filter: filter, limit: 3)
     end.map do |search_result|
+      # todo: consider relevance score and only add if above a certain threshold
       if search_result.hits.empty?
-        puts
-        puts "❌❌❌ MEMORY NOT FOUND #{search_result.query} ❌❌❌"
-        puts
+        Rails.logger.debug("❌ MEMORY NOT FOUND #{search_result.query} ❌")
       else
         memory = compile_content(search_result.query, search_result.hits)
-        puts
-        puts "💡💡💡 #{memory}"
-        puts
-        chat.messages.create!(
-          role: "user",
-          sender: chat.user,
-          content: memory,
-          skip_broadcast: true,
-          visible: false
-        )
+        Rails.logger.debug("💡 Creating Memory Message for #{memory} 💡")
+        chat.messages.create!(role: "user", content: memory, skip_broadcast: true, visible: false)
       end
     end
   end
@@ -37,8 +28,8 @@ class MemoryAnnotator
 
   def compile_content(query, hits)
     [
-      "You asked yourself: #{query}",
-      "And the memories you found were:",
+      "You asked your long-term memory: #{query}",
+      "And you remembered the following:",
       hits.map { |h| h.brief }.join("\n\n")
     ].join("\n\n")
   end

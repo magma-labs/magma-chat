@@ -11,7 +11,6 @@
 #  sender_name      :string
 #  sender_type      :string
 #  tokens_count     :integer          default(0), not null
-#  type             :string           default("Message"), not null
 #  visible          :boolean          default(TRUE), not null
 #  created_at       :datetime         not null
 #  updated_at       :datetime         not null
@@ -23,7 +22,6 @@
 #  index_messages_on_chat_id  (chat_id)
 #  index_messages_on_role     (role)
 #  index_messages_on_sender   (sender_type,sender_id)
-#  index_messages_on_type     (type)
 #
 # Foreign Keys
 #
@@ -31,8 +29,7 @@
 #
 class Message < ApplicationRecord
   include PgSearch::Model
-
-  # URGENT TODO: Introduce subtypes for UserMessage, BotMessage, etc.
+  include Strategic
 
   attribute :run_analysis_after_saving, :boolean, default: false
   attribute :skip_broadcast, :boolean, default: false
@@ -54,6 +51,7 @@ class Message < ApplicationRecord
   pg_search_scope :search_content, against: [:content]
 
   before_save :calculate_tokens
+  before_save :set_sender
   before_update :override_disclaimers, if: -> { role.assistant? }
 
   after_commit :broadcast_message, on: :create, unless: :skip_broadcast
@@ -73,10 +71,19 @@ class Message < ApplicationRecord
     super.to_s.inquiry
   end
 
+  def role=(r)
+    super(r.to_s)
+    self.strategy = r.to_s
+  end
+
   def sender=(sender)
     super
     self.sender_name = sender.name
     self.sender_image_url = sender.image_url
+  end
+
+  def to_partial_path
+    "messages/message"
   end
 
   def self.up_to_token_limit(chat, max_tokens, only_visible:)
@@ -117,4 +124,7 @@ class Message < ApplicationRecord
     ChatAnalysisJob.perform_later(chat)
   end
 
+  def strategy_name
+    role
+  end
 end

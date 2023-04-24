@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_04_23_180625) do
+ActiveRecord::Schema[7.0].define(version: 2023_04_23_234956) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -53,7 +53,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_23_180625) do
   end
 
   create_table "messages", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.string "type", default: "Message", null: false
     t.uuid "chat_id", null: false
     t.string "sender_type"
     t.uuid "sender_id"
@@ -70,7 +69,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_23_180625) do
     t.index ["chat_id"], name: "index_messages_on_chat_id"
     t.index ["role"], name: "index_messages_on_role"
     t.index ["sender_type", "sender_id"], name: "index_messages_on_sender"
-    t.index ["type"], name: "index_messages_on_type"
   end
 
   create_table "thoughts", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|

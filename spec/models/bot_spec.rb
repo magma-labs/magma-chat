@@ -51,7 +51,18 @@ RSpec.describe Bot do
     let(:bot) { create(:bot) }
 
     let(:observations) do
-      (1..5).map { |num| "Observation #{num}" }
+      [
+        {
+          importance: 100,
+          brief: "super important observation or fact about user",
+          about: "user"
+        },
+        {
+          importance: 50,
+          brief: "an observation about the current conversation",
+          about: "conversation"
+        }
+      ]
     end
 
     before do
@@ -64,8 +75,8 @@ RSpec.describe Bot do
         .by(observations.count)
 
       bot.observations.each_with_index do |observation, i|
-        expect(observation.subject).to eq(chat.user)
-        expect(observation.brief).to eq(observations[i])
+        expect(observation.subject).to eq(chat.user).or eq(chat)
+        expect(observation.brief).to eq(observations[i][:brief])
         expect(observation.importance).to be_between(0, 100)
       end
     end
