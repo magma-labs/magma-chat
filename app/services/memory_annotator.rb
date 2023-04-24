@@ -8,6 +8,9 @@ class MemoryAnnotator
   end
 
   def perform(number_of_messages_to_pop: 6)
+    # no point if there's no Marqo service attached
+    return if ENV['MARQO_URL'].blank?
+
     response = Gpt.chat(transcript: Prompts.get("conversation_analyzer.prelude"), prompt: prompt(number_of_messages_to_pop))
     extract_questions(response).map do |question|
       filter = "bot_id:#{chat.bot.id} AND subject_id:#{chat.user.id}"

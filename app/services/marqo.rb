@@ -14,6 +14,7 @@ class Marqo
   end
 
   def store(index:, doc:, id:, non_tensor_fields: [])
+    return if ENV['MARQO_URL'].blank?
     puts
     puts "🧠🧠🧠 INDEX: #{index} 🧠🧠🧠"
     puts "🧠🧠🧠 DOC: #{doc} 🧠🧠🧠"
