@@ -69,8 +69,8 @@
         <% else %>
           <%= link_to "Unpublish", "#", data: { reflex: "click->Bot#unpublish", id: @bot.id }, class: "bg-yellow-500 hover:bg-yellow-400 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" %>
         <% end %>
-        <% unless true && @bot.kind_of? Agent # commented until further notice %>
-          <%= link_to "Promote to Agent", "#", data: { reflex: "click->Bot#promote", id: @bot.id }, class: "bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" %>
+        <% unless @bot.kind_of? Agent %>
+          <%#= link_to "Promote to Agent", "#", data: { reflex: "click->Bot#promote", id: @bot.id }, class: "bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" %>
         <% end %>
         <% if @bot.persisted? && @bot.chats.empty? %>
           <%= link_to "Delete", "#", data: { reflex: "click->Bot#destroy", id: @bot.id }, class: "bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" %>
