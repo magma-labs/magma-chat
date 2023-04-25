@@ -5,4 +5,4 @@ the LGPLv3 license.  Please see <http://www.gnu.org/licenses/lgpl-3.0.html>
 for license text.
 
 MagmaChat Pro and MagmaChat Enterprise will have a commercial-friendly license.
-Please contact Magma Labs https://magmalabs.io for purchasing options.
+Please contact MagmaLabs https://magmalabs.io for purchasing options.

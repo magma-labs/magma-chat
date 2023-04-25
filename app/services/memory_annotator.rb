@@ -17,6 +17,7 @@ class MemoryAnnotator
       Marqo.client.search("thoughts", question, filter: filter, limit: 3)
     end.map do |search_result|
       # todo: consider relevance score and only add if above a certain threshold
+      # todo: combine results since we're often getting the same hits for each question and it eats up context window
       if search_result.hits.nil? || search_result.hits.empty?
         Rails.logger.debug("❌ MEMORY NOT FOUND #{search_result.query} ❌")
       else
