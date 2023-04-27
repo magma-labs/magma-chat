@@ -10,6 +10,7 @@ class SettingField
     @form = form
     @current_user = current_user
     @key = key
+    @value = value
   end
 
   def label

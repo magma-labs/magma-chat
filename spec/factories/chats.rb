@@ -27,6 +27,7 @@ FactoryBot.define do
   factory :chat do
     engine { 'engine' }
     analysis { {} }
+    public_access { false }
 
     association :bot
     association :user
@@ -37,6 +38,10 @@ FactoryBot.define do
 
     after(:create) do |chat, evaluator|
       create_list(:message, evaluator.message_count, chat: chat)
+    end
+
+    trait :public do
+      public_access { true }
     end
   end
 end

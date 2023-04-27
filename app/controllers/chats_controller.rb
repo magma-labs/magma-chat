@@ -56,8 +56,9 @@ class ChatsController < ApplicationController
   end
 
   def readonly
-    @chat = Chat.find(params[:id])
-    if @chat.public_access?
+    @chat = Chat.find_by(id: params[:id])
+
+    if @chat&.public_access?
       render :show
     else
       redirect_to root_path, notice: "Chat not found"
@@ -69,6 +70,4 @@ class ChatsController < ApplicationController
   def chat_params
     params.require(:chat).permit(:first_message, :engine, :bot_id)
   end
-
-
 end

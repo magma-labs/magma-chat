@@ -22,13 +22,13 @@ FactoryBot.define do
     email { Faker::Internet.email }
     name { Faker::Name.name }
 
-    oauth_uid { Faker::Number.number(digits: 21) }
-    oauth_provider { 'Google' }
+    oauth_uid { Faker::Number.number(digits: 9).to_s }
+    oauth_provider { 'google_oauth2' }
 
     image_url { Faker::Internet.url }
+  end
 
-    trait :admin do
-      admin { true }
-    end
+  factory :admin, parent: :user do
+    admin { true }
   end
 end
