@@ -9,6 +9,8 @@ MagmaLabs presents the best ChatGPT-style interface for GPT, written in Rails 7 
 
 * Run `rails db:setup` to create the database
 
+* Run `bin/dev` to fire up the app
+
 * Long-term memory for bots requires Marqo, an open-source, multi-modal vector search engine that you can download and run locally using Docker. More information at https://www.marqo.ai/
 
 ### OpenAI API
