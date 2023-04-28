@@ -48,15 +48,14 @@ class ChatReflex < ApplicationReflex
         # assume the title is whatever string supplied after the /new command
         title = value.split("/new").last&.strip.presence || "New Chat"
         @chat = current_user.chats.create!(title: title, engine: "gpt-3.5-turbo")
-        cable_ready.redirect_to(url: "/chats/#{chat.id}").broadcast
-        morph :nothing
+        reload
       when /^\/delete/
         destroy
       when /^\/clear/
         chat.messages.destroy_all
       when /^\/grow/
         chat.toggle!(:grow)
-        cable_ready.redirect_to(url: "/chats/#{chat.id}").broadcast
+        reload
       when /^\/redo/
         if chat.messages.any?
           message = value.split("/redo").last&.strip
@@ -65,13 +64,14 @@ class ChatReflex < ApplicationReflex
       when /^\/public/
         if chat.messages.any?
           chat.update!(public_access: true)
-          cable_ready.redirect_to(url: "/chats/#{chat.id}").broadcast
+          reload
         end
       when /^\/private/
         chat.update!(public_access: false)
-        cable_ready.redirect_to(url: "/chats/#{chat.id}").broadcast
+        reload
       when /^\/stream/
         current_user.update!(settings: current_user.settings.to_h.merge(streaming: !current_user.settings.streaming))
+        reload
       when /^\/whisper/
         # message = value.split("/whisper").last&.strip.presence
         # chat.prompt!(message: message, visible: false)
@@ -84,11 +84,16 @@ class ChatReflex < ApplicationReflex
         # todo: implement
       when /^\/debug/
         chat.update!(settings: chat.settings.to_h.merge(show_invisibles: !chat.settings.show_invisibles))
-        cable_ready.redirect_to(url: "/chats/#{chat.id}").broadcast
+        reload
       end
     else
       yield
     end
+  end
+
+  def reload
+    cable_ready.redirect_to(url: "/chats/#{chat.id}").broadcast
+    morph :nothing
   end
 
 end
