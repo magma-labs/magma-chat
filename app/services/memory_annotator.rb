@@ -24,6 +24,7 @@ class MemoryAnnotator
     questions = extract_questions(response)
     questions.each do |question|
       filter = "bot_id:#{chat.bot.id} AND subject_id:#{chat.user.id}"
+      # todo: can https://docs.marqo.ai/0.0.18/API-Reference/search/#score-modifiers help with relevance?
       search_result = Marqo.client.search("thoughts", question, filter: filter, limit: 3)
       next if search_result.hits.nil? || search_result.hits.empty?
 

@@ -99,6 +99,7 @@ class Chat < ApplicationRecord
     analysis[:next] || []
   end
 
+  # todo: replace this with throw/catch or exception handling so that it stops the original completion
   def reprompt_with_human_override!(message)
     # grab the last two visible messages in correct order
     last_messages = self.messages.reload.latest.limit(3).to_a.reverse
