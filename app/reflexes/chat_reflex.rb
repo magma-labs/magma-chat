@@ -70,6 +70,8 @@ class ChatReflex < ApplicationReflex
       when /^\/private/
         chat.update!(public_access: false)
         cable_ready.redirect_to(url: "/chats/#{chat.id}").broadcast
+      when /^\/stream/
+        current_user.update!(settings: current_user.settings.to_h.merge(streaming: !current_user.settings.streaming))
       when /^\/whisper/
         # message = value.split("/whisper").last&.strip.presence
         # chat.prompt!(message: message, visible: false)

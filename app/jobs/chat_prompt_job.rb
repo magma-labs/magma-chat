@@ -2,25 +2,42 @@ class ChatPromptJob < ApplicationJob
   queue_as :high_priority_queue
 
   def perform(chat, content, visible)
+    # add relevant memories from long term vector storage
+    MemoryAnnotator.new(chat).perform
+
     # create a blank assistant message to so that it shows
     # thinking animation and keeps the order of messages correctly
     message = chat.messages.create(role: "assistant", content: "", visible: visible, run_analysis_after_saving: false)
-
-    # add relevant memories from long term vector storage
-    MemoryAnnotator.new(chat).perform
 
     # calculate maximum tokens to ask for in response
     tokens_count = TikToken.count(chat.directive + content)
     max_tokens = chat.settings.response_length_tokens
 
+    # chat options
+    opts = {
+      directive: chat.directive,
+      prompt: content,
+      max_tokens: max_tokens,
+      transcript: chat.messages_for_gpt(tokens_count + max_tokens),
+      stream: chat.user.settings.streaming && stream_proc(message: message)
+    }
+
     # make sure to never pull only visible here, or we will lose consideration of memories
-    reply = Gpt.chat(directive: chat.directive, prompt: content, max_tokens: max_tokens, transcript: chat.messages_for_gpt(tokens_count + max_tokens))
+    reply = Gpt.chat(**opts)
+    # todo: need a different way of handling toolchain, so this is getting taken out soon
     process_reply_with_toolchain(chat, message, reply)
 
     # todo: error handling, probably put it into the message content
   end
 
   private
+
+  def stream_proc(message:)
+    proc do |chunk, _bytesize|
+      new_content = chunk.dig("choices", 0, "delta", "content")
+      message.update(content: message.content + new_content) if new_content
+    end
+  end
 
   ## TODO: WIP (Having a hard time getting bot to recognize what tools it can use.)
   def process_reply_with_toolchain(chat, message, reply)
