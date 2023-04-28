@@ -35,7 +35,6 @@ class Chat < ApplicationRecord
   has_many :messages, dependent: :destroy, enable_cable_ready_updates: true
 
   before_create :set_title
-  before_create :set_visibility
   after_create :add_context_messages
 
   after_commit :prompt!, on: :create, if: :first_message
@@ -156,10 +155,6 @@ class Chat < ApplicationRecord
     else
       self.title = first_message
     end
-  end
-
-  def set_visibility
-    self.settings = settings.to_h.merge(show_invisibles: !settings.show_invisibles) if user.admin?
   end
 
   def prefix_timestamp_to_content(message)

@@ -1,3 +1,10 @@
+##
+## A basic implementation of retrieval-augmented generation (or "RETRO")
+## a) retrieves relevant data from outside of the language model (non-parametric) and
+## b) augments the data with context in the prompt to the LLM. The architecture
+## cleanly routes around most of the limitations of fine-tuning and context-only
+## approaches. Read more at https://mattboegner.com/knowledge-retrieval-architecture-for-llms/
+##
 class MemoryAnnotator
   attr_reader :chat
 
@@ -11,30 +18,28 @@ class MemoryAnnotator
     # no point if there's no Marqo service attached
     return if ENV['MARQO_URL'].blank?
 
+    unique_hits = Set.new
+
     response = Gpt.chat(transcript: Prompts.get("conversation_analyzer.prelude"), prompt: prompt(number_of_messages_to_pop))
-    extract_questions(response).map do |question|
+    questions = extract_questions(response)
+    questions.each do |question|
       filter = "bot_id:#{chat.bot.id} AND subject_id:#{chat.user.id}"
-      Marqo.client.search("thoughts", question, filter: filter, limit: 3)
-    end.map do |search_result|
-      # todo: consider relevance score and only add if above a certain threshold
-      # todo: combine results since we're often getting the same hits for each question and it eats up context window
-      if search_result.hits.nil? || search_result.hits.empty?
-        Rails.logger.debug("❌ MEMORY NOT FOUND #{search_result.query} ❌")
-      else
-        memory = compile_content(search_result.query, search_result.hits)
-        Rails.logger.debug("💡 Creating Memory Message for #{memory} 💡")
-        chat.user_message!(memory)
-      end
+      search_result = Marqo.client.search("thoughts", question, filter: filter, limit: 3)
+      next if search_result.hits.nil? || search_result.hits.empty?
+
+      search_result.hits.each { |hit| unique_hits << hit.brief.strip }
     end
+
+    # todo: consider relevance score and only add if above a certain threshold\
+    chat.user_message!(compile_content(questions, unique_hits))
   end
 
   private
 
-  def compile_content(query, hits)
+  def compile_content(questions, answers)
     [
-      "You asked your long-term memory: #{query}",
-      "And you remembered the following:",
-      hits.map { |h| h.brief }.join("\n\n")
+      "You asked your long-term memory: \n\n #{questions.join("\n")}",
+      "And you remembered the following: \n\n #{answers.join("\n")}"
     ].join("\n\n")
   end
 
