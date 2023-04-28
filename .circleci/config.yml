@@ -51,8 +51,9 @@ jobs:
     steps:
       - install-dependencies
       - setup-database
+      - run: bundle exec rails tailwindcss:build
       - run:
-          command: bundle exec rspec --format progress --format RspecJunitFormatter -o ~/rspec/rspec.xml
+          command: bundle exec rspec --format progress --format RspecJunitFormatter -o ~/test_results/rspec/rspec.xml
           when: always
       - store_test_results:
-          path: ~/rspec
+          path: ~/test_results
