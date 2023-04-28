@@ -1,17 +1,19 @@
 class SettingField
+  include ApplicationHelper
+
   attr_reader :form
-  attr_reader :user
+  attr_reader :current_user
   attr_reader :key
   attr_reader :value
 
-  def initialize(user, form, key, value)
+  def initialize(current_user, form, key, value)
     @form = form
-    @user = user
+    @current_user = current_user
     @key = key
   end
 
   def label
-    form.label(key, Gpt.dt(t[:title]))
+    form.label(key, d(t[:title]))
   end
 
   def input
@@ -31,6 +33,6 @@ class SettingField
   end
 
   def user_type
-    user.admin ? :admin : :user
+    current_user.admin ? :admin : :user
   end
 end
