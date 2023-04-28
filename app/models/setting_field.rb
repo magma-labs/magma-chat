@@ -20,6 +20,10 @@ class SettingField
     form.send(field_type, key, *field_args)
   end
 
+  def wrapper_class
+    t[:wrapper_class] || "flex flex-col gap-1"
+  end
+
   private
 
   def t
