@@ -66,3 +66,15 @@ en:
           - Türkçe
         - {}
         - { class: "rounded-md text-gray-800" }
+    streaming:
+      title: Stream response from GPT as it is generated
+      wrapper_class: "flex items-center gap-2"
+      admin: &default_streaming_field
+        field: check_box
+        field_args:
+          - { class: "rounded-md text-gray-800 order-first" }
+        help_text: |
+          If checked, the response from GPT will be streamed to the user as it is generated.
+          If unchecked, the response will be generated in full before being sent to the user.
+      user:
+        <<: *default_streaming_field

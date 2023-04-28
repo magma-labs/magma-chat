@@ -6,9 +6,9 @@
                     manage your privacy settings, and tailor your experience within the application to better suit your needs.
                     If you have any questions or need assistance, please visit our Help Center or contact our support team", classes: "max-w-prose") %>
   <%= form_with(model: current_user, url: settings_path, method: :patch, class: "text-gray-300 max-w-prose space-y-4" ) do |form| %>
-    <% current_user.settings.to_h.each do |key, val| %>
+    <% t("settings").each do |key, val| %>
       <% SettingField.new(current_user, form, key, val).then do |field| %>
-        <div class="flex flex-col gap-1">
+        <div class="<%= field.wrapper_class %>">
           <%= field.label %>
           <%= field.input %>
         </div>

@@ -23,6 +23,6 @@ class SettingsController < ApplicationController
 
 
   def settings_params
-    params.require(:user).permit(current_user.settings.to_h.keys)
+    params.require(:user).permit(t("settings").keys)
   end
 end
