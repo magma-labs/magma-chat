@@ -129,7 +129,7 @@ GEM
     importmap-rails (1.1.5)
       actionpack (>= 6.0.0)
       railties (>= 6.0.0)
-    instant18n (0.2.0)
+    instant18n (0.3.0)
       actionview
       activesupport
       railties
@@ -380,7 +380,7 @@ DEPENDENCIES
   faker
   httparty
   importmap-rails
-  instant18n (~> 0.2.0)
+  instant18n (~> 0.3.0)
   jbuilder
   judoscale-rails
   judoscale-sidekiq

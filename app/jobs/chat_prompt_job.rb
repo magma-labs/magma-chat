@@ -18,6 +18,7 @@ class ChatPromptJob < ApplicationJob
       directive: chat.directive,
       prompt: content,
       max_tokens: max_tokens,
+      temperature: 0.7,
       transcript: chat.messages_for_gpt(tokens_count + max_tokens),
       stream: chat.user.settings.streaming && stream_proc(message: message)
     }
@@ -29,6 +30,7 @@ class ChatPromptJob < ApplicationJob
     if reply.nil? # streaming
       ChatObservationJob.perform_later(chat)
       ChatAnalysisJob.perform_later(chat)
+      ChatResponsibilityJob.perform_later(chat)
     else
       process_reply_with_toolchain(chat, message, reply)
     end

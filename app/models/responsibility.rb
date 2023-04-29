@@ -1,0 +1,2 @@
+class Responsibility < Thought
+end

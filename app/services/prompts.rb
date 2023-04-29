@@ -10,7 +10,7 @@ module Prompts
     prompts_file = Rails.root.join('config', 'prompts.yml')
     prompts = YAML.load_file(prompts_file)
     prompt = prompts.dig(*key.split('.'))
-    raise "not found" if prompt.blank?
+    raise "Prompt #{key} not found" if prompt.blank?
 
     if prompt.is_a?(String)
       prompt % args # interpolate the args into the string

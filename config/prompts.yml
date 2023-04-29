@@ -55,6 +55,33 @@ chats:
     %{bot_role}: %{bot_message}
     User: %{user_message}
     %{bot_role}:
+  responsibility:
+    prompt: |
+      Analyze the conversation and return a list of actions that you as the assistant should be responsible for performing on a regular basis.
+
+      For example, if I said "I want to exercise and have written my daily journal by 12 noon every day" then the assistant's list should include:
+
+      1. Ask user if they have exercised today, at 12 noon every day unless the user has already exercised three times this week.
+      2. Ask user if they have written their daily journal, at 12 noon every day.
+
+      Here's another example, if I say "I want to call my son at least once a week" then the assistant's list should include:
+
+      1. Keep track of the last time the user called their son.
+      2. If the user has not called their son in the last week, then ask the user if they want to call their son today.
+
+    extra_example: |
+      Here's another example, if I say "I want to do a better job of keeping in touch with my friends" then your list should include:
+
+      1. Keep track of the who the user's friends are.
+      2. Determine how often the user should contact each friend and give the user periodic reminders
+      3. Make sure that none of user's friends are left without being contacted for too long.
+
+    prompt_condense: |
+      Filter this list of responsibilities to remove any that are redundant or not specific enough to be actionable, then rewrite them
+      to include specific date/time or time intervals at which they should be considered.
+
+      %{responsibilities}
+
 
 bots:
   intro: |

@@ -2,7 +2,7 @@
   <h1 class="text-2xl font-medium"><%= it("Settings") %></h1>
 </div>
 <div class="flex flex-col gap-4 p-4">
-  <%= dynamic_copy("Welcome to User Settings! Here, you can customize your account preferences,
+  <%= it("Welcome to User Settings! Here, you can customize your account preferences,
                     manage your privacy settings, and tailor your experience within the application to better suit your needs.
                     If you have any questions or need assistance, please visit our Help Center or contact our support team", classes: "max-w-prose") %>
   <%= form_with(model: current_user, url: settings_path, method: :patch, class: "text-gray-300 max-w-prose space-y-4" ) do |form| %>

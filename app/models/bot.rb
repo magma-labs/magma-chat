@@ -34,6 +34,7 @@ class Bot < ApplicationRecord
   has_many :chats, dependent: :nullify
   has_many :thoughts, dependent: :destroy
   has_many :observations, dependent: :destroy
+  has_many :responsibilities, dependent: :destroy
 
   before_create :set_intro
 
