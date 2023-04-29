@@ -13,7 +13,7 @@ class SettingField
   end
 
   def label
-    form.label(key, it(t[:title]))
+    form.label(key, I18n.it(t[:title]))
   end
 
   def input
