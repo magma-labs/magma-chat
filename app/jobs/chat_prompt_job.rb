@@ -24,8 +24,14 @@ class ChatPromptJob < ApplicationJob
 
     # make sure to never pull only visible here, or we will lose consideration of memories
     reply = Gpt.chat(**opts)
+
     # todo: need a different way of handling toolchain, so this is getting taken out soon
-    process_reply_with_toolchain(chat, message, reply)
+    if reply.nil? # streaming
+      ChatObservationJob.perform_later(chat)
+      ChatAnalysisJob.perform_later(chat)
+    else
+      process_reply_with_toolchain(chat, message, reply)
+    end
 
     # todo: error handling, probably put it into the message content
   end

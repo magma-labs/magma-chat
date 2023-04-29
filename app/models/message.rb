@@ -101,6 +101,14 @@ class Message < ApplicationRecord
       .reverse
   end
 
+  def reanalyze
+    puts
+    puts "🤓🤓🤓🤓🤓🤓🤓 Reanalyzing chat #{chat.id} after message #{id} 🤓🤓🤓🤓🤓🤓🤓"
+    puts
+    ChatObservationJob.perform_later(chat)
+    ChatAnalysisJob.perform_later(chat)
+  end
+
   private
 
   def calculate_tokens
@@ -114,14 +122,6 @@ class Message < ApplicationRecord
       self.visible = false
       chat.reprompt_with_human_override!(self)
     end
-  end
-
-  def reanalyze
-    puts
-    puts "🤓🤓🤓🤓🤓🤓🤓 Reanalyzing chat #{chat.id} after message #{id} 🤓🤓🤓🤓🤓🤓🤓"
-    puts
-    ChatObservationJob.perform_later(chat)
-    ChatAnalysisJob.perform_later(chat)
   end
 
   def strategy_name

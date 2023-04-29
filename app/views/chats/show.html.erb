@@ -21,7 +21,7 @@
   <% end %>
   <%= cable_ready_updates_for @chat, html_options: { class: "p-4 analysis text-sm space-y-2 w-full h-full text-gray-300 flex flex-col gap-2 z-10 absolute", } do %>
     <div>
-      <label><%= d("Title") %></label>
+      <label><%= it("Title") %></label>
       <%= @chat.title %>
       <% if @chat.public_access? && current_user == @chat.user %>
         <div class="text-xs text-gray-400">
@@ -43,13 +43,13 @@
     <% unless @chat.analysis.blank? %>
       <% unless @chat.analysis[:summary].blank? %>
         <div>
-          <label><%= d("Summary") %></label>
+          <label><%= it("Summary") %></label>
           <%= @chat.analysis[:summary] %>&nbsp;
         </div>
       <% end %>
       <% unless @chat.tags.empty? %>
         <div>
-          <label class="mb-1"><%= d("Tags") %></label>
+          <label class="mb-1"><%= it("Tags") %></label>
           <div>
             <% @chat.tags.each do |tag| %>
               <span class="tag"><%= tag %></span>
@@ -59,7 +59,7 @@
       <% end %>
       <% unless @chat.analysis_next.empty? %>
         <div>
-          <label class="mb-1"><%= d("Suggested Topics") %></label>
+          <label class="mb-1"><%= it("Suggested Topics") %></label>
           <% @chat.analysis_next.each do |sugg| %>
             <div data-id="<%= @chat&.id %>" data-value="<%= sugg %>"
                  <% if current_user %>data-reflex="click->Chat#suggested"<% end %>

@@ -1,7 +1,7 @@
 <div class="space-y-4">
   <%= form_for :search, url: "/chats/search", class: "flex justify-between items-center gap-4 shadow sticky top-0 z-50 bg-slate-800 p-3" do |f| %>
-    <h1 class="text-2xl font-medium"><%= d("Conversations") %></h1>
-    <input type="text" placeholder="<%= d("Search...") %>" autocomplete="off" name="q"
+    <h1 class="text-2xl font-medium"><%= it("Conversations") %></h1>
+    <input type="text" placeholder="<%= it("Search...") %>" autocomplete="off" name="q"
            class="rounded-md bg-gray-400 border-gray-200 border-2 text-gray-800 p-1 w-28 max-w-[50%]
                 focus:bg-white focus:flex-1 focus:pr-12 transition-all duration-300 transform">
     <div class="absolute right-4 opacity-60">🔎</div>
@@ -23,7 +23,7 @@
             <div class="text-xs text-gray-500 mt-1">
               <%= chat.created_at.strftime("%b %d, %Y") %> -
               <%# TODO: added a counter cache to chat %>
-              <%= chat.messages.count %> <%= d("messages with").downcase %>
+              <%= chat.messages.count %> <%= it("messages with").downcase %>
               <%= chat.bot.name %>,  <%= d(chat.bot.role) %>
             </div>
           </div>

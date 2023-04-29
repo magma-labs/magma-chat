@@ -4,14 +4,14 @@
       <%= image_tag("nav_logo.svg", class: "h-6 xl:h-10 object-fit sm:m-auto") %>
     <% end %>
     <a href="/chats/new" class="text-gray-500 text-sm border bg-slate-800 border-gray-600 sm:-mt-2
-     hover:border-gray-400 p-1 sm:mr-4 rounded-md hover:text-gray-200" title="New chat">+&nbsp;<%= d("New") %>&nbsp;<span class="hidden xl:inline"><%= d("Chat") %></span></a>
+     hover:border-gray-400 p-1 sm:mr-4 rounded-md hover:text-gray-200" title="New chat">+&nbsp;<%= it("New") %>&nbsp;<span class="hidden xl:inline"><%= it("Chat") %></span></a>
   </div>
   <div class="hidden sm:flex sm:flex-col gap-5 w-full overflow-y-auto h-full p-4">
     <% @latest_chats.group_by(&:bot_id).each do |_, chats| %>
       <div>
         <div class="flex items-end justify-between h-8 border-b border-gray-500 mb-1">
           <div class="font-medium">
-            <%= [chats.first.bot.name, d(chats.first.bot.role).presence].compact.join(", ") %>
+            <%= [chats.first.bot.name, it(chats.first.bot.role).presence].compact.join(", ") %>
           </div>
           <%= image_tag chats.first.bot.image_url, class: "w-12 object-cover -ml-3" %>
         </div>
@@ -20,15 +20,15 @@
     <% end %>
     <% if @latest_chats.any? %>
       <label class="block text-gray-500 text-xs mb-2">
-        <%= d("Displaying 10 most recent chats...") %>
-        <%= link_to d("see all"), chats_path, class: " font-medium text-gray-400" %>
+        <%= it("Displaying 10 most recent chats...") %>
+        <%= link_to it("see all"), chats_path, class: " font-medium text-gray-400" %>
       </label>
     <% else %>
       <div class="text-gray-300 space-y-4">
-        <p><%= d("Welcome to MagmaChat, the most advanced chat interface to OpenAI's GPT large language model.
+        <p><%= it("Welcome to MagmaChat, the most advanced chat interface to OpenAI's GPT large language model.
                To begin, choose a bot and start a new conversation. Oh, and don't forget that you can
                change your default language preference in Settings (link below) if English is not your primary preference.") %></p>
-        <p><%= d("Not ready to start chatting? You can also learn more about
+        <p><%= it("Not ready to start chatting? You can also learn more about
                   <a href='https://magmalabs.io' target='_blank' class='text-magma-red font-bold'>MagmaLabs</a>
                   or check out the project source code on <a href='https://github.com/magma-labs/magma-chat'
                   class='font-bold text-white' target='_blank'>Github</a>.").html_safe %>
@@ -41,9 +41,9 @@
       <%= current_user.email %>
     </div>
     <div class="flex gap-2 px-3">
-      <%= link_to d("Settings"), "/settings", class: "text-gray-400 hover:text-yellow-500 block" %>
+      <%= link_to it("Settings"), "/settings", class: "text-gray-400 hover:text-yellow-500 block" %>
       <%= link_to "Bots", "/bots", class: "text-gray-400 hover:text-yellow-500 block" if current_admin? %>
-      <%= link_to d("Sign out"), "/logout", class: "text-gray-400 hover:text-yellow-500 block" %>
+      <%= link_to it("Sign out"), "/logout", class: "text-gray-400 hover:text-yellow-500 block" %>
     </div>
 
   </div>

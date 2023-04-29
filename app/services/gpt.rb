@@ -24,8 +24,9 @@ module Gpt
       Rails.logger.info("GPT REQUEST: #{params}")
       client.chat(parameters: params).then do |response|
         Rails.logger.info("GPT RESPONSE: #{response}")
-        # todo: raise application level errors so that they can be handled differently than normal replies
-        response.dig("error","message") || response.dig("choices", 0, "message", "content")
+        if response.any?
+          response.dig("error","message") || response.dig("choices", 0, "message", "content")
+        end
       end
     end
   end
@@ -45,24 +46,6 @@ module Gpt
       ]
       chat(directive: Prompts.get("gpt.magic_directive"), prompt: args.join(", "), temperature: temp, transcript: messages)
     end
-  end
-
-  def dt(prompt, classes: "", max_length: 200, temperature: 1)
-    return prompt
-    #   Rails.cache.fetch("gpt_dt_#{prompt}_#{current_language}_#{max_length}_#{temperature}", expires_in: 1.year) do
-    #     Gpt.chat(
-    #       directive: Prompts.get("gpt.t_directive"),
-    #       prompt: Prompts.get("dynamic_text", t: prompt, l: current_language), temperature: temperature
-    #     )
-    #   end.then do |text|
-    #     text.gsub!(/^"+|"+$/, '')
-    #     if classes.present?
-    #       tag.div(text, class: "dynamic-text #{classes}")
-    #     else
-    #       text
-    #     end
-    #   end
-    # end
   end
 
   private

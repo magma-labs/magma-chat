@@ -8,12 +8,14 @@
         <% if message.content.blank? %>
           <%= render "loading" %>
         <% else %>
-          <%= markdown(message.content) %>
-            <div class="text-gray-500 text-xs">
-              <%= d("#{distance_of_time_in_words_to_now(message.updated_at)} ago").downcase %>
-              ・ <%= message.tokens_count %> tokens
-              <% if params[:message] == message.id %><span data-controller="scroll" data-action="scroll#scroll"></span><% end %>
-            </div>
+          <%= tag.div(markdown(message.content)) %>
+          <%= tag.div(message.content, id: dom_id(message, :content), class: "hidden") %>
+          <div class="text-gray-500 text-xs">
+            <%= "#{distance_of_time_in_words_to_now(message.updated_at)} ago" %>
+            ・ <%= message.tokens_count %> tokens
+            ・ <span class="cursor-pointer" data-controller="clipboard" data-action="click->clipboard#target" data-target="<%= dom_id(message, :content) %>">copy message content</span>
+            <% if params[:message] == message.id %><span data-controller="scroll" data-action="scroll#scroll"></span><% end %>
+          </div>
         <% end %>
       </div>
       <% if current_admin? %>
@@ -33,7 +35,7 @@
         <% else %>
           <code class="text-xs whitespace-break-spaces"><%= message.content %></code>
           <div class="text-gray-500 text-xs">
-            <%= d("#{distance_of_time_in_words_to_now(message.updated_at)} ago").downcase %>
+            <%= "#{distance_of_time_in_words_to_now(message.updated_at)} ago" %>
             ・ <%= message.tokens_count %> tokens
           </div>
         <% end %>

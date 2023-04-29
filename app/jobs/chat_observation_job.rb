@@ -8,7 +8,7 @@ class ChatObservationJob < ApplicationJob
     Gpt.chat(
       directive: directive,
       prompt: prompt,
-      transcript: chat.messages_for_gpt(tokens_count + 200, only_visible: true).take(6),
+      transcript: chat.messages_for_gpt(2000 - tokens_count, only_visible: true).take(6),
       temperature: 0.5,
       max_tokens: 300,
     ).then do |response|

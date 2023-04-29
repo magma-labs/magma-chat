@@ -129,6 +129,11 @@ GEM
     importmap-rails (1.1.5)
       actionpack (>= 6.0.0)
       railties (>= 6.0.0)
+    instant18n (0.2.0)
+      actionview
+      activesupport
+      railties
+      ruby-openai (~> 4.0.0)
     io-console (0.6.0)
     irb (1.6.4)
       reline (>= 0.3.0)
@@ -375,6 +380,7 @@ DEPENDENCIES
   faker
   httparty
   importmap-rails
+  instant18n (~> 0.2.0)
   jbuilder
   judoscale-rails
   judoscale-sidekiq
