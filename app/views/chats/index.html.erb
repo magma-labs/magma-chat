@@ -24,7 +24,7 @@
               <%= chat.created_at.strftime("%b %d, %Y") %> -
               <%# TODO: added a counter cache to chat %>
               <%= chat.messages.count %> <%= it("messages with").downcase %>
-              <%= chat.bot.name %>,  <%= d(chat.bot.role) %>
+              <%= chat.bot.name %>,  <%= it(chat.bot.role) %>
             </div>
           </div>
         </div>

@@ -11,9 +11,9 @@
       <%= bot.name %>
       <%= "(Draft)" if bot.published_at.blank? %>
       <div class="text-sm text-gray-500">
-        <%= d(bot.role) %>
+        <%= it(bot.role) %>
       </div>
     </div>
-    <div class="text-sm text-gray-700"><%= d(truncate(bot.intro, length: 100)) %></div>
+    <div class="text-sm text-gray-700"><%= it(truncate(bot.intro, length: 100)) %></div>
   </div>
 </div>
