@@ -54,17 +54,23 @@ Here are some of the cool features we are envisioning:
 
 * Ruby 3.2.1
 
-* Requires Postgres and Redis to be running
-
-* Run `rails db:setup` to create the database
-
-* Run `bin/dev` to fire up the app
+* Requires Docker
 
 * Long-term memory for bots requires Marqo, an open-source, multi-modal vector search engine that you can download and run locally using Docker. More information at https://www.marqo.ai/
 
+configure environment variables
+```sh
+cp .env.example .env.local
+```
+
+fire up the app
+```sh
+docker-compose up --build
+```
+
 ### OpenAI API
 
-Make sure you have `OPENAI_ACCESS_TOKEN` environment variable set. (Developers, use a `.env` file in the root of the project.)
+Make sure you have `OPENAI_ACCESS_TOKEN` environment variable set. (Developers, use a `.env.local` file in the root of the project.)
 
 ### Google Oauth
 

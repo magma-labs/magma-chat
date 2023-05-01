@@ -10,12 +10,7 @@ x-app: &default-app
     db:
       condition: service_healthy
   env_file:
-    - .env
-  environment:
-    - RAILS_ENV=development
-    - DATABASE_URL=postgres://postgres:password@host.docker.internal:5432/magma_chat_development
-    - REDIS_URL=redis://host.docker.internal:6379/1
-    - MARQO_URL=https://marqo-ai.magmalabs.io/
+    - .env.local
   tty: true
   volumes:
     - .:/rails
@@ -25,11 +20,7 @@ x-assets: &default-assets
     context: "."
     dockerfile: Dockerfile
   env_file:
-    - .env
-  environment:
-    - RAILS_ENV=development
-    - DATABASE_URL=postgres://postgres:password@host.docker.internal:5432/magma_chat_development
-    - REDIS_URL=redis://host.docker.internal:6379/1
+    - .env.local
   tty: true
   volumes:
     - .:/rails
@@ -44,9 +35,9 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
-    command: redis-server
+    command: redis-server --requirepass password
     ports:
-      - '6379:6379'
+      - '6380:6379'
     volumes:
       - 'redis-data:/data'
     networks:
@@ -55,20 +46,20 @@ services:
   db:
     image: postgres:15
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      test: ["CMD-SHELL", "pg_isready -U rails"]
       interval: 5s
       timeout: 5s
       retries: 5
     ports:
-      - "5432:5432"
+      - "5433:5432"
     restart: always
     environment:
-      - POSTGRES_USER=postgres
+      - POSTGRES_USER=rails
       - POSTGRES_PASSWORD=password
       - POSTGRES_HOST_AUTH_METHOD=trust
-      - POSTGRES_DB=magma_chat_development
     volumes:
       - 'pg-data:/var/lib/postgresql/data'
+      - './db/development.sql:/docker-entrypoint-initdb.d/setup.sql'
     networks:
       default:
 

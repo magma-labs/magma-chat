@@ -54,7 +54,6 @@ gem "bootsnap", require: false
 
 gem "action-cable-redis-backport", "~> 1"
 gem "cable_ready", "~> 5.0.0"
-gem "dotenv", "~> 2.8"
 gem "faker"
 gem "instant18n", "~> 0.3.0"
 gem "httparty"
