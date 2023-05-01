@@ -76,8 +76,13 @@
   <% end %>
   <div class="hidden sm:block">
     <%= image_tag @chat.bot.image_url, class: "object-fit absolute bottom-0 opacity-60" %>
-    <div class="absolute bottom-0 text-xs sm:text-sm lg:text-base p-3 tracking-widest font-bold text-center w-full bg-opacity-30 bg-gradient-to-t from-black to-transparent  shadow text-white">
-      <div><%= @chat.bot.name %></div>
+    <div class="absolute z-30 bottom-0 text-xs sm:text-sm lg:text-base p-3 tracking-widest font-bold text-center w-full bg-opacity-30 bg-gradient-to-t from-black to-transparent  shadow text-white">
+      <div>
+        <%= @chat.bot.name %>
+        <% if current_user.admin? %>
+          <%= link_to "🤖", [@chat.bot] %>
+        <% end %>
+      </div>
       <div class="font-light"><%= @chat.bot.role %></div>
     </div>
   </div>

@@ -103,7 +103,7 @@ class Message < ApplicationRecord
     puts
     ChatObservationJob.perform_later(chat)
     ChatAnalysisJob.perform_later(chat)
-    ChatResponsibilityJob.perform_later(chat)
+    # ChatResponsibilityJob.perform_later(chat)
   end
 
   private

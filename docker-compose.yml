@@ -15,6 +15,7 @@ x-app: &default-app
     - RAILS_ENV=development
     - DATABASE_URL=postgres://postgres:password@host.docker.internal:5432/magma_chat_development
     - REDIS_URL=redis://host.docker.internal:6379/1
+    - MARQO_URL=https://marqo-ai.magmalabs.io/
   tty: true
   volumes:
     - .:/rails

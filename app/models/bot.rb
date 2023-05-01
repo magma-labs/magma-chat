@@ -99,6 +99,11 @@ class Bot < ApplicationRecord
     "bots/bot"
   end
 
+  def self.inherited(subclass)
+    super
+    subclass.define_singleton_method(:model_name) { Bot.model_name }
+  end
+
   private
 
   def set_intro

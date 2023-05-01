@@ -110,7 +110,7 @@ GEM
     bootsnap (1.16.0)
       msgpack (~> 1.2)
     builder (3.2.4)
-    cable_ready (5.0.0.rc2)
+    cable_ready (5.0.0)
       actionpack (>= 5.2)
       actionview (>= 5.2)
       activesupport (>= 5.2)
@@ -403,7 +403,7 @@ DEPENDENCIES
   action-cable-redis-backport (~> 1)
   annotate
   bootsnap
-  cable_ready (~> 5.0.0.pre10)
+  cable_ready (~> 5.0.0)
   capybara
   debug
   dotenv (~> 2.8)
