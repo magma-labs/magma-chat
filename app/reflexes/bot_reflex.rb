@@ -4,11 +4,15 @@ class BotReflex < ApplicationReflex
   attr_reader :bot
   before_reflex :load_bot
 
-  def promote
-    @bot.update_column(:type, "Agent")
-    cable_ready.redirect_to(url: "/bots/#{@bot.id}").broadcast
-    morph :nothing
+  def add_tool
+    @bot.tools.create(name: "New Tool")
   end
+
+  # def promote
+  #   @bot.update_column(:type, "Agent")
+  #   cable_ready.redirect_to(url: "/bots/#{@bot.id}").broadcast
+  #   morph :nothing
+  # end
 
   def publish
     @bot.update(published_at: Time.now)
@@ -26,6 +30,10 @@ class BotReflex < ApplicationReflex
     morph :nothing
   end
 
+  def toggle_setting(_, checked)
+    @bot.raw_settings[element.dataset[:field]] = checked
+    @bot.save!
+  end
 
   private
 

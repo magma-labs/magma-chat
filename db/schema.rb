@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_04_23_234956) do
+ActiveRecord::Schema[7.0].define(version: 2023_04_30_011642) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -86,6 +86,18 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_23_234956) do
     t.index ["subject_type", "subject_id"], name: "index_thoughts_on_subject"
   end
 
+  create_table "tools", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "bot_id", null: false
+    t.string "type", default: "Tool", null: false
+    t.string "name", null: false
+    t.text "implementation"
+    t.jsonb "settings", default: {}, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["bot_id"], name: "index_tools_on_bot_id"
+    t.index ["type"], name: "index_tools_on_type"
+  end
+
   create_table "users", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "name", default: "", null: false
     t.string "email", null: false
@@ -102,4 +114,5 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_23_234956) do
   end
 
   add_foreign_key "messages", "chats"
+  add_foreign_key "tools", "bots"
 end

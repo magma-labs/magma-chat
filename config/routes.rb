@@ -5,7 +5,7 @@ Rails.application.routes.draw do
   get 'api/index'
   resources :home, only: [:index]
 
-  resources :agents, controller: "bots", type: "Agent"
+  # resources :agents, controller: "bots", type: "Agent"
 
   resources :bots do
     member do
@@ -34,6 +34,9 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   root "home#index"
+
+  # quick health check at /up
+  get "/up", to: proc { [200, {}, ["OK"]] }
 
   mount Sidekiq::Web, at: '/sidekiq', constraints: AdminConstraint
 end

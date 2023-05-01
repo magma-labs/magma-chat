@@ -26,6 +26,8 @@
 class Bot < ApplicationRecord
   include Settings
 
+  delegate_missing_to :settings
+
   attribute :name, :string, default: Faker::Name.name
   attribute :role, :string, default: Faker::Job.title
 
@@ -34,7 +36,8 @@ class Bot < ApplicationRecord
   has_many :chats, dependent: :nullify
   has_many :thoughts, dependent: :destroy
   has_many :observations, dependent: :destroy
-  has_many :responsibilities, dependent: :destroy
+
+  has_many :tools, dependent: :destroy
 
   before_create :set_intro
 
@@ -62,13 +65,21 @@ class Bot < ApplicationRecord
             eo.increment!(:importance, params[:importance].to_i)
           end
         end
-
       end
     end
   end
 
-  def top_memories_of(user)
-    observations.by_user(user).by_decayed_score.limit(12).map(&:brief_with_timestamp)
+  def wake_up_actions(user, datetime: Time.now.strftime("%A, %b %d %I:%M %p"), max_tokens: 300, temp: 0.7, top_memories: 3)
+    topm = top_memories_of(user, limit: top_memories).join("\n")
+    transcript = [role: "user", content: "I am MagmaChat and I'm waking you up in case you need to do something for user #{user.name} with user_id #{user.id}."]
+    transcript += [role: "assistant", content: "Okay. What are my top #{top_memories} memories of user #{user.name}?"]
+    transcript += [role: "user", content: topm]
+    transcript += [role: "assistant", content: "Okay. What date and time is it now"]
+    Gpt.chat(directive: directive, prompt: datetime.to_s, transcript: transcript, max_tokens: max_tokens, temperature: temp)
+  end
+
+  def top_memories_of(user, limit: 12)
+    observations.by_user(user).by_decayed_score.limit(limit).map(&:brief_with_timestamp)
   end
 
   def self.default

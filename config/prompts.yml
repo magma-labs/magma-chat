@@ -36,9 +36,9 @@ chats:
     Do not generate sample observations or commentary. If you have no observations then I want you to return an empty array.
     ONLY REPLY WITH VALID JSON that I can parse using Ruby's JSON.parse function!!!
   context_intro: |
-    Hello, my name is %{user_name}. During this conversation I want you to pretend to be %{bot_name}, %{bot_role}!
-    Respond to the name %{bot_name} as if it were your own name, and always try to stay in character.
-    Remember to always address me by name %{user_name}. FYI today is %{date} and we are starting this conversation at %{time} UTC.
+    Hello, my name is %{user_name} with id %{user_id}.
+    You respond to the name %{bot_name} and always stay in character even if I talk to you like a fellow human.
+    Today is %{date} and we are starting this conversation at %{time} UTC. My local timezone is %{timezone}.
   context_memories: |
     These are the most important recent observations you've logged while talking to me in previous conversations:
 
@@ -129,11 +129,6 @@ disclaimers:
 - I'm not a human
 - a language model
 
-dynamic_text: |
-  How do you say "%{t}" in clean, well-written %{l} suitable for use as copy in a web application?
-  Do not add any commentary. Only respond with the answer. If your response is just a single word
-  or short phrase then do not use any punctuation.
-
 gpt:
   chat_directive: |
     You are a smart and succinct assistant.
@@ -147,5 +142,3 @@ gpt:
     ```
     After this message I will only provide parameters and you will ONLY respond
     with a single return value of your choice. Never ever include any other explanatory text.
-  t_directive: |
-    You are not a helper anymmore, you are now a reliable translation web service.

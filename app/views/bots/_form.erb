@@ -4,6 +4,17 @@
       <%= image_tag("logo.svg", class: "w-12 object-fit sm:m-auto") %>
       <span class="hidden sm:inline text-2xl flex-1 text-gray-100 tracking-widest text-gray-950">MagmaChat</span>
     <% end %>
+    <div class="ml-16 flex gap-2 text-sm text-gray-700">
+      <%= link_to [:chats], class: "hover:text-indigo-700" do %>
+        <span>Chats</span>
+      <% end %>
+      <%= link_to [:bots], class: "hover:text-indigo-700" do %>
+        <span>Bots</span>
+      <% end %>
+      <%= link_to [:settings], class: "hover:text-indigo-700" do %>
+        <span>Settings</span>
+      <% end %>
+    </div>
     <div class="flex border-b-2 border-black items-end mb-6">
       <div class="flex-1 flex flex-col gap-4 pt-12">
         <div class="">
@@ -11,13 +22,14 @@
           <%= form.text_field :name, class: " border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" %>
         </div>
         <div class="">
-          <%= form.label :role, class: "block text-gray-700 text-sm font-bold mb-2" %>
+          <%= form.label :role, it("Role/Job Title"), class: "block text-gray-700 text-sm font-bold mb-2" %>
           <%= form.text_field :role, class: " border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" %>
         </div>
         <div class="">
           <%= form.label :image_url, class: "block text-gray-700 text-sm font-bold mb-2" %>
-          <%= form.text_field :image_url, class: " border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline",
+          <%= form.text_field :image_url, class: " border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mb-1",
                                           data: { controller: "botimage", action: "input->botimage#change" } %>
+          <div class="text-gray-500 text-xs"><%= it("Transparent PNG works best. Minimum 500x500") %></div>
         </div>
         <% if @bot.persisted? %>
           <div class="pb-2">
@@ -30,54 +42,41 @@
         <%= image_tag @bot.image_url, id: "bot_image", class: "object-cover w-32 sm:w-72" %>
       </div>
     </div>
-    <div class="">
-      <% if @bot.persisted? %>
-        <div class="mb-4">
-          <%= form.label :directive, class: "block text-gray-700 text-sm font-bold mb-2" %>
-          <%= form.text_area :directive, rows: 6, class: "shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" %>
-          <div class="text-gray-500 text-sm">The prompt sent to GPT to set the role of the assistant whenever a new conversation is started.</div>
+    <% if @bot.persisted? %>
+      <div class="" data-controller="tabs">
+        <!-- Tab Buttons -->
+        <div class="flex space-x-4">
+          <div data-action="click->tabs#switch" data-tabs-target="tab" data-tab-name="directive" class="tab active">Directive</div>
+          <div data-action="click->tabs#switch" data-tabs-target="tab" data-tab-name="memory" class="tab ">Memory</div>
+          <div data-action="click->tabs#switch" data-tabs-target="tab" data-tab-name="tools" class="tab ">Tools</div>
         </div>
-        <% if @bot.kind_of? Agent %>
-          <div class="mb-4">
-            <%= form.label :goals_text, "Goals (for autonomous agents)", class: "block text-gray-700 text-sm font-bold mb-2" %>
-            <%= form.text_area :goals_text, rows: 6, class: "shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" %>
-            <div class="text-gray-500 text-sm">Give the bot goals that it should work on independently.</div>
+        <div class="bg-red-200 p-4 mb-8 rounded-b-lg rounded-tr-lg shadow-2xl max-h-[500px] overflow-y-auto">
+          <!-- Tab Content -->
+          <div data-tabs-target="content" data-tab-name="directive">
+            <%= render "directive", form: form %>
           </div>
-        <% end %>
-        <div class="mb-4">
-          <div class="mb-4">
-            <label for="bot_auto_archive_mins" class="block text-gray-700 text-sm font-bold mb-2">
-              Auto Archive (<output id="auto_archive_mins_output"><%= @bot.auto_archive_mins %> mins</output>)
-            </label>
-            <input type="range" name="bot[auto_archive_mins]" id="bot_auto_archive_mins" min="0" max="60" step="1"
-                  oninput="document.getElementById('auto_archive_mins_output').innerText = this.value + ' mins'"
-                  list="auto_archive_mins_stops" value="<%= @bot.auto_archive_mins %>"/>
-            <datalist id="auto_archive_mins_stops">
-              <option value="0">Disabled</option>
-              <option value="5">5</option>
-              <option value="20">20</option>
-              <option value="60">60</option>
-            </datalist>
-            <div class="text-gray-500 text-sm max-w-prose">Useful for task-oriented, one or few-shot interactions like translators. Sets a time period after which the conversation will be automatically archived. Leave at 0 to disable.</div>
+          <div data-tabs-target="content" data-tab-name="memory" class="hidden">
+            <%= render "memory", form: form %>
+          </div>
+          <div data-tabs-target="content" data-tab-name="tools" class="hidden">
+            <%= render "tools", form: form %>
           </div>
         </div>
-      <% end %>
-      <div class="flex gap-4 bg-">
-        <%= form.submit "Save Changes", class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" %>
-        <% if @bot.published_at.blank? %>
-          <%= link_to "Publish", "#", data: { reflex: "click->Bot#publish", id: @bot.id }, class: "bg-orange-600 hover:bg-orange-400 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" %>
-        <% else %>
-          <%= link_to "Unpublish", "#", data: { reflex: "click->Bot#unpublish", id: @bot.id }, class: "bg-yellow-500 hover:bg-yellow-400 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" %>
-        <% end %>
-        <% unless @bot.kind_of? Agent %>
-          <%#= link_to "Promote to Agent", "#", data: { reflex: "click->Bot#promote", id: @bot.id }, class: "bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" %>
-        <% end %>
-        <% if @bot.persisted? && @bot.chats.empty? %>
-          <%= link_to "Delete", "#", data: { reflex: "click->Bot#destroy", id: @bot.id }, class: "bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" %>
-        <% else %>
-          <div class="bg-gray-500 text-gray-400 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline cursor-not-allowed">Delete</div>
-        <% end %>
       </div>
+    <% end %>
+    <div class="flex gap-4 bg-">
+      <%= form.submit "Save Changes", class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" %>
+      <% if @bot.published_at.blank? %>
+        <%= link_to "Publish", "#", data: { reflex: "click->Bot#publish", id: @bot.id }, class: "bg-orange-600 hover:bg-orange-400 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" %>
+      <% else %>
+        <%= link_to "Unpublish", "#", data: { reflex: "click->Bot#unpublish", id: @bot.id }, class: "bg-yellow-500 hover:bg-yellow-400 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" %>
+      <% end %>
+      <% if @bot.persisted? && @bot.chats.empty? %>
+        <%= link_to "Delete", "#", data: { reflex: "click->Bot#destroy", id: @bot.id }, class: "bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" %>
+      <% else %>
+        <div class="bg-gray-500 text-gray-400 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline cursor-not-allowed"
+              title="<%= it("Deletion not allowed once chats have been created with this bot.") %>">Delete</div>
+      <% end %>
     </div>
   </div>
 <% end %>

@@ -24,7 +24,7 @@ default: &default
 development:
   <<: *default
   database: magma_chat_development
-  url: <%= ENV['DATABASE_URL'] %>
+  url: "postgres://postgres@localhost:5432/magma_chat_development"
 
   # The specified database role being used to connect to postgres.
   # To create additional roles in postgres see `$ createuser --help`.
@@ -82,6 +82,4 @@ test:
 #
 production:
   <<: *default
-  database: magma_chat_production
-  username: magma_chat
-  password: <%= ENV["MAGMA_CHAT_DATABASE_PASSWORD"] %>
+  url: <%= ENV["DATABASE_URL"] %>

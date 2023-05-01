@@ -1,0 +1,16 @@
+<div class="flex flex-col gap-4">
+  <div class="flex gap-2 items-top">
+    <%= form.check_box :enable_tools, class: "rounded-md bg-gray-400 w-4 h-4 m-2 p-2 w-6", data: { id: @bot.id, controller: "botsettings", action: "click->botsettings#toggle_setting", field: "enable_tools" } %>
+    <div class="flex-1">
+      <%= form.label :enable_tools, "Enable tools", class: "text-gray-700" %>
+      <div class="text-gray-500 text-xs"><%= it("Tools allow bots to interact with the outside world.") %></div>
+    </div>
+  </div>
+  <% if @bot.enable_tools %>
+    <div class="ml-8">
+      <%= render @bot.tools %>
+      <span class="text-blue-500 text-sm px-4 py-2 rounded-md underline cursor-pointer"
+            data-id="<%= @bot.id %>" data-reflex="click->Bot#add_tool"><%= it("Add Tool") %></span>
+    </div>
+  <% end %>
+</div>

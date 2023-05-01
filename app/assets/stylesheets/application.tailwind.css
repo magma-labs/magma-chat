@@ -108,4 +108,11 @@ body {
     @apply bg-gradient-to-b from-gray-700 to-gray-800 !important;
   }
 
+  .tab {
+    @apply bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold cursor-pointer py-2 px-4 rounded-t-lg;
+  }
+
+  .tab.active {
+    @apply bg-red-200 font-bold py-2 px-4 rounded-t-lg;
+  }
 }

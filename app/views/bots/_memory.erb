@@ -1,0 +1,32 @@
+<div class="flex flex-col gap-4">
+  <div class="flex gap-2 items-top border-b pb-4">
+    <%= form.check_box :enable_observations, class: "rounded-md bg-gray-400 w-4 h-4 m-2 p-2 w-6", data: { id: @bot.id, controller: "botsettings", action: "click->botsettings#toggle_setting", field: "enable_observations" } %>
+    <div class="flex-1">
+      <%= form.label :enable_observations, "Enable observations", class: "text-gray-700" %>
+      <div class="text-gray-500 text-xs"><%= it("Make observations about the user after each message exchange.") %></div>
+    </div>
+  </div>
+  <div class="flex gap-2 items-top">
+    <%= form.check_box :short_term_memory, class: "rounded-md bg-gray-400 w-4 h-4 m-2 p-2 w-6", data: { id: @bot.id, controller: "botsettings", action: "click->botsettings#toggle_setting", field: "short_term_memory" } %>
+    <div class="flex-1">
+      <%= form.label :short_term_memory, "Enable short term memory", class: "text-gray-700" %>
+      <div class="text-gray-500 text-xs"><%= it("Inserts most recent and important thoughts into the start of each chat transcript") %></div>
+    </div>
+  </div>
+  <% if @bot.settings.short_term_memory %>
+    <div class="ml-12">
+      <div class="flex gap-2 items-center">
+        <%= form.label :recent_thoughts_count, class: "text-gray-700" %>
+        <%= form.number_field :recent_thoughts_count, class: "w-12 text-gray-800 rounded-sm border-0 p-1 text-sm mb-1", required: true, min: 1, max: 20 %>
+      </div>
+      <div class="text-gray-500 text-xs"><%= it("How many thoughts to insert from 1 to 20. Suggested value is 10.") %></div>
+    </div>
+  <% end %>
+  <div class="flex gap-2 items-top  border-t pt-4">
+    <%= form.check_box :long_term_memory, class: "rounded-md bg-gray-400 w-4 h-4 m-2 p-2 w-6", data: { id: @bot.id, controller: "botsettings", action: "click->botsettings#toggle_setting", field: "long_term_memory" } %>
+    <div class="flex-1">
+      <%= form.label :long_term_memory, "Enable long-term memory querying", class: "text-gray-700" %>
+      <div class="text-gray-500 text-xs"><%= it("Performs tensor search for relevant thoughts prior to answering a prompt. Adds 5-15 seconds latency.") %></div>
+    </div>
+  </div>
+</div>

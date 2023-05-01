@@ -41,10 +41,6 @@ class Message < ApplicationRecord
   scope :by_users, -> { where(role: "user") }
   scope :by_user, ->(user) { where(sender: user) }
 
-  # scopes for visibility
-  scope :visible, -> { where(visible: true) }
-  scope :invisible, -> { where(visible: false) }
-
   # scope that filters out nil or empty content
   scope :with_content, -> { where.not(content: [nil, ""]) }
 
