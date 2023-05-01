@@ -38,6 +38,11 @@ class User < ApplicationRecord
       user.image_url = auth[:info][:image]
       user.oauth_token = auth[:credentials][:token]
       user.oauth_expires_at = Time.at(auth[:credentials][:expires_at])
+    end.tap do |user|
+      # keep image up to date
+      if auth[:info][:image] != user.image_url
+        user.update(image_url: auth[:info][:image])
+      end
     end
   end
 
