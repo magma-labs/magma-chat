@@ -6,7 +6,7 @@
       <div class="text-gray-500 text-xs"><%= it("Tools allow bots to interact with the outside world.") %></div>
     </div>
   </div>
-  <% if @bot.enable_tools %>
+  <% if @bot.settings.enable_tools %>
     <div class="ml-8">
       <%= render @bot.tools %>
       <span class="text-blue-500 text-sm px-4 py-2 rounded-md underline cursor-pointer"
