@@ -9,7 +9,7 @@
   <div class="flex flex-col gap-1 p-4 h-full">
     <div class="text-gray-800 font-bold">
       <%= bot.name %>
-      <% if current_user.admin? %>
+      <% if current_user&.admin? %>
         <%= link_to "📝", [bot] %>
       <% end %>
       <%= "(Draft)" if bot.published_at.blank? %>
