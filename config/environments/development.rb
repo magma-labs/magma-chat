@@ -8,7 +8,7 @@ config.session_store :redis_session_store,
   redis: {
     expire_after: 120.minutes,
     key_prefix: "session:",
-    url: ENV.fetch("REDIS_URL") { "redis://localhost:6379/1" }
+    url: ENV.fetch("REDIS_URL") { "redis://default:password@host.docker.internal:6379/1" }
   }
   config.action_controller.default_url_options = {host: "localhost", port: 3000}
   config.action_mailer.default_url_options = {host: "localhost", port: 3000}
@@ -34,7 +34,8 @@ config.session_store :redis_session_store,
   config.action_controller.enable_fragment_cache_logging = true
 
   config.cache_store = :redis_cache_store, {
-    url: ENV.fetch("REDIS_URL") { "redis://localhost:6379/1" }
+    url: ENV.fetch("REDIS_URL") { "redis://default:password@host.docker.internal:6379/1" }
+
   }
   config.public_file_server.headers = {
     "Cache-Control" => "public, max-age=#{2.days.to_i}"

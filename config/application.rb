@@ -10,7 +10,7 @@ Bundler.require(*Rails.groups)
 module MagmaChat
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
-    config.load_defaults 7.0
+    config.load_defaults 7.1
 
     # primary key type
     config.generators do |g|

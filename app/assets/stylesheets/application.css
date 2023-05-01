@@ -13,7 +13,7 @@
  *= require_tree .
  *= require_self
  */
-html {
+html.dark {
   color-scheme: dark;
   scrollbar-face-color: rgb(75 85 99);
   scrollbar-base-color: rgb(75 85 99);
@@ -25,13 +25,13 @@ html {
   scrollbar-darkshadow-color: rgb(75 85 99);
 }
 
-::-webkit-scrollbar { width: 10px; height: 3px;}
-::-webkit-scrollbar-button {  background-color: #52585e; }
-::-webkit-scrollbar-track {  background-color: #646464;}
-::-webkit-scrollbar-track-piece { background-color: rgb(46, 54, 68); }
-::-webkit-scrollbar-thumb { height: 50px; background-color: #52585e; border-radius: 3px;}
-::-webkit-scrollbar-corner { background-color: #646464;}
-::-webkit-resizer { background-color: #666;}
+html.dark ::-webkit-scrollbar { width: 10px; height: 3px;}
+html.dark ::-webkit-scrollbar-button {  background-color: #52585e; }
+html.dark ::-webkit-scrollbar-track {  background-color: #646464;}
+html.dark ::-webkit-scrollbar-track-piece { background-color: rgb(46, 54, 68); }
+html.dark ::-webkit-scrollbar-thumb { height: 50px; background-color: #52585e; border-radius: 3px;}
+html.dark ::-webkit-scrollbar-corner { background-color: #646464;}
+html.dark ::-webkit-resizer { background-color: #666;}
 
 .clickable-region {
   position: relative;

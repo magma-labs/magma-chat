@@ -6,7 +6,9 @@
 
 # ignore dots
 .env
+.env.development
 .DS_Store
+.docker
 
 # Ignore bundler config.
 /.bundle
@@ -39,3 +41,5 @@
 
 # Simplecov gem coverage results
 coverage
+deploy.yml
+config/database.yml

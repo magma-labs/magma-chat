@@ -135,8 +135,10 @@ class Chat < ApplicationRecord
       bot_name: bot.name,
       bot_role: bot.role,
       user_name: user.name,
+      user_id: user.id,
       date: Date.today.strftime("%B %d, %Y"),
-      time: Time.now.strftime("%I:%M %p")
+      time: Time.now.strftime("%I:%M %p"),
+      timezone: "US/Central" # todo: just send localized time instead of UTC so we don't have issues with daylight savings, etc
     )
 
     user_message!(context_intro_prompt, skip_broadcast: true, visible: false)

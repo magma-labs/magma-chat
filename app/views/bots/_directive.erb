@@ -1,0 +1,14 @@
+<div class="mb-4">
+  <%= form.text_area :directive, rows: 15, class: "shadow appearance-none border rounded w-full py-2 px-3 text-sm text-gray-700 leading-tight focus:outline-none focus:shadow-outline" %>
+  <div class="text-gray-500 text-xs">The prompt sent to GPT to set the role of the assistant whenever a new conversation is started.</div>
+  <% #todo: add link to documentation about writing effective directives %>
+</div>
+<div class="flex gap-2 items-top">
+  <%= form.check_box :reprompt_with_human_override, class: "w-4 h-4 m-2 p-2 w-6", data: { id: @bot.id, controller: "botsettings", action: "click->botsettings#toggle_setting", field: "reprompt_with_human_override" } %>
+  <div class="flex-1">
+    <%= form.label :reprompt_with_human_override, "Humanize", class: "text-gray-700" %>
+    <div class="text-gray-500 text-xs"><%= it("Prevent bot from adding disclaimers about being an AI-based language model.") %></div>
+  </div>
+</div>
+
+<%#= render "auto_archive" %>
