@@ -67,7 +67,7 @@ gem "recursive-open-struct"
 gem "redcarpet"
 gem "redis-session-store", "~> 0.11.5"
 gem "ruby-openai", "~> 4.0.0"
-gem 'sidekiq'
+gem 'sidekiq',"~> 7.0"
 gem 'strategic', '~> 1.2.0'
 gem "stimulus_reflex", "~> 3.5.0.pre10"
 gem "tiktoken_ruby", "~> 0.0.4"

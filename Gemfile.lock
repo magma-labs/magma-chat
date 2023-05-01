@@ -433,7 +433,7 @@ DEPENDENCIES
   ruby-openai (~> 4.0.0)
   scout_apm
   selenium-webdriver
-  sidekiq
+  sidekiq (~> 7.0)
   simplecov
   sprockets-rails
   stimulus-rails

@@ -11,7 +11,6 @@ WORKDIR /rails
 ENV RAILS_ENV="production" \
     BUNDLE_DEPLOYMENT="1" \
     BUNDLE_PATH="/usr/local/bundle" \
-    BUNDLE_WITHOUT="development" \
     SECRET_KEY_BASE="fakekeyforassets"
 
 
@@ -36,7 +35,7 @@ COPY . .
 RUN bundle exec bootsnap precompile app/ lib/
 
 # Precompiling assets for production without requiring secret RAILS_MASTER_KEY
-RUN SECRET_KEY_BASE=1 ./bin/rails assets:precompile
+# RUN SECRET_KEY_BASE=1 ./bin/rails assets:precompile
 
 
 # Final stage for app image
