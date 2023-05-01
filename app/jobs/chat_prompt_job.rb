@@ -30,7 +30,7 @@ class ChatPromptJob < ApplicationJob
     if reply.nil? # streaming
       ChatObservationJob.perform_later(chat)
       ChatAnalysisJob.perform_later(chat)
-      ChatResponsibilityJob.perform_later(chat)
+      # ChatResponsibilityJob.perform_later(chat)
     else
       process_reply_with_toolchain(chat, message, reply)
     end
