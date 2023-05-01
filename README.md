@@ -56,6 +56,8 @@ Here are some of the cool features we are envisioning:
 
 * Requires Docker
 
+Use the `docker-compose.yml.example` file as a guide for your own configuration.
+
 * Long-term memory for bots requires Marqo, an open-source, multi-modal vector search engine that you can download and run locally using Docker. More information at https://www.marqo.ai/
 
 configure environment variables

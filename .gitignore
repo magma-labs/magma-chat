@@ -10,6 +10,9 @@
 .DS_Store
 .docker
 
+# ignore docker-compose.yml
+docker-compose.yml
+
 # Ignore bundler config.
 /.bundle
 
