@@ -6,7 +6,7 @@
 
 # ignore dots
 .env
-.env.development
+.env.local
 .DS_Store
 .docker
 

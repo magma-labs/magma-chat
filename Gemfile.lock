@@ -406,7 +406,6 @@ DEPENDENCIES
   cable_ready (~> 5.0.0)
   capybara
   debug
-  dotenv (~> 2.8)
   error_highlight (>= 0.4.0)
   factory_bot_rails
   faker
