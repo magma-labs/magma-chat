@@ -5,7 +5,7 @@ build:
 release:
   image: web
   command:
-    - bash -c "bundle exec rails db:prepare && bundle exec rails db:migrate"
+    - bash -c "bundle exec rails db:prepare"
 
 run:
-  web: bundle exec puma -C config/puma.rb
+  web: bin/rails server
