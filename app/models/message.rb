@@ -57,9 +57,8 @@ class Message < ApplicationRecord
   validates :rating, numericality: { greater_than_or_equal_to: 0, less_than_or_equal_to: 5 }
 
   def broadcast_message
-    if role.user?
-      ChatPromptJob.perform_later(chat, content, visible)
-    end
+    return if role.assistant?
+    ChatPromptJob.perform_later(chat, content, visible)
   end
 
   # todo: consider setting automatically based on sender type
@@ -98,12 +97,8 @@ class Message < ApplicationRecord
   end
 
   def reanalyze
-    puts
-    puts "🤓🤓🤓🤓🤓🤓🤓 Reanalyzing chat #{chat.id} after message #{id} 🤓🤓🤓🤓🤓🤓🤓"
-    puts
-    ChatObservationJob.perform_later(chat)
-    ChatAnalysisJob.perform_later(chat)
-    # ChatResponsibilityJob.perform_later(chat)
+    ChatObservationJob.perform_later(chat) if chat.bot.enable_observations?
+    ChatAnalysisJob.perform_later(chat) if chat.enable_analysis?
   end
 
   private
@@ -113,6 +108,7 @@ class Message < ApplicationRecord
   end
 
   def override_disclaimers
+    return unless content.present? && chat.bot.humanize?
     # todo: can we make this work in user's language not just English?
     regex = Regexp.new(Prompts.get("disclaimers").join("|"))
     if match = content.match(regex)

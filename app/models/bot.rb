@@ -67,6 +67,7 @@ class Bot < ApplicationRecord
     end
   end
 
+  # TODO: pending implementation of scheduled wake up times
   def wake_up_actions(user, datetime: Time.now.strftime("%A, %b %d %I:%M %p"), max_tokens: 300, temp: 0.7, top_memories: 3)
     topm = top_memories_of(user, limit: top_memories).join("\n")
     transcript = [role: "user", content: "I am MagmaChat and I'm waking you up in case you need to do something for user #{user.name} with user_id #{user.id}."]
@@ -76,8 +77,8 @@ class Bot < ApplicationRecord
     Gpt.chat(directive: directive, prompt: datetime.to_s, transcript: transcript, max_tokens: max_tokens, temperature: temp)
   end
 
-  def top_memories_of(user, limit: 12)
-    observations.by_user(user).by_decayed_score.limit(limit).map(&:brief_with_timestamp)
+  def top_memories_of(user)
+    observations.by_user(user).by_decayed_score.limit(recent_thoughts_count).map(&:brief_with_timestamp)
   end
 
   def self.default

@@ -7,11 +7,13 @@
 ##
 class MemoryAnnotator
   attr_reader :chat
+  attr_reader :memories_message
 
   ## takes the last number of n messages, generates a list of questions about the conversation, and searches for matching thoughts
   ## if any matching thoughts are found in long term memory, they are added to the chat as hidden messages
-  def initialize(chat)
+  def initialize(chat, memories_message)
     @chat = chat
+    @memories_message = memories_message
   end
 
   def perform(number_of_messages_to_pop: 6)
@@ -32,7 +34,7 @@ class MemoryAnnotator
     end
 
     # todo: consider relevance score and only add if above a certain threshold\
-    chat.user_message!(compile_content(questions, unique_hits))
+    memories_message.update!(content: compile_content(questions, unique_hits), visible: false)
   end
 
   private

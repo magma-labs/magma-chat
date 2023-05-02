@@ -8,12 +8,6 @@ class BotReflex < ApplicationReflex
     @bot.tools.create(name: "New Tool")
   end
 
-  # def promote
-  #   @bot.update_column(:type, "Agent")
-  #   cable_ready.redirect_to(url: "/bots/#{@bot.id}").broadcast
-  #   morph :nothing
-  # end
-
   def publish
     @bot.update(published_at: Time.now)
   end
@@ -31,7 +25,7 @@ class BotReflex < ApplicationReflex
   end
 
   def toggle_setting(_, checked)
-    @bot.raw_settings[element.dataset[:field]] = checked
+    @bot.settings[element.dataset[:field]] = checked
     @bot.save!
   end
 

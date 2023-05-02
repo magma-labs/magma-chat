@@ -136,6 +136,8 @@ class Chat < ApplicationRecord
   private
 
   def add_context_messages
+    return unless bot.short_term_memory?
+
     context_intro_prompt = Prompts.get("chats.context_intro",
       bot_name: bot.name,
       bot_role: bot.role,

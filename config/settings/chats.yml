@@ -1,13 +1,3 @@
-enable_tools:
-  default: false
-long_term_memory:
-  default: false
-short_term_memory:
-  default: true
-enable_observations:
-  default: true
-humanize:
-  default: true
 temperature:
   default: 1.0
 top_p:
@@ -20,5 +10,5 @@ frequency_penalty:
   default: 0.0
 show_invisibles:
   default: false
-response_length_tokens:
-  default: 400
+enable_analysis:
+  default: true

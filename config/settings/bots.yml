@@ -1,7 +1,16 @@
+model:
+  default: gpt-3.5-turbo
+  options:
+    - gpt-3.5-turbo
+    - gpt-4
 enable_tools:
   default: false
+recent_thoughts_count:
+  default: 4
 long_term_memory:
   default: false
+ltm_recent_messages_count:
+  default: 2
 short_term_memory:
   default: true
 enable_observations:
