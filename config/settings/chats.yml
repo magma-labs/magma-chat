@@ -1,0 +1,24 @@
+enable_tools:
+  default: false
+long_term_memory:
+  default: false
+short_term_memory:
+  default: true
+enable_observations:
+  default: true
+humanize:
+  default: true
+temperature:
+  default: 1.0
+top_p:
+  default: 1.0
+max_tokens:
+  default: 64
+presence_penalty:
+  default: 0.0
+frequency_penalty:
+  default: 0.0
+show_invisibles:
+  default: false
+response_length_tokens:
+  default: 400

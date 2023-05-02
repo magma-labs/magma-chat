@@ -11,7 +11,7 @@ class ChatPromptJob < ApplicationJob
 
     # calculate maximum tokens to ask for in response
     tokens_count = TikToken.count(chat.directive + content)
-    max_tokens = chat.settings.response_length_tokens
+    max_tokens = chat.response_length_tokens
 
     # chat options
     opts = {
@@ -20,7 +20,7 @@ class ChatPromptJob < ApplicationJob
       max_tokens: max_tokens,
       temperature: 0.7,
       transcript: chat.messages_for_gpt(tokens_count + max_tokens),
-      stream: chat.user.settings.streaming && stream_proc(message: message)
+      stream: chat.user.streaming && stream_proc(message: message)
     }
 
     # make sure to never pull only visible here, or we will lose consideration of memories

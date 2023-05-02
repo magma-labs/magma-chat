@@ -13,7 +13,7 @@
       <div class="text-gray-500 text-xs"><%= it("Inserts most recent and important thoughts into the start of each chat transcript") %></div>
     </div>
   </div>
-  <% if @bot.settings.short_term_memory %>
+  <% if @bot.short_term_memory %>
     <div class="ml-12">
       <div class="flex gap-2 items-center">
         <%= form.label :recent_thoughts_count, class: "text-gray-700" %>

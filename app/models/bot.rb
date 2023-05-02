@@ -26,8 +26,6 @@
 class Bot < ApplicationRecord
   include Settings
 
-  delegate_missing_to :settings
-
   attribute :name, :string, default: Faker::Name.name
   attribute :role, :string, default: Faker::Job.title
 
