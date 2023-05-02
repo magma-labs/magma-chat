@@ -1,6 +1,6 @@
 module ApplicationHelper
   def current_language
-    current_user && current_user.settings.preferred_language || "English"
+    current_user && current_user.preferred_language || "English"
   end
 
   def count_to_em(count)

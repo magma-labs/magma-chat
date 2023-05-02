@@ -47,7 +47,12 @@ class Chat < ApplicationRecord
   delegate :directive, to: :bot
 
   def analysis
-    super.deep_symbolize_keys
+    text = super
+    if text.kind_of? String
+      JSON.parse(text).deep_symbolize_keys
+    else
+      text.deep_symbolize_keys
+    end
   end
 
   def bot
@@ -145,9 +150,9 @@ class Chat < ApplicationRecord
 
     top_memories = bot.top_memories_of(user)
     if top_memories.any?
-      context_memories_prompt = Prompts.get("chats.context_memories", { m: top_memories.join("\n\n"), lang: user.settings.preferred_language })
+      context_memories_prompt = Prompts.get("chats.context_memories", { m: top_memories.join("\n\n"), lang: user.preferred_language })
       user_message!(context_memories_prompt, skip_broadcast: true, visible: false)
-      context_reply = Prompts.get("chats.context_memories_reply", lang: user.settings.preferred_language)
+      context_reply = Prompts.get("chats.context_memories_reply", lang: user.preferred_language)
       bot_message!(context_reply, skip_broadcast: true, visible: false)
     end
   end

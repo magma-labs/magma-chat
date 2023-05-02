@@ -10,6 +10,7 @@ export default class extends Controller {
     , function(err) {
       console.error('Async: Could not copy text: ', err);
     });
+    this.notify()
   }
 
   content(event) {
@@ -20,6 +21,7 @@ export default class extends Controller {
     , function(err) {
       console.error('Async: Could not copy text: ', err);
     });
+    this.notify()
   }
 
   target(event) {
@@ -33,5 +35,11 @@ export default class extends Controller {
     , function(err) {
       console.error('Async: Could not copy text: ', err);
     });
+    this.notify()
+  }
+
+  notify() {
+    document.querySelector("#awesome-notification p").innerText = this.element.dataset.message;
+    window.dispatchEvent(new CustomEvent('awesome'))
   }
 }

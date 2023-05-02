@@ -9,8 +9,6 @@ class ChatReflex < ApplicationReflex
   def prompt(message: value)
     slash_filter do
       chat.prompt!(message: message, sender: current_user)
-      # todo: render chats/loading partial into .message #loading div
-      # cable_ready.morph(children_only: true, selector: ".message#loading", html: render(partial: "chats/loading")).broadcast
     end
     morph :nothing
   end
@@ -70,7 +68,7 @@ class ChatReflex < ApplicationReflex
         chat.update!(public_access: false)
         reload
       when /^\/stream/
-        current_user.update!(settings: current_user.settings.to_h.merge(streaming: !current_user.settings.streaming))
+        current_user.update!(streaming: !current_user.streaming)
         reload
       when /^\/whisper/
         # message = value.split("/whisper").last&.strip.presence
@@ -83,7 +81,7 @@ class ChatReflex < ApplicationReflex
       when /^\/help/
         # todo: implement
       when /^\/debug/
-        chat.update!(settings: chat.settings.to_h.merge(show_invisibles: !chat.settings.show_invisibles))
+        chat.update!(show_invisibles: !chat.show_invisibles)
         reload
       end
     else

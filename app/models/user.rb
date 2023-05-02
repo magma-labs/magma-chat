@@ -19,7 +19,6 @@
 class User < ApplicationRecord
   include Settings
 
-  delegate_missing_to :settings
   has_many :chats, dependent: :destroy
 
   def tag_cloud(limit: 70)

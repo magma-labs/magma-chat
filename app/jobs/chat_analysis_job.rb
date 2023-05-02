@@ -3,7 +3,7 @@ class ChatAnalysisJob < ApplicationJob
 
   def perform(chat)
     directive = Prompts.get("chats.analysis_directive")
-    prompt = Prompts.get("chats.analyze", lang: chat.user.settings.preferred_language)
+    prompt = Prompts.get("chats.analyze", lang: chat.user.preferred_language)
     prompt_tokens = TikToken.count(prompt)
     Gpt.chat(
       directive: directive,

@@ -95,8 +95,17 @@ body {
     grid-area: 1 / 1 / 2 / 2;
   }
 
+  .message {
+    @apply border-2 border-transparent;
+  }
+
+  .menu-item {
+    @apply text-gray-700 px-3 py-2 text-sm flex gap-1 items-center no-underline cursor-pointer;
+    text-decoration-line: none !important;
+  }
+
   .message.highlight {
-    @apply bg-slate-700 border-yellow-300 border-2 rounded-lg shadow !important;
+    @apply border-red-500 border-2 rounded-lg shadow !important;
   }
 
   [data-controller='botselect'].selected {
