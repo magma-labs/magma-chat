@@ -13,7 +13,7 @@
       <%= form.range_field :max_tokens, min: 20, max: 2000, step: 1, class: "" %>
       <span class="setting_value"><%= @bot.max_tokens %></span>tokens
     </div>
-    <div class="text-gray-600 text-xs"><%= it("How long-winded would you like the bot to be in this chat. For English text, 1 token is approximately 4 characters or 0.75 words.") %></div>
+    <div class="text-gray-600 text-xs"><%= it("How long-winded would you like the bot to be. For English text, 1 token is approximately 4 characters or 0.75 words.") %></div>
   </div>
   <div class="field flex flex-col gap-1">
     <div class="flex items-center gap-3">
