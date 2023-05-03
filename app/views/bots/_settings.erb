@@ -1,0 +1,50 @@
+<div class="flex flex-col gap-4">
+  <div class="flex flex-col gap-0">
+    <div class="flex items-center gap-3">
+      <%= form.label :model, it("AI Model"), class: "block text-gray-800 font-bold" %>
+      <%= form.select :model, options_for_select([["GPT-3.5 Turbo", "gpt-3.5turbo"], ["GPT-4", "gpt-4"]], selected: @bot.model), {},
+                  class: "border-0 rounded bg-transparent text-gray-800 pr-8" %>
+    </div>
+    <div class="text-gray-600 text-xs"><%= it("Choose the GPT version to work with. GPT-4 is slower but more awesome.") %></div>
+  </div>
+  <div class="field flex flex-col gap-1">
+    <div class="flex items-center gap-3">
+      <%= form.label :max_tokens, "Desired reply length (short to long)", class: "block text-gray-800 text-sm font-bold" %>
+      <%= form.range_field :max_tokens, min: 20, max: 2000, step: 1, class: "" %>
+      <span class="setting_value"><%= @bot.max_tokens %></span>tokens
+    </div>
+    <div class="text-gray-600 text-xs"><%= it("How long-winded would you like the bot to be in this chat. For English text, 1 token is approximately 4 characters or 0.75 words.") %></div>
+  </div>
+  <div class="field flex flex-col gap-1">
+    <div class="flex items-center gap-3">
+      <%= form.label :temperature, class: "block text-gray-800 font-bold" %>
+      <%= form.range_field :temperature, min: 0, max: 2, step: 0.01, class: "" %>
+      <span class="setting_value"><%= @bot.temperature %></span>
+    </div>
+    <div class="text-gray-600 text-xs"><%= it("Higher values make the bot chaotic, while lower values make it consistent and predictable.") %></div>
+  </div>
+  <div class="field flex flex-col gap-1">
+    <div class="flex items-center gap-3">
+      <%= form.label :top_p, it("Creativity"), class: "block text-gray-800 font-bold" %>
+      <%= form.range_field :top_p, min: 0, max: 1, step: 0.01, class: "" %>
+      <span class="setting_value"><%= @bot.top_p %></span>
+    </div>
+    <div class="text-gray-600 text-xs"><%= it("How creative should the bot be? Higher values are more creative. (top_p)") %></div>
+  </div>
+  <div class="field flex flex-col gap-1">
+    <div class="flex items-center gap-3">
+      <%= form.label :presence_penalty, it("Focus"), class: "block text-gray-800 font-bold" %>
+      <%= form.range_field :presence_penalty, min: -2, max: 2, step: 0.01, class: "" %>
+      <span class="setting_value"><%= @bot.presence_penalty %></span>
+    </div>
+    <div class="text-gray-600 text-xs"><%= it("Higher values increase the bot's likelihood to talk about new topics. (presence_penalty)") %></div>
+  </div>
+  <div class="field flex flex-col gap-1">
+    <div class="flex items-center gap-3">
+      <%= form.label :frequency_penalty, class: "block text-gray-800 font-bold" %>
+      <%= form.range_field :frequency_penalty, min: -2, max: 2, step: 0.01, class: "" %>
+      <span class="setting_value"><%= @bot.frequency_penalty %></span>
+    </div>
+    <div class="text-gray-600 text-xs"><%= it("Higher values decrease the bot's likelihood to repeat the same line verbatim. (frequency_penalty)") %></div>
+  </div>
+</div>

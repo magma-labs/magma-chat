@@ -1,4 +1,4 @@
-<%= form_with(model: @bot.becomes(Bot), local: true) do |form| %>
+<%= form_with(model: @bot.becomes(Bot), local: true, data: { controller: "settings", gid: @bot.to_global_id.to_s }) do |form| %>
   <div class="container mx-auto">
     <%= link_to [:bots], class: "flex gap-3 items-center" do %>
       <%= image_tag("logo.svg", class: "w-12 object-fit sm:m-auto") %>
@@ -47,6 +47,7 @@
         <!-- Tab Buttons -->
         <div class="flex space-x-4">
           <div data-action="click->tabs#switch" data-tabs-target="tab" data-tab-name="directive" class="tab active">Directive</div>
+          <div data-action="click->tabs#switch" data-tabs-target="tab" data-tab-name="settings" class="tab ">Settings</div>
           <div data-action="click->tabs#switch" data-tabs-target="tab" data-tab-name="memory" class="tab ">Memory</div>
           <div data-action="click->tabs#switch" data-tabs-target="tab" data-tab-name="tools" class="tab ">Tools</div>
         </div>
@@ -54,6 +55,9 @@
           <!-- Tab Content -->
           <div data-tabs-target="content" data-tab-name="directive">
             <%= render "directive", form: form %>
+          </div>
+          <div data-tabs-target="content" data-tab-name="settings" class="hidden">
+            <%= render "settings", form: form %>
           </div>
           <div data-tabs-target="content" data-tab-name="memory" class="hidden">
             <%= render "memory", form: form %>
