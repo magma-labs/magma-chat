@@ -1,7 +1,7 @@
 FactoryBot.define do
   factory :bot do
     goals { {} }
-    name { 'My Bot' }
+    name { Faker::Name.name }
     settings { {} }
   end
 end

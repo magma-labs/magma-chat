@@ -91,6 +91,12 @@ RSpec.describe Message, type: :model do
     end
   end
 
+  describe '#to_partial_path' do
+    subject(:result) { described_class.new.to_partial_path }
+
+    it { is_expected.to eq 'messages/message' }
+  end
+
   describe '#reanalyze' do
     let(:message) { create(:message) }
     let(:chat) { message.chat }

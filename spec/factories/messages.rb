@@ -31,6 +31,7 @@ FactoryBot.define do
   factory :message do
     role { 'user' }
     content { Faker::Hipster.sentence }
+    tokens_count { rand(1..100) }
 
     association :chat
   end

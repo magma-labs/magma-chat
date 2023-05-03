@@ -24,7 +24,6 @@ class BotsController < AdminController
     end
   end
 
-
   private
 
   def bot_params

@@ -216,4 +216,12 @@ RSpec.describe Chat do
       end
     end
   end
+
+  describe '#total_token_count' do
+    let(:chat) { build(:chat, message_count: 5) }
+
+    it 'sums up messages token_count' do
+      expect(chat.total_token_count).to eq chat.messages.sum(:tokens_count)
+    end
+  end
 end
