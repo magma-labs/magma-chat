@@ -1,7 +1,12 @@
+model:
+  default: gpt-3.5-turbo
+  options:
+    - gpt-3.5-turbo
+    - gpt-4
 temperature:
   default: 1.0
 top_p:
-  default: 1.0
+  default: 0.95
 max_tokens:
   default: 64
 presence_penalty:

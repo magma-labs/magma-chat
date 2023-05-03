@@ -10,9 +10,7 @@
     <div class="w-full p-4">
       <%= form_with model: @chat do |f| %>
         <%= f.hidden_field :bot_id %>
-        <%= f.hidden_field :engine, value: "gpt-3.5-turbo" %>
-        <%= f.text_field :first_message, class: "w-full rounded-md bg-gray-700 text-white",
-                                   data: {controller: "chat focus", action: "change->chat#submit"} %>
+        <%= f.text_field :first_message, class: "w-full rounded-md bg-gray-700 text-white", data: { controller: "chat focus", action: "change->chat#submit" } %>
     <% end %>
   </div>
 <% end %>

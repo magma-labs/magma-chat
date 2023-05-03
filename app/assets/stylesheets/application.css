@@ -87,6 +87,10 @@ html.dark ::-webkit-resizer { background-color: #666;}
    background-color: rgb(75 85 99);
 }
 
+.message.settings {
+   background-color: rgb(94, 63, 63);
+}
+
 .message.user {
    background-color: rgb(55 65 81)
 }

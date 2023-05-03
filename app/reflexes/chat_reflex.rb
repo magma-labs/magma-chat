@@ -34,7 +34,7 @@ class ChatReflex < ApplicationReflex
     if id = element.dataset[:id].presence
       @chat = Chat.find(id)
     else
-      @chat = Chat.create(title: element.value, engine: "gpt-3.5-turbo")
+      @chat = Chat.create(title: element.value)
     end
     @value = element.value
   end
@@ -45,7 +45,7 @@ class ChatReflex < ApplicationReflex
       when /^\/new/
         # assume the title is whatever string supplied after the /new command
         title = value.split("/new").last&.strip.presence || "New Chat"
-        @chat = current_user.chats.create!(title: title, engine: "gpt-3.5-turbo")
+        @chat = current_user.chats.create!(title: title)
         reload
       when /^\/delete/
         destroy
@@ -67,6 +67,8 @@ class ChatReflex < ApplicationReflex
       when /^\/private/
         chat.update!(public_access: false)
         reload
+      when /^\/settings/
+        chat.display_settings!
       when /^\/stream/
         current_user.update!(streaming: !current_user.streaming)
         reload

@@ -4,7 +4,6 @@
 #
 #  id            :uuid             not null, primary key
 #  analysis      :jsonb            not null
-#  engine        :string           not null
 #  grow          :boolean          default(FALSE), not null
 #  public_access :boolean          default(FALSE), not null
 #  settings      :jsonb            not null
@@ -18,14 +17,12 @@
 # Indexes
 #
 #  index_chats_on_bot_id         (bot_id)
-#  index_chats_on_engine         (engine)
 #  index_chats_on_public_access  (public_access)
 #  index_chats_on_title          (title)
 #  index_chats_on_user_id        (user_id)
 #
 FactoryBot.define do
   factory :chat do
-    engine { 'engine' }
     analysis { {} }
 
     association :bot

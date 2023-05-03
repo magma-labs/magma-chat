@@ -15,19 +15,19 @@ class ChatPromptJob < ApplicationJob
 
     # calculate maximum tokens to ask for in response
     tokens_count = TikToken.count(chat.directive + content)
-    max_tokens = [chat.max_tokens, chat.bot.max_tokens].min
+
 
     # chat options
     opts = {
-      model: chat.bot.model,
+      model: chat.model,
       directive: chat.directive,
       prompt: content,
-      max_tokens: max_tokens,
-      temperature: chat.bot.temperature,
-      top_p: chat.bot.top_p,
-      presence_penalty: chat.bot.presence_penalty,
-      frequency_penalty: chat.bot.frequency_penalty,
-      transcript: chat.messages_for_gpt(tokens_count + max_tokens),
+      max_tokens: chat.max_tokens,
+      temperature: chat.temperature,
+      top_p: chat.top_p,
+      presence_penalty: chat.presence_penalty,
+      frequency_penalty: chat.frequency_penalty,
+      transcript: chat.messages_for_gpt(tokens_count + chat.max_tokens),
       stream: chat.user.streaming && stream_proc(message: message)
     }
 

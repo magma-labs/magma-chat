@@ -28,7 +28,7 @@ class BotsController < AdminController
   private
 
   def bot_params
-    params.require(:bot).permit(:name, :role, :image_url, :intro, :directive, :goals_text, :auto_archive_mins)
+    params.require(:bot).permit(:name, :role, :image_url, :intro, :directive, :goals_text, :auto_archive_mins).to_h
   end
 
   def set_bot

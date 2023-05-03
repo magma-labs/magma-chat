@@ -56,6 +56,12 @@ class Message < ApplicationRecord
   validates :role, presence: true
   validates :rating, numericality: { greater_than_or_equal_to: 0, less_than_or_equal_to: 5 }
 
+  delegate :to_partial_path, to: :strategy
+
+  after_initialize do
+    self.strategy ||= role.to_s
+  end
+
   def broadcast_message
     return if role.assistant?
     ChatPromptJob.perform_later(chat, content, visible)
@@ -77,14 +83,10 @@ class Message < ApplicationRecord
     self.sender_image_url = sender.image_url
   end
 
-  def to_partial_path
-    "messages/message"
-  end
-
   def self.up_to_token_limit(chat, max_tokens, only_visible:)
     subquery =
       select("*, SUM(tokens_count) OVER (ORDER BY created_at DESC) AS running_total")
-        .where(chat_id: chat.id, visible: [true, only_visible])
+        .where(chat_id: chat.id, visible: [true, only_visible], role: ["user", "assistant"])
         .from("messages")
         .to_sql
 

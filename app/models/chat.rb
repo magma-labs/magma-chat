@@ -4,7 +4,6 @@
 #
 #  id            :uuid             not null, primary key
 #  analysis      :jsonb            not null
-#  engine        :string           not null
 #  grow          :boolean          default(FALSE), not null
 #  public_access :boolean          default(FALSE), not null
 #  settings      :jsonb            not null
@@ -18,7 +17,6 @@
 # Indexes
 #
 #  index_chats_on_bot_id         (bot_id)
-#  index_chats_on_engine         (engine)
 #  index_chats_on_public_access  (public_access)
 #  index_chats_on_title          (title)
 #  index_chats_on_user_id        (user_id)
@@ -35,6 +33,7 @@ class Chat < ApplicationRecord
   has_many :messages, dependent: :destroy, enable_cable_ready_updates: true
 
   before_create :set_title
+  before_create :copy_settings_from_bot
   after_create :add_context_messages
 
   after_commit :prompt!, on: :create, if: :first_message
@@ -121,6 +120,10 @@ class Chat < ApplicationRecord
     end
   end
 
+  def display_settings!
+    messages.create!(role: "settings", skip_broadcast: true)
+  end
+
   def tags
     analysis[:tags].presence || []
   end
@@ -157,6 +160,15 @@ class Chat < ApplicationRecord
       context_reply = Prompts.get("chats.context_memories_reply", lang: user.preferred_language)
       bot_message!(context_reply, skip_broadcast: true, visible: false)
     end
+  end
+
+  def copy_settings_from_bot
+    self.model = bot.model
+    self.temperature = bot.temperature
+    self.top_p = bot.top_p
+    self.presence_penalty = bot.presence_penalty
+    self.frequency_penalty = bot.frequency_penalty
+    self.max_tokens = bot.max_tokens
   end
 
   def set_title

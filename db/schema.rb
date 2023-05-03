@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2023_04_30_011642) do
+ActiveRecord::Schema[7.1].define(version: 2023_05_03_054309) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -35,7 +35,6 @@ ActiveRecord::Schema[7.1].define(version: 2023_04_30_011642) do
 
   create_table "chats", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "title", null: false
-    t.string "engine", null: false
     t.jsonb "transcript", default: [], null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -46,7 +45,6 @@ ActiveRecord::Schema[7.1].define(version: 2023_04_30_011642) do
     t.boolean "public_access", default: false, null: false
     t.jsonb "settings", default: {"show_invisibles"=>false, "response_length_tokens"=>400}, null: false
     t.index ["bot_id"], name: "index_chats_on_bot_id"
-    t.index ["engine"], name: "index_chats_on_engine"
     t.index ["public_access"], name: "index_chats_on_public_access"
     t.index ["title"], name: "index_chats_on_title"
     t.index ["user_id"], name: "index_chats_on_user_id"

@@ -67,7 +67,7 @@ class ChatsController < ApplicationController
   private
 
   def chat_params
-    params.require(:chat).permit(:first_message, :engine, :bot_id)
+    params.require(:chat).permit(:first_message, :bot_id).to_h
   end
 
 

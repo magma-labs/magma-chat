@@ -3,13 +3,13 @@ class SettingsController < ApplicationController
   before_action :load_latest_chats
 
   def update
-    current_user.update!(settings_params.to_h)
+    current_user.update!(settings_params)
     redirect_to settings_path, notice: "Settings updated"
   end
 
   private
 
   def settings_params
-    params.require(:user).permit(t("settings").keys)
+    params.require(:user).permit(t("settings").keys).to_h
   end
 end
