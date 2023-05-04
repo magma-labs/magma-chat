@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/rails/rails.git
-  revision: 912096d4ce930b8e7e5d91e0c86bae2091fda0e4
+  revision: 533161a73df4bfaccb7856dad45c531ac6cafde7
   branch: main
   specs:
     actioncable (7.1.0.alpha)
@@ -157,7 +157,7 @@ GEM
     httparty (0.21.0)
       mini_mime (>= 1.0.0)
       multi_xml (>= 0.5.2)
-    i18n (1.12.0)
+    i18n (1.13.0)
       concurrent-ruby (~> 1.0)
     importmap-rails (1.1.5)
       actionpack (>= 6.0.0)
@@ -258,16 +258,16 @@ GEM
     puma (5.6.5)
       nio4r (~> 2.0)
     racc (1.6.2)
-    rack (2.2.6.4)
+    rack (3.0.7)
     rack-protection (3.0.6)
       rack
-    rack-session (1.0.1)
-      rack (< 3)
+    rack-session (2.0.0)
+      rack (>= 3.0.0)
     rack-test (2.1.0)
       rack (>= 1.3)
-    rackup (1.0.0)
-      rack (< 3)
-      webrick
+    rackup (2.1.0)
+      rack (>= 3)
+      webrick (~> 1.8)
     rails-dom-testing (2.0.3)
       activesupport (>= 4.2.0)
       nokogiri (>= 1.6)
@@ -391,7 +391,7 @@ GEM
     websocket-extensions (0.1.5)
     xpath (3.2.0)
       nokogiri (~> 1.8)
-    zeitwerk (2.6.7)
+    zeitwerk (2.6.8)
 
 PLATFORMS
   aarch64-linux
