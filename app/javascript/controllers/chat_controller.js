@@ -59,31 +59,5 @@ export default class extends ApplicationController {
 
   afterPrompt(element, reflex, noop, reflexId) {
     element.focus()
-  }  prompt(event) {
-    if (this.element.value.length === 0) {
-      return;
-    }
-
-    const xhr = new XMLHttpRequest();
-    xhr.open("GET", "/chats");
-    xhr.setRequestHeader("Content-Type", "application/json");
-
-    const token = document.head.querySelector(
-      'meta[name="csrf-token"]'
-    ).content;
-
-    xhr.setRequestHeader("X-CSRF-Token", token);
-
-    xhr.onreadystatechange = () => {
-      if (xhr.readyState === XMLHttpRequest.DONE) {
-        if (xhr.status === 200) {
-          this.stimulate('ChatReflex#prompt');
-        } else if (xhr.status === 401) {
-          window.location.href = "/";
-        }
-      }
-    };
-
-    xhr.send();
   }
 }
