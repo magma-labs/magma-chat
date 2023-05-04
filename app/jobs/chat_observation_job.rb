@@ -9,7 +9,11 @@ class ChatObservationJob < ApplicationJob
       bot_name: chat.bot.name,
       bot_role: chat.bot.role
     )
+  end
 
+  private
+
+  def first_pass(chat)
     Gpt.chat(
       directive: directive,
       transcript: chat.messages_for_gpt(TikToken.count(directive + prompt), only_visible: true),
@@ -17,6 +21,12 @@ class ChatObservationJob < ApplicationJob
       temperature: 0.6,
       max_tokens: 300
     ).then do |response|
+      second_pass(chat, response)
+    end
+  end
+
+  def second_pass(chat, response)
+    Gpt.chat(
       chat.bot_observations!(response.scan(/^\d+\. (.*)$/).flatten)
     end
   end

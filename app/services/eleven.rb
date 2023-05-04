@@ -4,7 +4,7 @@ module Eleven
   extend self
 
   def api_key
-    @api_key ||= ENV.fetch('XI_API_KEY')
+    @api_key ||= ENV['XI_API_KEY']
   end
 
   def tts(voice_id: "21m00Tcm4TlvDq8ikWAM", text:, stability: 0.5, similarity_boost: 0.5)
