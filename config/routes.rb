@@ -30,6 +30,8 @@ Rails.application.routes.draw do
     resources :users
   end
 
+  get "/tts/:message_id.mp3", to: "chats#tts", as: :tts
+
   get "/tag/:q", to: "chats#tag", as: :tag
   get "/c/:id", to: "chats#readonly", as: :readonly
 

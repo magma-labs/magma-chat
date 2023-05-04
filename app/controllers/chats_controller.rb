@@ -64,6 +64,16 @@ class ChatsController < ApplicationController
     end
   end
 
+  def tts
+    message = Message.find(params[:message_id])
+    bot = message.chat.bot
+    Eleven.tts(text: message.content, stability: bot.voice_stability, voice_id: bot.voice_id).then do |response|
+      # send MP3 data to browser with filename
+      audio =  response.read_body
+      send_data audio, type: "audio/mpeg", disposition: "inline", filename: "message-#{message.id}.mp3"
+    end
+  end
+
   private
 
   def chat_params

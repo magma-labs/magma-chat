@@ -20,6 +20,7 @@ class User < ApplicationRecord
   include Settings
 
   has_many :chats, dependent: :destroy
+  has_many :messages, as: :sender
 
   def tag_cloud(limit: 70)
     tag_counts = Hash.new(0)

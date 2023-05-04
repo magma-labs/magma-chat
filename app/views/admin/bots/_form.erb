@@ -48,6 +48,9 @@
         <div class="flex space-x-4">
           <div data-action="click->tabs#switch" data-tabs-target="tab" data-tab-name="directive" class="tab active">Directive</div>
           <div data-action="click->tabs#switch" data-tabs-target="tab" data-tab-name="settings" class="tab ">Settings</div>
+          <% if ENV['XI_API_KEY'] %>
+            <div data-action="click->tabs#switch" data-tabs-target="tab" data-tab-name="voice" class="tab ">Voice</div>
+          <% end %>
           <div data-action="click->tabs#switch" data-tabs-target="tab" data-tab-name="memory" class="tab ">Memory</div>
           <div data-action="click->tabs#switch" data-tabs-target="tab" data-tab-name="tools" class="tab ">Tools</div>
         </div>
@@ -59,6 +62,11 @@
           <div data-tabs-target="content" data-tab-name="settings" class="hidden">
             <%= render "settings", form: form %>
           </div>
+          <% if ENV['XI_API_KEY'] %>
+            <div data-tabs-target="content" data-tab-name="voice" class="hidden">
+              <%= render "voice", form: form %>
+            </div>
+          <% end %>
           <div data-tabs-target="content" data-tab-name="memory" class="hidden">
             <%= render "memory", form: form %>
           </div>

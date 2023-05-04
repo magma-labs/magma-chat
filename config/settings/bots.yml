@@ -27,3 +27,7 @@ presence_penalty:
   default: 0.0
 frequency_penalty:
   default: 0.0
+voice_id:
+  default: AZnzlk1XvdvUeBnXmlld
+voice_stability:
+  default: 0.5

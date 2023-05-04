@@ -206,3 +206,25 @@ body::-webkit-scrollbar {
    background-color: darkgrey;
    outline: 1px solid slategrey;
  }
+
+.voiceshake {
+  animation: kfVoiceshake 0.5s ease-in-out infinite;
+}
+
+@keyframes kfVoiceshake {
+  0% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(-10deg);
+  }
+  50% {
+    transform: rotate(5deg);
+  }
+  75% {
+    transform: rotate(-5deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}

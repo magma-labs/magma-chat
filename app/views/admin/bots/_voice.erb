@@ -1,0 +1,27 @@
+<div class="flex flex-col gap-4">
+  <div class="flex flex-col gap-0" data-controller="voicepreview">
+    <div class="flex items-center gap-3" >
+      <% voices = XI_VOICES.map {|v| [v[:name], v[:id]] } %>
+      <%= form.label :voice_id, it("Voice"), class: "block text-gray-800 font-bold" %>
+      <%= form.select :voice_id, options_for_select(voices, selected: @bot.voice_id), {include_blank: it("Disabled")},
+                  data: { "voicepreview-target": "select" },
+                  class: "border-none focus:border-none focus:ring-0 focus:ring-transparent border-0 rounded bg-transparent text-gray-800 pr-8" %>
+      <button type="button" data-action="voicepreview#play"><%= "🔊" %></button>
+    </div>
+    <div class="text-gray-600 text-xs"><%= it("Choose a voice for this bot's text to speech feature.") %></div>
+  </div>
+  <div class="field flex flex-col gap-1">
+    <div class="flex items-center gap-3">
+      <%= form.label :voice_stability, it("Seriousness Factor"), class: "block text-gray-800 text-sm font-bold" %>
+      <%= form.range_field :voice_stability, min: 0, max: 1, step: 0.01, class: "" %>
+      <span class="setting_value"><%= @bot.voice_stability %></span>
+    </div>
+    <div class="text-gray-600 text-xs"><%= it("Controls how unstable and/or emotional the bot sounds.") %></div>
+  </div>
+
+  <div class="flex flex-wrap gap-3">
+    <% voices = XI_VOICES.each do |voice| %>
+      <audio id="voice_preview_<%= voice[:id] %>" volume="0.6" src="<%= voice[:preview_url] %>"></audio>
+    <% end %>
+  </div>
+</div>
