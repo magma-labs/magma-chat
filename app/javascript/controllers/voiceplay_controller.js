@@ -5,6 +5,7 @@ export default class extends Controller {
     super.connect()
     this.avatar = this.element;
     this.audio = this.element.nextSibling;
+    this.audio.volume = 0.7;
 
     this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
     const source = this.audioContext.createMediaElementSource(this.audio);
