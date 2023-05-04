@@ -1,6 +1,7 @@
-class BotsController < AdminController
+class Admin::BotsController < AdminController
   skip_before_action :verify_authenticity_token, only: [:promote]
   before_action :set_bot, except: [:index, :new, :create]
+  # todo: only admins here
 
   def index
     @bots = [ new_bot ]
@@ -13,14 +14,14 @@ class BotsController < AdminController
 
   def create
     Bot.create!(bot_params).then do |bot|
-      redirect_to [bot]
+      redirect_to [:admin, bot]
     end
   end
 
   def update
     Bot.find(params[:id]).then do |bot|
       bot.update!(bot_params)
-      redirect_to [bot]
+      redirect_to [:admin, bot]
     end
   end
 

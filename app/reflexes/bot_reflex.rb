@@ -19,7 +19,7 @@ class BotReflex < ApplicationReflex
   def destroy
     if @bot.chats.empty?
       @bot.destroy!
-      cable_ready.redirect_to(url: "/bots").broadcast
+      cable_ready.redirect_to(url: "/admin/bots").broadcast
     end
     morph :nothing
   end

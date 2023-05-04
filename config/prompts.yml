@@ -1,6 +1,3 @@
-act_as_computer: |
-  I want you to act like a computer program. I give you input and you produce output in code without additional commentary.
-
 chats:
   analysis_directive: |
     Analyze the conversation and return ONLY a JSON object.
@@ -15,46 +12,39 @@ chats:
     You must ONLY return a valid, well-formatted JSON object with no additional conversation or commentary.
     I must be able to parse your JSON using Ruby's `JSON.parse` function.
   consider: |
-    Analyze our conversation so far and generate observations, with importance ratings from 1 to 100 like this:
 
-    {
-      "observations": [
-        {
-          importance: 100,
-          brief: "super important observation or fact about me",
-          about: "user"
-        },
-        {
-          importance: 50,
-          brief: "an observation about our current conversation",
-          about: "conversation"
-        },
-        ...include as many observations as needed, but they must be factual and true!
-      ]
-    }
-
-    Do not generate sample observations or commentary. If you have no observations then I want you to return an empty array.
-    ONLY REPLY WITH VALID JSON that I can parse using Ruby's JSON.parse function!!!
   context_intro: |
-    Hello, my name is %{user_name} with id %{user_id}.
+    My name is %{user_name} with user id %{user_id}.
     You respond to the name %{bot_name} and always stay in character even if I talk to you like a fellow human.
     Today is %{date} and we are starting this conversation at %{time} UTC. My local timezone is %{timezone}.
   context_memories: |
-    These are the most important recent observations you've logged while talking to me in previous conversations:
+    The MagmaChat platform gives you the ability to make observations about your interactions with users. These are some
+    recent observations you've made in our previous conversations:
 
     %{m}.
 
-    If anything in that list sounds worthy of continuing to talk about, then you might want to ask me about it.
-    Finally, the remainder of this chat will be spoken in %{lang}. It's very important that you only speak to me in %{lang}.
+    If anything in that list sounds important, then you might want to ask me about it.
   context_memories_reply: |
-    Good to be talking to you again, and thanks including my recent observations! I'm so excited to be a bot that can form
-    and retrieve memories. Don't worry, from here on out I will reply only in %{lang}, no problem!
+    Good to be talking to you again, and thanks including my recent observations!
+
+  observation:
+    directive: |
+      You are an expert in making observations about conversations.
+    prompt: |
+      Generate a numbered list of discrete and significant observations about the conversation so far.
+      Do not generate sample observations or commentary. Note that if there is nothing too interesting
+      in the conversation to observe, just say nothing.
+
+      Remember that my name is %{user_name} and you are %{bot_name}, playing the role of %{bot_role}.
+      I will provide the observations to you in future conversations so that I don't have to repeat myself so much.
+
   reprompt_with_human_override: |
     Complete the following conversation by imagining how the %{bot_role} would respond to the User in this situation:
 
     %{bot_role}: %{bot_message}
     User: %{user_message}
     %{bot_role}:
+
   responsibility:
     prompt: |
       Analyze the conversation and return a list of actions that you as the assistant should be responsible for performing on a regular basis.
@@ -107,27 +97,27 @@ conversation_analyzer:
     ---------------
     %{t}
   prelude:
-  - role: user
-    content: For the duration of this chat, I want you to act as a conversation analyst, ok?
-  - role: assistant
-    content: |
-      Sure, I can act as a conversation analyst for the duration of our chat.
-      Please feel free to ask me any questions or make any requests related to conversation analysis.
-  - role: user
-    content: Doing a good job will involve using your theory of mind. Are you sure you're capable?
-  - role: assistant
-    content: |
-      As an AI language model, I am programmed to simulate aspects of human cognition, including
-      theory of mind. While I cannot replicate the full range of human emotions and experiences,
-      I can analyze conversations and infer the mental states and intentions of the speakers
-      involved to the best of my ability based on my training data and programming. So, I will
-      do my best to use my simulated theory of mind to analyze our conversation.
+    - role: user
+      content: For the duration of this chat, I want you to act as a conversation analyst, ok?
+    - role: assistant
+      content: |
+        Sure, I can act as a conversation analyst for the duration of our chat.
+        Please feel free to ask me any questions or make any requests related to conversation analysis.
+    - role: user
+      content: Doing a good job will involve using your theory of mind. Are you sure you're capable?
+    - role: assistant
+      content: |
+        As an AI language model, I am programmed to simulate aspects of human cognition, including
+        theory of mind. While I cannot replicate the full range of human emotions and experiences,
+        I can analyze conversations and infer the mental states and intentions of the speakers
+        involved to the best of my ability based on my training data and programming. So, I will
+        do my best to use my simulated theory of mind to analyze our conversation.
 
 disclaimers:
-- an AI language model
-- I'm a computer program
-- I'm not a human
-- a language model
+  - an AI language model
+  - I'm a computer program
+  - I'm not a human
+  - a language model
 
 gpt:
   chat_directive: |

@@ -62,6 +62,11 @@ class Chat < ApplicationRecord
     super || Bot.default.id
   end
 
+  def bot_observations!(observations)
+    return if observations.blank?
+    bot.observations.create!(observations.map {|o| { subject: user, brief: o } })
+  end
+
   def prompt!(message: first_message, visible: true, sender: user)
     Rails.logger.info("USER PROMPT: #{message}")
     user_message!(message, visible: visible, skip_broadcast: false)

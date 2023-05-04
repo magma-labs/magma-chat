@@ -7,7 +7,8 @@ module Gpt
     @client ||= OpenAI::Client.new(access_token: ENV.fetch("OPENAI_ACCESS_TOKEN"))
   end
 
-  def chat(model: "gpt-3.5-turbo", directive: Prompts.get("gpt.chat_directive"), prompt:, transcript: [], temperature: 0.7, top_p: 1.0, frequency_penalty: 0.0, presence_penalty: 0.0, max_tokens: 500, cache: 10.seconds, stream: nil)
+  def chat(model: nil, directive: Prompts.get("gpt.chat_directive"), prompt:, transcript: [], temperature: 0.7, top_p: 1.0, frequency_penalty: 0.0, presence_penalty: 0.0, max_tokens: 500, cache: 10.seconds, stream: nil)
+    model ||= ENV.fetch("OPENAI_DEFAULT_MODEL","gpt-3.5-turbo")
     Rails.cache.fetch(key([directive, prompt, transcript, temperature, frequency_penalty, presence_penalty, max_tokens]), expires_in: cache) do
       messages = [ message(:system, directive) ]
       messages += transcript

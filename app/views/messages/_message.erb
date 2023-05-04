@@ -2,7 +2,7 @@
   <div class="message <%= message.role %> w-full p-4 <%= "highlight" if params[:message] == message.id %>">
     <div class="text-lg xl:max-w-[80%] mx-auto flex items-start gap-6">
       <div class="flex-shrink-0 relative h-[36px] w-[36px] rounded-md  text-white flex items-center justify-center mt-1 bg-gray-800 select-none">
-        <img src="<%= message.sender_image_url %>" alt="" class="object-fit rounded-md select-none">
+        <img src="<%= message.sender_image_url %>" alt="" class="object-fit rounded-md select-none" referrerpolicy="no-referrer">
       </div>
       <div class="flex-1 max-w-full relative min-h-[40px]">
         <% if message.content.blank? %>

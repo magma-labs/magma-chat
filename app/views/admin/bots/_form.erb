@@ -1,6 +1,6 @@
-<%= form_with(model: @bot.becomes(Bot), local: true, data: { controller: "settings", gid: @bot.to_global_id.to_s }) do |form| %>
+<%= form_with(model: [:admin, @bot.becomes(Bot)], data: { controller: "settings", gid: @bot.persisted? && @bot.to_global_id.to_s }) do |form| %>
   <div class="container mx-auto">
-    <%= link_to [:bots], class: "flex gap-3 items-center" do %>
+    <%= link_to "/", class: "flex gap-3 items-center" do %>
       <%= image_tag("logo.svg", class: "w-12 object-fit sm:m-auto") %>
       <span class="hidden sm:inline text-2xl flex-1 text-gray-100 tracking-widest text-gray-950">MagmaChat</span>
     <% end %>
@@ -8,7 +8,7 @@
       <%= link_to [:chats], class: "hover:text-indigo-700" do %>
         <span>Chats</span>
       <% end %>
-      <%= link_to [:bots], class: "hover:text-indigo-700" do %>
+      <%= link_to [:admin, :bots], class: "hover:text-indigo-700" do %>
         <span>Bots</span>
       <% end %>
       <%= link_to [:settings], class: "hover:text-indigo-700" do %>

@@ -10,7 +10,7 @@
     <div class="text-gray-800 font-bold">
       <%= bot.name %>
       <% if current_user&.admin? %>
-        <%= link_to "📝", [bot] %>
+        <%= link_to "📝", [:admin, bot] %>
       <% end %>
       <%= "(Draft)" if bot.published_at.blank? %>
       <div class="text-sm text-gray-500">

@@ -80,7 +80,7 @@
       <div>
         <%= @chat.bot.name %>
         <% if current_user&.admin? %>
-          <%= link_to "🤖", [@chat.bot] %>
+          <%= link_to "🤖", [:admin, @chat.bot] %>
         <% end %>
       </div>
       <div class="font-light"><%= @chat.bot.role %></div>

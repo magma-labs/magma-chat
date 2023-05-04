@@ -34,6 +34,8 @@ class Message < ApplicationRecord
   attribute :run_analysis_after_saving, :boolean, default: false
   attribute :skip_broadcast, :boolean, default: false
 
+  delegate :to_partial_path, to: :strategy
+
   belongs_to :chat
   belongs_to :sender, polymorphic: true, optional: true
 
@@ -46,9 +48,10 @@ class Message < ApplicationRecord
 
   pg_search_scope :search_content, against: [:content]
 
+  before_update :override_disclaimers
+
   before_save :calculate_tokens
   before_save :set_sender
-  before_update :override_disclaimers, if: -> { role.assistant? }
 
   after_commit :broadcast_message, on: :create, unless: :skip_broadcast
   after_commit :reanalyze, if: :run_analysis_after_saving
@@ -56,18 +59,15 @@ class Message < ApplicationRecord
   validates :role, presence: true
   validates :rating, numericality: { greater_than_or_equal_to: 0, less_than_or_equal_to: 5 }
 
-  delegate :to_partial_path, to: :strategy
-
   after_initialize do
     self.strategy ||= role.to_s
   end
 
-  def broadcast_message
-    return if role.assistant?
-    ChatPromptJob.perform_later(chat, content, visible)
+  def reanalyze
+    ChatObservationJob.perform_later(chat) if chat.bot.enable_observations?
+    ChatAnalysisJob.perform_later(chat) if chat.enable_analysis?
   end
 
-  # todo: consider setting automatically based on sender type
   def role
     super.to_s.inquiry
   end
@@ -98,28 +98,9 @@ class Message < ApplicationRecord
       .reverse
   end
 
-  def reanalyze
-    ChatObservationJob.perform_later(chat) if chat.bot.enable_observations?
-    ChatAnalysisJob.perform_later(chat) if chat.enable_analysis?
-  end
-
   private
 
   def calculate_tokens
     self.tokens_count = TikToken.count(content.to_s.encode('UTF-8', 'UTF-8', invalid: :replace, undef: :replace))
-  end
-
-  def override_disclaimers
-    return unless content.present? && chat.bot.humanize?
-    # todo: can we make this work in user's language not just English?
-    regex = Regexp.new(Prompts.get("disclaimers").join("|"))
-    if match = content.match(regex)
-      self.visible = false
-      chat.reprompt_with_human_override!(self)
-    end
-  end
-
-  def strategy_name
-    role
   end
 end

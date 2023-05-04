@@ -47,13 +47,14 @@ RSpec.describe Message, type: :model do
     let(:role) { :user }
 
     it 'schedules ChatPromptJob' do
+      expect(instance.strategy).to be_kind_of(Message::UserStrategy)
       expect {
         instance.broadcast_message
       }.to have_enqueued_job(ChatPromptJob).with(instance.chat, instance.content, instance.visible)
     end
 
     context 'when it not "user" role' do
-      let(:role) { :not_user }
+      let(:role) { :assistant }
 
       it 'does not schedule ChatPromptJob' do
         expect {

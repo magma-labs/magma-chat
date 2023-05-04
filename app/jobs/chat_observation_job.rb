@@ -2,32 +2,22 @@ class ChatObservationJob < ApplicationJob
   queue_as :default
 
   def perform(chat)
-    directive = Prompts.get("act_as_computer")
-    prompt = Prompts.get("chats.consider")
-    tokens_count = TikToken.count(directive + prompt)
+    directive = Prompts.get("chats.observation.directive")
+    prompt = Prompts.get(
+      "chats.observation.prompt",
+      user_name: chat.user.name,
+      bot_name: chat.bot.name,
+      bot_role: chat.bot.role
+    )
+
     Gpt.chat(
       directive: directive,
+      transcript: chat.messages_for_gpt(TikToken.count(directive + prompt), only_visible: true),
       prompt: prompt,
-      transcript: chat.messages_for_gpt(2000 - tokens_count, only_visible: true).take(6),
-      temperature: 0.5,
-      max_tokens: 300,
+      temperature: 0.6,
+      max_tokens: 300
     ).then do |response|
-      if response.blank?
-        Rails.logger.warn "😵😵😵 No response to observation for Chat: #{chat.id}"
-      else
-        puts
-        puts "🔥🔥🔥 #{response} 🔥🔥🔥"
-        puts
-        json_match = response.match(/.*?(\{.*\})/m)
-        if json_match
-          JSON.parse(json_match[1], symbolize_names: true).then do |data|
-            chat.bot.observed!(chat, data[:observations])
-          end
-        else
-          Rails.logger.warn "😵😵😵 No observation for Chat: #{chat.id}"
-          Rails.logger.warn "😵😵😵 GPT said: #{response}"
-        end
-      end
+      chat.bot_observations!(response.scan(/^\d+\. (.*)$/).flatten)
     end
   end
 end

@@ -1,5 +1,8 @@
 require "active_support/core_ext/integer/time"
 
+require "dotenv"
+Dotenv.load(".env.local", ".env.#{Rails.env}")
+
 Rails.application.configure do
 
   config.session_store :redis_session_store,

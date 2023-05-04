@@ -9,7 +9,7 @@ Eventually we should integrate Devise for many more authentication and user mana
 ### Create and manage Bots and Conversations
 A chat (aka conversation) is an instance of a chat between a human and a bot. A bot is an anthropomorphized digital persona/autonomous agent configured in MagmaChat and brought to life using OpenAI’s API for chat completion (aka ChatGPT).
 
-The default bot is Gerald. Talking to him is just like talking to ChatGPT directly, he has no special directive. If you are an admin, you can go to `/bots` and experiment with creating additional bots with custom directives that make them take on specialized roles and/or personalities.
+The default bot is Gerald. Talking to him is just like talking to ChatGPT directly, he has no special directive. If you are an admin, you can go to `/admin/bots` and experiment with creating additional bots with custom directives that make them take on specialized roles and/or personalities.
 
 ### Bots have short-term and long-term memory capability
 As users are chatting with bots, bots passively make observations about the user and the conversation and store those as memories in the `thoughts` table. If Marqo is enabled, thoughts are also stored as vectors so that they can be queried using tensor search. An essential part of the bots built-in programming is to act human-like and remember who you are. Bots that are configured to be friendly will often proactively ask you how you're doing today and follow up about previous conversation topics. Active mitigation prevents bots from littering their conversations with “as a language model” disclaimers.
@@ -88,7 +88,7 @@ Admin privileges are granted simply with the `admin` boolean attribute on `User`
 
 ### Configuring Bots
 
-Once you have admin rights, you'll be able to access `/bots` to create additional bots beyond just Gerald, the default GPT Assistant that's created automatically. Note that bots must be published in order to show up in the new chat screen for non-admin users. Draft bots show up to admin users so that they can be tested and refined prior to publication.
+Once you have admin rights, you'll be able to access `/admin/bots` to create additional bots beyond just Gerald, the default GPT Assistant that's created automatically. Note that bots must be published in order to show up in the new chat screen for non-admin users. Draft bots show up to admin users so that they can be tested and refined prior to publication.
 
 Type /debug from any chat input to toggle visibility of hidden messages containing inline instructions to the bots from the platform.
 
