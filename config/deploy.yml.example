@@ -1,0 +1,79 @@
+# Name of your application. Used to uniquely configure containers.
+service: magma-chat
+
+# Name of the container image.
+image: <container_image>
+
+# builder:
+#   dockerfile: Dockerfile
+#   multiarch: false
+#   secrets:
+#     - MRSK_REGISTRY_PASSWORD
+
+# Deploy to these servers.
+servers:
+  web:
+    hosts:
+      - <IP_ADDRESS>
+    labels:
+      traefik.http.routers.magma-chat-web.rule: Host(`example.com`,`www.example.com`)
+      traefik.http.services.magma-chat-web.loadbalancer.healthcheck.interval: 45s
+
+# Credentials for your image host.
+registry:
+  # Specify the registry server, if you're not using Docker Hub
+  # server: "registry.digitalocean.com"
+  username:
+    - MRSK_REGISTRY_USERNAME
+  password:
+    - MRSK_REGISTRY_PASSWORD
+
+# Inject ENV variables into containers (secrets come from .env).
+env:
+  clear:
+    DB_HOST: <IP_ADDRESS>
+    RAILS_LOG_TO_STDOUT: true
+    RAILS_SERVE_STATIC_FILES: true
+    WEB_CONCURRENCY: 2
+  secret:
+    - DATABASE_URL
+    - GOOGLE_CLIENT_ID
+    - GOOGLE_CLIENT_SECRET
+    - MARQO_URL
+    - OPENAI_ACCESS_TOKEN
+    - REDIS_CACHE_URL
+    - REDIS_URL
+    - SECRET_KEY_BASE
+    - XI_API_KEY
+
+# Use accessory services (secrets come from .env).
+accessories:
+  db:
+    image: postgres:15
+    host: <IP_ADDRESS>
+    port: 5432
+    env:
+      clear:
+        POSTGRES_DB: magma_chat_production
+        POSTGRES_USER: magma_chat
+        POSTGRES_PASSWORD: <choose a postgres password here>
+    directories:
+      - data:/var/lib/postgresql/data
+  redis:
+    image: redis:7.0
+    cmd: redis-server --requirepass <choose a redis password here>
+    host: <IP_ADDRESS>
+    port: 6379
+    directories:
+      - data:/data
+
+# Configure custom arguments for Traefik
+# traefik:
+#   args:
+#     accesslog: true
+#     accesslog.format: json
+
+# Configure a custom healthcheck (default is /up on port 3000)
+healthcheck:
+  path: /up
+  port: 3000
