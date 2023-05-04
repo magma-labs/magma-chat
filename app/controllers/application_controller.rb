@@ -22,7 +22,7 @@ class ApplicationController < ActionController::Base
     if current_user
       cookies.encrypted[:user_id] = current_user&.id
     else
-      redirect_to root_path
+      redirect_to root_path, status: :unauthorized
     end
   end
 end
