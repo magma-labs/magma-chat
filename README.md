@@ -25,6 +25,9 @@ Type `/public` to make a conversation available to non-authenticated visitors.
 ### Multi-mode chat input
 The text input for chatting can be toggled between single line and grow modes, for maximum usability. Just type `/grow` to toggle. In grow mode, cmd+enter submits your message (or hit the send button.)
 
+### Text-to-Speech
+Your bot can talk to you. Just click on their avatar to have the message contents read out loud using Eleven Labs API. (Requires setting `XI_API_KEY` environment variable.)
+
 ### Sane prompt management abstraction
 All prompts are stored in `config/prompts.yml` and the plan is to eventually make them editable at runtime.
 
@@ -45,7 +48,7 @@ Here are some of the cool features we are envisioning:
 * Bot teams for putting bots to work on tasks together.
 * Autonomous agent features: reflection, planning, independent operation, and much more…
 * Fine-tuning features for further refining bot behavior beyond zero-,one-, and few shot training.
-* Speech-to-text and text-to-speech for more natural interaction with bots.
+* Speech-to-text for more natural interaction with bots.
 * Swappable embedding and vector database options for bot memory.
 * Fine-grained, web-based management of all settings and user preferences for everything described above.
 * Easy exporting of conversations to formats suitable for sharing and printing
