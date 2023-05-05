@@ -17,19 +17,18 @@
 #  created_at       :datetime         not null
 #  updated_at       :datetime         not null
 #
-FactoryBot.define do
-  factory :user do
-    admin { false }
-    email { Faker::Internet.email }
-    name { Faker::Name.name }
+class Human < User
+  include UsedAsSubject
 
-    oauth_uid { Faker::Number.number(digits: 21) }
-    oauth_provider { 'Google' }
+  has_many :chats, dependent: :destroy, foreign_key: :user_id
+  has_many :messages, as: :sender
 
-    image_url { Faker::Internet.url }
-
-    trait :admin do
-      admin { true }
+  def tag_cloud(limit: 70)
+    tag_counts = Hash.new(0)
+    chats.select(:analysis).map(&:tags).flatten.each do |tag|
+      tag_counts[tag] += 1
     end
+    tag_counts.sort_by {|k, v| v}.reverse.take(limit).to_h
   end
+
 end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2023_05_03_054309) do
+ActiveRecord::Schema[7.1].define(version: 2023_05_05_040841) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -69,6 +69,18 @@ ActiveRecord::Schema[7.1].define(version: 2023_05_03_054309) do
     t.index ["sender_type", "sender_id"], name: "index_messages_on_sender"
   end
 
+  create_table "things", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "world_id", null: false
+    t.string "name", null: false
+    t.string "type", null: false
+    t.text "description", default: "", null: false
+    t.jsonb "settings", default: {}, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["type"], name: "index_things_on_type"
+    t.index ["world_id"], name: "index_things_on_world_id"
+  end
+
   create_table "thoughts", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "type"
     t.uuid "bot_id", null: false
@@ -109,6 +121,7 @@ ActiveRecord::Schema[7.1].define(version: 2023_05_03_054309) do
     t.datetime "updated_at", null: false
     t.boolean "admin", default: false, null: false
     t.jsonb "settings", default: {"preferred_language"=>"English"}, null: false
+    t.string "type", default: "Human", null: false
   end
 
   add_foreign_key "messages", "chats"

@@ -2,7 +2,7 @@ class ChatResponsibilityJob < ApplicationJob
   queue_as :default
 
   def perform(chat)
-    prompt = Prompts.get("chats.responsibility.prompt", bot_role: chat.bot.role, bot_directive: chat.bot.directive)
+    prompt = Magma::Prompts.get("chats.responsibility.prompt", bot_role: chat.bot.role, bot_directive: chat.bot.directive)
     tokens_count = TikToken.count(chat.bot.directive + prompt)
 
     # gather
@@ -22,7 +22,7 @@ class ChatResponsibilityJob < ApplicationJob
     end
 
     # condense
-    prompt = Prompts.get("chats.responsibility.prompt_condense", responsibilities: current_responsibilities_of(chat.bot, chat.user))
+    prompt = Magma::Prompts.get("chats.responsibility.prompt_condense", responsibilities: current_responsibilities_of(chat.bot, chat.user))
 
     Gpt.chat(
       directive: chat.bot.directive,

@@ -2,8 +2,8 @@ class ChatAnalysisJob < ApplicationJob
   queue_as :default
 
   def perform(chat)
-    directive = Prompts.get("chats.analysis_directive")
-    prompt = Prompts.get("chats.analyze", lang: chat.user.preferred_language)
+    directive = Magma::Prompts.get("chats.analysis_directive")
+    prompt = Magma::Prompts.get("chats.analyze", lang: chat.user.preferred_language)
     prompt_tokens = TikToken.count(prompt)
     Gpt.chat(
       directive: directive,

@@ -22,7 +22,7 @@ class MemoryAnnotator
 
     unique_hits = Set.new
 
-    response = Gpt.chat(transcript: Prompts.get("conversation_analyzer.prelude"), prompt: prompt(number_of_messages_to_pop))
+    response = Gpt.chat(transcript: Magma::Prompts.get("conversation_analyzer.prelude"), prompt: prompt(number_of_messages_to_pop))
     questions = extract_questions(response)
     questions.each do |question|
       filter = "bot_id:#{chat.bot.id} AND subject_id:#{chat.user.id}"
@@ -51,7 +51,7 @@ class MemoryAnnotator
   end
 
   def prompt(number_of_messages_to_pop)
-    Prompts.get(
+    Magma::Prompts.get(
       "conversation_analyzer.prompt",
       user_name: chat.user.name,
       bot_role: chat.bot.role,

@@ -1,0 +1,30 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+require 'find'
+
+def check_file_encoding(file_path)
+  content = File.read(file_path)
+  encoding = content.encoding.to_s
+  bom = content.start_with?("\xEF\xBB\xBF")
+
+  if encoding != 'UTF-8' || bom
+    puts "🤢🤢 Non-UTF-8 file detected: #{file_path} 🤢🤢"
+    puts "  Encoding: #{encoding}"
+    puts "  BOM detected" if bom
+  else
+    puts "#{file_path} UTF-8 OK"
+  end
+end
+
+def scan_directory(path)
+  Find.find(path) do |entry|
+    next if File.directory?(entry)
+    check_file_encoding(entry)
+  end
+end
+
+app_root = Dir.pwd
+puts "Scanning files in #{app_root} for non-UTF-8 encodings..."
+scan_directory(app_root)
+puts "Scan completed."

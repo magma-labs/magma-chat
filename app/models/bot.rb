@@ -25,6 +25,7 @@
 #
 class Bot < ApplicationRecord
   include Settings
+  include UsedAsSubject
 
   attribute :name, :string, default: Faker::Name.name
   attribute :role, :string, default: Faker::Job.title
@@ -107,7 +108,7 @@ class Bot < ApplicationRecord
 
   def set_intro
     self.intro = Gpt.chat(
-      prompt: Prompts.get("bots.intro", {name: name, role: role}),
+      prompt: Magma::Prompts.get("bots.intro", {name: name, role: role}),
       max_tokens: 120,
       temperature: 0.8
     )

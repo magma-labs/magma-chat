@@ -94,7 +94,7 @@ RSpec.describe Bot do
     let(:prompt_double) { double('Prompt') }
 
     before do
-      allow(Prompts).to receive(:get).and_return(prompt_double)
+      allow(Magma::Prompts).to receive(:get).and_return(prompt_double)
       allow(Gpt).to receive(:chat)
         .with(prompt: prompt_double, max_tokens: 120, temperature: 0.8)
         .and_return(bot_intro_from_gpt)

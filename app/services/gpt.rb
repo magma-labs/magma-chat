@@ -7,8 +7,10 @@ module Gpt
     @client ||= OpenAI::Client.new(access_token: ENV.fetch("OPENAI_ACCESS_TOKEN"))
   end
 
-  def chat(model: nil, directive: Prompts.get("gpt.chat_directive"), prompt:, transcript: [], temperature: 0.7, top_p: 1.0, frequency_penalty: 0.0, presence_penalty: 0.0, max_tokens: 500, cache: 10.seconds, stream: nil)
+  def chat(model: nil, directive: nil, prompt:, transcript: [], temperature: 0.7, top_p: 1.0, frequency_penalty: 0.0, presence_penalty: 0.0, max_tokens: 500, cache: 30.seconds, stream: nil)
     model ||= ENV.fetch("OPENAI_DEFAULT_MODEL","gpt-3.5-turbo")
+    directive ||= Magma::Prompts.get("gpt.default_chat_directive")
+    # todo: probably don't need to cache if streaming
     Rails.cache.fetch(key([directive, prompt, transcript, temperature, frequency_penalty, presence_penalty, max_tokens]), expires_in: cache) do
       messages = [ message(:system, directive) ]
       messages += transcript
@@ -43,10 +45,10 @@ module Gpt
   def magic(signature:, description:, args:, model: "gpt-3.5-turbo", temp: 1.0, max_tokens: 100)
     Rails.cache.fetch(key([signature, description, args, model, temp, max_tokens]), expires_in: 10.days) do
       messages = [
-        message(:user, Prompts.get("gpt.magic_prompt", { signature: signature, description: description })),
+        message(:user, Magma::Prompts.get("gpt.magic_prompt", { signature: signature, description: description })),
         message(:assistant, "Understood. Waiting for arguments")
       ]
-      chat(directive: Prompts.get("gpt.magic_directive"), prompt: args.join(", "), temperature: temp, transcript: messages)
+      chat(directive: Magma::Prompts.get("gpt.magic_directive"), prompt: args.join(", "), temperature: temp, transcript: messages)
     end
   end
 

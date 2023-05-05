@@ -13,22 +13,12 @@
 #  oauth_token      :string
 #  oauth_uid        :string           not null
 #  settings         :jsonb            not null
+#  type             :string           default("Human"), not null
 #  created_at       :datetime         not null
 #  updated_at       :datetime         not null
 #
 class User < ApplicationRecord
   include Settings
-
-  has_many :chats, dependent: :destroy
-  has_many :messages, as: :sender
-
-  def tag_cloud(limit: 70)
-    tag_counts = Hash.new(0)
-    chats.select(:analysis).map(&:tags).flatten.each do |tag|
-      tag_counts[tag] += 1
-    end
-    tag_counts.sort_by {|k, v| v}.reverse.take(limit).to_h
-  end
 
   def self.from_omniauth(auth)
     auth.deep_symbolize_keys!
@@ -46,6 +36,7 @@ class User < ApplicationRecord
     end
   end
 
+  # todo: probably not needed anymore
   def self.default
     where(name: "Default User").first_or_create do |user|
       user.email = "info@magmalabs.io"

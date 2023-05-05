@@ -29,14 +29,36 @@ chats:
 
   observation:
     directive: |
-      You are an expert in making observations about conversations.
-    prompt: |
-      Generate a numbered list of discrete and significant observations about the conversation so far.
-      Do not generate sample observations or commentary. Note that if there is nothing too interesting
-      in the conversation to observe, just say nothing.
+      You are now an expert in analyzing conversations between humans and AI-powered bots on the MagmaChat platform.
+    make:
+      prompt: |
+        Generate a numbered list of discrete and significant observations about this conversation so far. Do not generate sample observations. Just analyze the existing conversation. Your response should not contain commentary, markdown or additional formatting beyond numbering.
 
-      Remember that my name is %{user_name} and you are %{bot_name}, playing the role of %{bot_role}.
-      I will provide the observations to you in future conversations so that I don't have to repeat myself so much.
+        Remember that my name is %{user_name} and %{bot_name} is an AI-powered bot playing the role of %{bot_role}. The MagmaChat platform will provide %{bot_name} with the observations that you generate in future conversations so that I don't have to repeat it myself.
+    refine:
+      prompt: |
+        KNOWN SUBJECTS
+        %{known_subjects}
+
+        OBSERVATIONS
+        The following observations were made during a conversation between a User and a Bot on the MagmaChat platform.
+
+        %{observations}
+
+        INSTRUCTIONS
+        If an observation mentions a project, then make the subject of that observation the project
+        If an observation is about a subject mentioned in the SUBJECTS list, then make sure to include the optional subject_id
+        If an observation mentions a new company, project, or human subject, create new separate elements in the ObservationList for them
+        If an observation contains personal information or preferences about a Human, make the importance relatively high
+        If an observation is about a subject not mentioned in the SUBJECTS list, then provide the subject_name
+        It's very important that if an observation mentions a new human subject, create a separate element in the ObservationList for them, with the subject_type set to "Human" and subject_name containing their name.
+        If an observation mentions more than one subject, generate an element in the ObservationList for each of them
+        If an observation contains more than one piece of factual information, generate an element in the ObservationList for each of them
+        It is understood and expected that the ObservationList will usually contain many more items than the source OBSERVATIONS provided above
+
+        Produce JSON output according to the following schema without any formatting or markdown.
+
+        %{schema}
 
   reprompt_with_human_override: |
     Complete the following conversation by imagining how the %{bot_role} would respond to the User in this situation:
@@ -120,8 +142,10 @@ disclaimers:
   - a language model
 
 gpt:
-  chat_directive: |
+  default_chat_directive: |
     You are a smart and succinct assistant.
+  continue_prompt: |
+    please continue
   magic_directive: |
     You are a Ruby virtual machine.
   magic_prompt: |

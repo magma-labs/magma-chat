@@ -182,7 +182,7 @@ RSpec.describe Chat do
     let(:chat) { create(:chat, message_count: 2) }
 
     let(:context_user_prompt) do
-      Prompts.get('chats.context_intro', {
+      Magma::Prompts.get('chats.context_intro', {
         bot_name: chat.bot.name,
         bot_role: chat.bot.role,
         user_name: chat.user.name,

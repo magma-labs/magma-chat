@@ -13,6 +13,7 @@
 #  oauth_token      :string
 #  oauth_uid        :string           not null
 #  settings         :jsonb            not null
+#  type             :string           default("Human"), not null
 #  created_at       :datetime         not null
 #  updated_at       :datetime         not null
 #
