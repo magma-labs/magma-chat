@@ -1,22 +1,22 @@
 <div class="card flex cursor-pointer border-4 px-4 w-full items-center xl:items-end relative"
-     data-id="<%= bot.id %>" data-name="<%= bot.name %>"
-     data-placeholder="<%= it("Start a new chat with #{bot.name}") %>"
-     data-hello="<%= hello_in_user_language %>"
+     data-id="<%= bot.id %>" data-name="<%= bot.name&.force_encoding("UTF-8") %>"
+     data-placeholder="<%= it("Start a new chat with #{bot.name.force_encoding("UTF-8")}") %>"
+     data-hello="<%= hello_in_user_language&.force_encoding("UTF-8") %>"
      data-controller="botselect" data-action="click->botselect#select">
   <div class="max-w-[140px]">
     <%= image_tag bot.image_url, class: "object-fit" %>
   </div>
   <div class="flex flex-col gap-1 p-4 h-full">
     <div class="text-gray-800 font-bold">
-      <%= bot.name %>
+      <%= bot.name&.force_encoding("UTF-8") %>
       <% if current_user&.admin? %>
         <%= link_to "📝", [:admin, bot] %>
       <% end %>
       <%= "(Draft)" if bot.published_at.blank? %>
       <div class="text-sm text-gray-500">
-        <%= it(bot.role) %>
+        <%= it(bot.role&.force_encoding("UTF-8")) %>
       </div>
     </div>
-    <div class="text-sm text-gray-700"><%= it(truncate(bot.intro, length: 100)).html_safe.force_encoding("UTF-8") %></div>
+    <div class="text-sm text-gray-700"><%= it(truncate(bot.intro&.force_encoding("UTF-8"), length: 100)).html_safe %></div>
   </div>
 </div>
