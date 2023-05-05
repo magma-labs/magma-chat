@@ -17,6 +17,6 @@
         <%= it(bot.role) %>
       </div>
     </div>
-    <div class="text-sm text-gray-700"><%= it(truncate(bot.intro, length: 100)).html_safe %></div>
+    <div class="text-sm text-gray-700"><%= it(truncate(bot.intro, length: 100)).html_safe.force_encoding("UTF-8") %></div>
   </div>
 </div>
