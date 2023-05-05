@@ -12,8 +12,6 @@ def check_file_encoding(file_path)
     puts "🤢🤢 Non-UTF-8 file detected: #{file_path} 🤢🤢"
     puts "  Encoding: #{encoding}"
     puts "  BOM detected" if bom
-  else
-    puts "#{file_path} UTF-8 OK"
   end
 end
 
