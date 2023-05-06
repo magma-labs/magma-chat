@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2023_05_05_040841) do
+ActiveRecord::Schema[7.1].define(version: 2023_05_05_193534) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -19,7 +19,7 @@ ActiveRecord::Schema[7.1].define(version: 2023_05_05_040841) do
     t.text "directive", default: "", null: false
     t.text "intro"
     t.integer "auto_archive_mins", default: 0, null: false
-    t.integer "chats_count", default: 0, null: false
+    t.integer "conversations_count", default: 0, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "type", default: "Bot", null: false
@@ -33,7 +33,7 @@ ActiveRecord::Schema[7.1].define(version: 2023_05_05_040841) do
     t.index ["type"], name: "index_bots_on_type"
   end
 
-  create_table "chats", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+  create_table "conversations", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "title", null: false
     t.jsonb "transcript", default: [], null: false
     t.datetime "created_at", null: false
@@ -44,14 +44,14 @@ ActiveRecord::Schema[7.1].define(version: 2023_05_05_040841) do
     t.uuid "bot_id"
     t.boolean "public_access", default: false, null: false
     t.jsonb "settings", default: {"show_invisibles"=>false, "response_length_tokens"=>400}, null: false
-    t.index ["bot_id"], name: "index_chats_on_bot_id"
-    t.index ["public_access"], name: "index_chats_on_public_access"
-    t.index ["title"], name: "index_chats_on_title"
-    t.index ["user_id"], name: "index_chats_on_user_id"
+    t.index ["bot_id"], name: "index_conversations_on_bot_id"
+    t.index ["public_access"], name: "index_conversations_on_public_access"
+    t.index ["title"], name: "index_conversations_on_title"
+    t.index ["user_id"], name: "index_conversations_on_user_id"
   end
 
   create_table "messages", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.uuid "chat_id", null: false
+    t.uuid "conversation_id", null: false
     t.string "sender_type"
     t.uuid "sender_id"
     t.string "role"
@@ -64,7 +64,7 @@ ActiveRecord::Schema[7.1].define(version: 2023_05_05_040841) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "tokens_count", default: 0, null: false
-    t.index ["chat_id"], name: "index_messages_on_chat_id"
+    t.index ["conversation_id"], name: "index_messages_on_conversation_id"
     t.index ["role"], name: "index_messages_on_role"
     t.index ["sender_type", "sender_id"], name: "index_messages_on_sender"
   end
@@ -116,7 +116,7 @@ ActiveRecord::Schema[7.1].define(version: 2023_05_05_040841) do
     t.string "oauth_provider", null: false
     t.string "oauth_token"
     t.datetime "oauth_expires_at"
-    t.integer "chats_count", default: 0, null: false
+    t.integer "conversations_count", default: 0, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "admin", default: false, null: false
@@ -124,6 +124,6 @@ ActiveRecord::Schema[7.1].define(version: 2023_05_05_040841) do
     t.string "type", default: "Human", null: false
   end
 
-  add_foreign_key "messages", "chats"
+  add_foreign_key "messages", "conversations"
   add_foreign_key "tools", "bots"
 end

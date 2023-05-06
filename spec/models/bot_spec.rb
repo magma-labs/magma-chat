@@ -2,20 +2,20 @@
 #
 # Table name: bots
 #
-#  id                :uuid             not null, primary key
-#  auto_archive_mins :integer          default(0), not null
-#  chats_count       :integer          default(0), not null
-#  directive         :text             default(""), not null
-#  goals             :jsonb            not null
-#  image_url         :string
-#  intro             :text
-#  name              :string           not null
-#  published_at      :datetime
-#  role              :string
-#  settings          :jsonb            not null
-#  type              :string           default("Bot"), not null
-#  created_at        :datetime         not null
-#  updated_at        :datetime         not null
+#  id                  :uuid             not null, primary key
+#  auto_archive_mins   :integer          default(0), not null
+#  conversations_count :integer          default(0), not null
+#  directive           :text             default(""), not null
+#  goals               :jsonb            not null
+#  image_url           :string
+#  intro               :text
+#  name                :string           not null
+#  published_at        :datetime
+#  role                :string
+#  settings            :jsonb            not null
+#  type                :string           default("Bot"), not null
+#  created_at          :datetime         not null
+#  updated_at          :datetime         not null
 #
 # Indexes
 #
@@ -47,7 +47,7 @@ RSpec.describe Bot do
   end
 
   describe '#observed!' do
-    let(:chat) { create(:chat) }
+    let(:conversation) { create(:conversation) }
     let(:bot) { create(:bot) }
 
     let(:observations) do
@@ -70,12 +70,12 @@ RSpec.describe Bot do
     end
 
     it 'creates observations with correct attributes', :aggregate_failures do
-      expect { bot.observed!(chat, observations) }
+      expect { bot.observed!(conversation, observations) }
         .to change(bot.observations, :count)
         .by(observations.count)
 
       bot.observations.each_with_index do |observation, i|
-        expect(observation.subject).to eq(chat.user).or eq(chat)
+        expect(observation.subject).to eq(conversation.user).or eq(conversation)
         expect(observation.brief).to eq(observations[i][:brief])
         expect(observation.importance).to be_between(0, 100)
       end
@@ -90,14 +90,10 @@ RSpec.describe Bot do
 
   describe '.default' do
     let(:last_bot) { Bot.last }
-    let(:bot_intro_from_gpt) { 'Bot Intro from Chat GPT' }
-    let(:prompt_double) { double('Prompt') }
 
     before do
-      allow(Magma::Prompts).to receive(:get).and_return(prompt_double)
-      allow(Gpt).to receive(:chat)
-        .with(prompt: prompt_double, max_tokens: 120, temperature: 0.8)
-        .and_return(bot_intro_from_gpt)
+      # the intro is generated
+      allow(Gpt).to receive(:chat).and_return("Hello!")
     end
 
     it 'creates a default bot', :aggregate_failures do
@@ -106,7 +102,7 @@ RSpec.describe Bot do
       expect(last_bot.name).to eq 'Gerald'
       expect(last_bot.role).to eq 'GPT Assistant'
       expect(last_bot.directive).to eq "You are a smart and friendly general purpose chatbot."
-      expect(last_bot.intro).to eq bot_intro_from_gpt
+      expect(last_bot.intro).to eq 'Hello!'
       expect(last_bot.auto_archive_mins).to eq 0
     end
   end

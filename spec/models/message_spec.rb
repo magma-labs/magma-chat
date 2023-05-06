@@ -14,18 +14,18 @@
 #  visible          :boolean          default(TRUE), not null
 #  created_at       :datetime         not null
 #  updated_at       :datetime         not null
-#  chat_id          :uuid             not null
+#  conversation_id  :uuid             not null
 #  sender_id        :uuid
 #
 # Indexes
 #
-#  index_messages_on_chat_id  (chat_id)
-#  index_messages_on_role     (role)
-#  index_messages_on_sender   (sender_type,sender_id)
+#  index_messages_on_conversation_id  (conversation_id)
+#  index_messages_on_role             (role)
+#  index_messages_on_sender           (sender_type,sender_id)
 #
 # Foreign Keys
 #
-#  fk_rails_...  (chat_id => chats.id)
+#  fk_rails_...  (conversation_id => conversations.id)
 #
 require 'rails_helper'
 
@@ -38,7 +38,7 @@ RSpec.describe Message, type: :model do
     let(:instance) do
       described_class.new(
         role: role,
-        chat: create(:chat),
+        conversation: create(:conversation),
         content: :content,
         visible: true
       )
@@ -46,20 +46,20 @@ RSpec.describe Message, type: :model do
 
     let(:role) { :user }
 
-    it 'schedules ChatPromptJob' do
+    it 'schedules ConversationJob' do
       expect(instance.strategy).to be_kind_of(Message::UserStrategy)
       expect {
         instance.broadcast_message
-      }.to have_enqueued_job(ChatPromptJob).with(instance.chat, instance.content, instance.visible)
+      }.to have_enqueued_job(ConversationJob).with(instance.conversation, instance.content, instance.visible)
     end
 
     context 'when it not "user" role' do
       let(:role) { :assistant }
 
-      it 'does not schedule ChatPromptJob' do
+      it 'does not schedule ConversationJob' do
         expect {
           instance.broadcast_message
-        }.to_not have_enqueued_job(ChatPromptJob)
+        }.to_not have_enqueued_job(ConversationJob)
       end
     end
   end
@@ -94,25 +94,25 @@ RSpec.describe Message, type: :model do
 
   describe '#reanalyze' do
     let(:message) { create(:message) }
-    let(:chat) { message.chat }
+    let(:conversation) { message.conversation }
 
     before do
-      allow(chat).to receive_message_chain(:messages, :length).and_return(message_count)
+      allow(conversation).to receive_message_chain(:messages, :length).and_return(message_count)
     end
 
     context 'when messages count is a multiple of 4 plus 2' do
       let(:message_count) { 2 }
 
-      it 'enqueues a ChatObservationJob' do
-        expect { message.send(:reanalyze) }.to have_enqueued_job(ChatObservationJob).with(chat)
+      it 'enqueues an ObservationJob' do
+        expect { message.send(:reanalyze) }.to have_enqueued_job(ObservationJob).with(conversation)
       end
     end
 
     context 'when messages count is a multiple of 6 plus 4' do
       let(:message_count) { 4 }
 
-      it 'enqueues a ChatAnalysisJob' do
-        expect { message.send(:reanalyze) }.to have_enqueued_job(ChatAnalysisJob).with(chat)
+      it 'enqueues an AnalysisJob' do
+        expect { message.send(:reanalyze) }.to have_enqueued_job(AnalysisJob).with(conversation)
       end
     end
   end

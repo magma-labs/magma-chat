@@ -1,5 +1,5 @@
 <div class="space-y-3 bg-gray-700 h-full">
-  <%= form_for :search, url: "/chats/search", class: "flex justify-between items-center gap-4 shadow sticky top-0 z-50 bg-slate-800 p-3" do |f| %>
+  <%= form_for :search, url: "/conversations/search", class: "flex justify-between items-center gap-4 shadow sticky top-0 z-50 bg-slate-800 p-3" do |f| %>
     <input type="text" name="q" value="<%= @search.query %>" onchange="this.parentNode.submit()"
            data-controller="focus" autocomplete="off" placeholder="Search..."
            class="rounded-md border-gray-200 border-2 text-gray-800 p-1 flex-1 bg-white pr-12">

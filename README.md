@@ -7,7 +7,7 @@ MagmaChat is essentially still a proof of concept, but a lot of showstopper bugs
 Eventually we should integrate Devise for many more authentication and user management options, but for now you need to sign in using a Google Account.
 
 ### Create and manage Bots and Conversations
-A chat (aka conversation) is an instance of a chat between a human and a bot. A bot is an anthropomorphized digital persona/autonomous agent configured in MagmaChat and brought to life using OpenAI’s API for chat completion (aka ChatGPT).
+A conversation is an instance of a chat between a human and a bot. A bot is an anthropomorphized digital persona/autonomous agent configured in MagmaChat and brought to life using OpenAI’s API for chat completion (aka ChatGPT).
 
 The default bot is Gerald. Talking to him is just like talking to ChatGPT directly, he has no special directive. If you are an admin, you can go to `/admin/bots` and experiment with creating additional bots with custom directives that make them take on specialized roles and/or personalities.
 

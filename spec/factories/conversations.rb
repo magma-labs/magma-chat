@@ -1,6 +1,6 @@
 # == Schema Information
 #
-# Table name: chats
+# Table name: conversations
 #
 #  id            :uuid             not null, primary key
 #  analysis      :jsonb            not null
@@ -16,13 +16,13 @@
 #
 # Indexes
 #
-#  index_chats_on_bot_id         (bot_id)
-#  index_chats_on_public_access  (public_access)
-#  index_chats_on_title          (title)
-#  index_chats_on_user_id        (user_id)
+#  index_conversations_on_bot_id         (bot_id)
+#  index_conversations_on_public_access  (public_access)
+#  index_conversations_on_title          (title)
+#  index_conversations_on_user_id        (user_id)
 #
 FactoryBot.define do
-  factory :chat do
+  factory :conversation do
     analysis { {} }
 
     association :bot
@@ -32,8 +32,8 @@ FactoryBot.define do
       message_count { 0 }
     end
 
-    after(:create) do |chat, evaluator|
-      create_list(:message, evaluator.message_count, chat: chat)
+    after(:create) do |conversation, evaluator|
+      create_list(:message, evaluator.message_count, conversation: conversation)
     end
   end
 end

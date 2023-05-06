@@ -1,7 +1,8 @@
 class Message::BaseStrategy
   include Strategic::Strategy
 
-  delegate :chat, :content, :visible, to: :context
+  delegate :conversation, :content, :visible, to: :context
+  delegate :bot, :user, to: :conversation
 
   def broadcast_message
   end

@@ -1,15 +1,15 @@
-<%= link_to chat_path(chat), class: "chatnav flex items-start gap-0 w-full #{@chat == chat ? "active" : ""}" do %>
+<%= link_to conversation_path(conversation), class: "chatnav flex items-start gap-0 w-full #{@conversation == conversation ? "active" : ""}" do %>
   <div class="flex flex-col flex-1 w-full mb-2">
     <div class="flex justify-stretch flex-1 max-h-[60px] md:max-h-[22px] text-ellipsis overflow-hidden break-all relative">
       <%# should not wrap lines %>
       <div class="w-full text-gray-400 text-sm hover:text-yellow-500 truncate">
-        <%= chat.title.capitalize %>
+        <%= conversation.title.capitalize %>
       </div>
       <div class="absolute inset-y-0 right-0 w-8 z-10 bg-gradient-to-l from-gray-900"></div>
     </div>
     <div class="text-gray-600 text-xs flex gap-2 items-center">
       <span>
-        <%= distance_of_time_in_words_to_now(chat.updated_at) + "ago" %></span>
+        <%= distance_of_time_in_words_to_now(conversation.updated_at) + "ago" %></span>
     </div>
   </div>
 <% end %>

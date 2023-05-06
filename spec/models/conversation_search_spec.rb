@@ -1,19 +1,19 @@
 require 'rails_helper'
 
-RSpec.describe ChatSearch do
+RSpec.describe ConversationSearch do
   describe '.message_content' do
     subject(:instance) { described_class.message_content(user, query) }
 
     let(:user) { create(:user) }
     let(:query) { message_content.split(' ').first }
-    let(:chat) { create(:chat, message_count: 1, user: user) }
-    let(:message_content) { chat.messages.last.content }
+    let(:conversation) { create(:conversation, message_count: 1, user: user) }
+    let(:message_content) { conversation.messages.last.content }
 
     before do
       allow(Gpt).to receive(:chat)
-      allow_any_instance_of(Chat).to receive(:add_context_messages)
+      allow_any_instance_of(Conversation).to receive(:add_context_messages)
 
-      chat
+      conversation
     end
 
     it 'returns an instance with results', :aggregate_failures do
@@ -25,9 +25,9 @@ RSpec.describe ChatSearch do
 
       expect(first_result).to be_a OpenStruct
       expect(first_result.messages.count).to eq 1
-      expect(first_result.chat).to eq chat
-      expect(first_result.messages).to eq chat.messages
-      expect(first_result.to_partial_path).to eq 'chats/result'
+      expect(first_result.conversation).to eq conversation
+      expect(first_result.messages).to eq conversation.messages
+      expect(first_result.to_partial_path).to eq 'conversations/result'
     end
 
     context 'when no message is found' do
@@ -46,16 +46,16 @@ RSpec.describe ChatSearch do
     subject(:instance) { described_class.tag(query) }
 
     let(:query) { 'query' }
-    let(:chat) { build(:chat) }
+    let(:conversation) { build(:conversation) }
 
     before do
-      allow(Chat).to receive(:search_tags).with(query).and_return([chat])
+      allow(Conversation).to receive(:search_tags).with(query).and_return([conversation])
     end
 
     it 'initializes an instance', :aggregate_failures do
       expect(instance.query).to eq "tag: #{query}"
       expect(instance.results).to eq [
-        OpenStruct.new(chat: chat, messages: [], to_partial_path: 'chats/result')
+        OpenStruct.new(conversation: conversation, messages: [], to_partial_path: 'conversations/result')
       ]
     end
   end

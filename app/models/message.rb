@@ -14,18 +14,18 @@
 #  visible          :boolean          default(TRUE), not null
 #  created_at       :datetime         not null
 #  updated_at       :datetime         not null
-#  chat_id          :uuid             not null
+#  conversation_id  :uuid             not null
 #  sender_id        :uuid
 #
 # Indexes
 #
-#  index_messages_on_chat_id  (chat_id)
-#  index_messages_on_role     (role)
-#  index_messages_on_sender   (sender_type,sender_id)
+#  index_messages_on_conversation_id  (conversation_id)
+#  index_messages_on_role             (role)
+#  index_messages_on_sender           (sender_type,sender_id)
 #
 # Foreign Keys
 #
-#  fk_rails_...  (chat_id => chats.id)
+#  fk_rails_...  (conversation_id => conversations.id)
 #
 class Message < ApplicationRecord
   include PgSearch::Model
@@ -35,8 +35,9 @@ class Message < ApplicationRecord
   attribute :skip_broadcast, :boolean, default: false
 
   delegate :to_partial_path, to: :strategy
+  delegate :bot, :user, to: :conversation
 
-  belongs_to :chat
+  belongs_to :conversation
   belongs_to :sender, polymorphic: true, optional: true
 
   scope :by_bots, -> { where(role: "assistant") }
@@ -64,8 +65,8 @@ class Message < ApplicationRecord
   end
 
   def reanalyze
-    ChatObservationJob.perform_later(chat) if chat.bot.enable_observations?
-    ChatAnalysisJob.perform_later(chat) if chat.enable_analysis?
+    ObservationJob.perform_later(conversation) if bot.enable_observations?
+    AnalysisJob.perform_later(conversation) if conversation.enable_analysis?
   end
 
   def role
@@ -83,10 +84,10 @@ class Message < ApplicationRecord
     self.sender_image_url = sender.image_url
   end
 
-  def self.up_to_token_limit(chat, max_tokens, only_visible:)
+  def self.up_to_token_limit(conversation, max_tokens, only_visible:)
     subquery =
       select("*, SUM(tokens_count) OVER (ORDER BY created_at DESC) AS running_total")
-        .where(chat_id: chat.id, visible: [true, only_visible], role: ["user", "assistant"])
+        .where(conversation_id: conversation.id, visible: [true, only_visible], role: ["user", "assistant"])
         .from("messages")
         .to_sql
 
