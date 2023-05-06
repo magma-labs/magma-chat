@@ -9,7 +9,7 @@ export default class extends ApplicationController {
 
   toggle(event) {
     event.preventDefault()
-    this.stimulate('Chat#toggle_grow', this.element, {}, this.element.checked)
+    this.stimulate('Conversation#toggle_grow', this.element, {}, this.element.checked)
   }
 
   beforeToggleGrow(element, reflex, noop, reflexId) {

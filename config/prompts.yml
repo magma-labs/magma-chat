@@ -1,4 +1,4 @@
-chats:
+conversations:
   analysis_directive: |
     Analyze the conversation and return ONLY a JSON object.
   analyze: |

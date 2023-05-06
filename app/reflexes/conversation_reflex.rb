@@ -1,14 +1,14 @@
 # frozen_string_literal: true
 
-class ChatReflex < ApplicationReflex
-  attr_reader :chat
+class ConversationReflex < ApplicationReflex
+  attr_reader :conversation
   attr_reader :value
 
-  before_reflex :load_chat
+  before_reflex :load_conversation
 
   def prompt(message: value)
     slash_filter do
-      chat.prompt!(message: message, sender: current_user)
+      conversation.prompt!(message: message, sender: current_user)
     end
     morph :nothing
   end
@@ -19,22 +19,23 @@ class ChatReflex < ApplicationReflex
   end
 
   def toggle_grow(_, checked)
-    chat.update!(grow: checked)
+    conversation.update!(grow: checked)
   end
 
   def destroy
-    chat.destroy!
-    cable_ready.redirect_to(url: "/chats/new").broadcast
+    conversation.destroy!
+    cable_ready.redirect_to(url: "/conversations/new").broadcast
     morph :nothing
   end
 
   private
 
-  def load_chat
+  def load_conversation
+    # todo: probably should be scoped to current_user
     if id = element.dataset[:id].presence
-      @chat = Chat.find(id)
+      @conversation = Conversation.find(id)
     else
-      @chat = Chat.create(title: element.value)
+      @conversation = Conversation.create(title: element.value)
     end
     @value = element.value
   end
@@ -44,37 +45,37 @@ class ChatReflex < ApplicationReflex
       case value.strip
       when /^\/new/
         # assume the title is whatever string supplied after the /new command
-        title = value.split("/new").last&.strip.presence || "New Chat"
-        @chat = current_user.chats.create!(title: title)
+        title = value.split("/new").last&.strip.presence || "New Conversation"
+        @conversation = current_user.conversations.create!(title: title)
         reload
       when /^\/delete/
         destroy
       when /^\/clear/
-        chat.messages.destroy_all
+        conversation.messages.destroy_all
       when /^\/grow/
-        chat.toggle!(:grow)
+        conversation.toggle!(:grow)
         reload
       when /^\/redo/
-        if chat.messages.any?
+        if conversation.messages.any?
           message = value.split("/redo").last&.strip
-          chat.redo!(current_user, message)
+          conversation.redo!(current_user, message)
         end
       when /^\/public/
-        if chat.messages.any?
-          chat.update!(public_access: true)
+        if conversation.messages.any?
+          conversation.update!(public_access: true)
           reload
         end
       when /^\/private/
-        chat.update!(public_access: false)
+        conversation.update!(public_access: false)
         reload
       when /^\/settings/
-        chat.display_settings!
+        conversation.display_settings!
       when /^\/stream/
         current_user.update!(streaming: !current_user.streaming)
         reload
       when /^\/whisper/
         # message = value.split("/whisper").last&.strip.presence
-        # chat.prompt!(message: message, visible: false)
+        # conversation.prompt!(message: message, visible: false)
         # todo: some mechanism to message the user with a transient pop up response or something
       when /^\/stats/
         # todo: implement
@@ -83,7 +84,7 @@ class ChatReflex < ApplicationReflex
       when /^\/help/
         # todo: implement
       when /^\/debug/
-        chat.update!(show_invisibles: !chat.show_invisibles)
+        conversation.update!(show_invisibles: !conversation.show_invisibles)
         reload
       end
     else
@@ -92,7 +93,7 @@ class ChatReflex < ApplicationReflex
   end
 
   def reload
-    cable_ready.redirect_to(url: "/chats/#{chat.id}").broadcast
+    cable_ready.redirect_to(url: "/conversations/#{conversation.id}").broadcast
     morph :nothing
   end
 

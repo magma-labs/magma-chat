@@ -1,5 +1,5 @@
 <div class="space-y-4">
-  <%= form_for :search, url: "/chats/search", class: "flex justify-between items-center gap-4 shadow sticky top-0 z-50 bg-slate-800 p-3" do |f| %>
+  <%= form_for :search, url: "/conversations/search", class: "flex justify-between items-center gap-4 shadow sticky top-0 z-50 bg-slate-800 p-3" do |f| %>
     <h1 class="text-2xl font-medium"><%= it("Conversations") %></h1>
     <input type="text" placeholder="<%= it("Search...") %>" autocomplete="off" name="q"
            class="rounded-md bg-gray-400 border-gray-200 border-2 text-gray-800 p-1 w-28 max-w-[50%]
@@ -7,29 +7,29 @@
     <div class="absolute right-4 opacity-60">🔎</div>
   <% end %>
   <div class="flex flex-col gap-2 px-3 pb-12">
-    <% @chats.each do |chat| %>
+    <% @conversations.each do |conversation| %>
       <div class="flex justify-between items-bottom card clickable-region">
         <div class="flex flex-1 gap-2 items-center p-4">
           <div class="flex flex-col">
-            <div class="text-gray-800 font-medium"><%= link_to chat.title, [chat], class: "region-link" %></div>
-            <% if chat.summary.present? %>
+            <div class="text-gray-800 font-medium"><%= link_to conversation.title, [conversation], class: "region-link" %></div>
+            <% if conversation.summary.present? %>
               <div class="text-sm text-gray-600">
-                <%= truncate chat.summary, length: 200 %>
-                <% chat.tags.each do |tag| %>
+                <%= truncate conversation.summary, length: 200 %>
+                <% conversation.tags.each do |tag| %>
                   <%= link_to "##{tag}", tag_path(tag) %>&nbsp;
                 <% end %>
               </div>
             <% end %>
             <div class="text-xs text-gray-500 mt-1">
-              <%= chat.created_at.strftime("%b %d, %Y") %> -
-              <%# TODO: added a counter cache to chat %>
-              <%= chat.messages.count %> <%= it("messages with").downcase %>
-              <%= chat.bot.name %>,  <%= it(chat.bot.role) %>
+              <%= conversation.created_at.strftime("%b %d, %Y") %> -
+              <%# TODO: added a counter cache to conversation %>
+              <%= conversation.messages.count %> <%= it("messages with").downcase %>
+              <%= conversation.bot.name %>,  <%= it(conversation.bot.role) %>
             </div>
           </div>
         </div>
         <div class="flex gap-2 items-center relative w-28">
-          <%= image_tag(chat.bot.image_url, class: "h-full object-cover") %>
+          <%= image_tag(conversation.bot.image_url, class: "h-full object-cover") %>
         </div>
 
       </div>

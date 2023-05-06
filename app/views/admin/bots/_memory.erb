@@ -10,7 +10,7 @@
     <%= form.check_box :short_term_memory, class: "rounded-md bg-gray-400 w-4 h-4 m-2 p-2 w-6", data: { id: @bot.id, controller: "botsettings", action: "click->botsettings#toggle_setting", field: "short_term_memory" } %>
     <div class="flex-1">
       <%= form.label :short_term_memory, "Enable short term memory", class: "text-gray-700" %>
-      <div class="text-gray-500 text-xs"><%= it("Inserts most recent and important observations into the start of each chat transcript") %></div>
+      <div class="text-gray-500 text-xs"><%= it("Inserts most recent and important observations into the start of each conversation. (Hidden to user.)") %></div>
     </div>
   </div>
   <% if @bot.short_term_memory? %>

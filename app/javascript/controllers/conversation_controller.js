@@ -3,7 +3,7 @@ import ApplicationController from 'controllers/application_controller'
 export default class extends ApplicationController {
   connect() {
     super.connect()
-    console.log('Chat controller connected', this.element)
+    console.log('Conversation controller connected', this.element)
     this.element.focus()
     var submitButton = document.getElementById('prompt_submit')
     if(submitButton) {
@@ -29,7 +29,7 @@ export default class extends ApplicationController {
     if (this.element.value.length === 0) {
       return;
     }
-    this.stimulate('ChatReflex#prompt')
+    this.stimulate('ConversationReflex#prompt')
   }
 
   beforePrompt(element, reflex, noop, reflexId) {

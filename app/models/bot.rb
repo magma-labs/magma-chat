@@ -2,20 +2,20 @@
 #
 # Table name: bots
 #
-#  id                :uuid             not null, primary key
-#  auto_archive_mins :integer          default(0), not null
-#  chats_count       :integer          default(0), not null
-#  directive         :text             default(""), not null
-#  goals             :jsonb            not null
-#  image_url         :string
-#  intro             :text
-#  name              :string           not null
-#  published_at      :datetime
-#  role              :string
-#  settings          :jsonb            not null
-#  type              :string           default("Bot"), not null
-#  created_at        :datetime         not null
-#  updated_at        :datetime         not null
+#  id                  :uuid             not null, primary key
+#  auto_archive_mins   :integer          default(0), not null
+#  conversations_count :integer          default(0), not null
+#  directive           :text             default(""), not null
+#  goals               :jsonb            not null
+#  image_url           :string
+#  intro               :text
+#  name                :string           not null
+#  published_at        :datetime
+#  role                :string
+#  settings            :jsonb            not null
+#  type                :string           default("Bot"), not null
+#  created_at          :datetime         not null
+#  updated_at          :datetime         not null
 #
 # Indexes
 #
@@ -32,7 +32,7 @@ class Bot < ApplicationRecord
 
   # todo: need an attribute for desired response size in tokens
 
-  has_many :chats, dependent: :nullify
+  has_many :conversations, dependent: :nullify
   has_many :thoughts, dependent: :destroy
   has_many :observations, dependent: :destroy
 
@@ -51,11 +51,11 @@ class Bot < ApplicationRecord
     @generated_image_url ||= "https://robohash.org/#{name}.png?size=640x640&set=set1"
   end
 
-  def observed!(chat, list_of_observations)
+  def observed!(conversation, list_of_observations)
     list_of_observations.each do |params|
       subject_name = params.delete(:about)
       observations.build(params).then do |observation|
-        observation.subject = subject_name["conversation"] ? chat : chat.user
+        observation.subject = subject_name["conversation"] ? conversation : conversation.user
         if observation.save
           # no problem
         else
@@ -82,6 +82,7 @@ class Bot < ApplicationRecord
     observations.by_user(user).by_decayed_score.limit(recent_thoughts_count).map(&:brief_with_timestamp)
   end
 
+  # todo: make configurable
   def self.default
     where(name: "Gerald", role: "GPT Assistant").first_or_create do |bot|
       bot.directive = "You are a smart and friendly general purpose chatbot."

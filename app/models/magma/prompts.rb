@@ -2,7 +2,9 @@ module Magma
   module Prompts
     extend self
 
-    # e.g. get("chat.prompt", "hello") => "What do you think about hello?"
+    ##
+    # Get a prompt from the prompts.yml file instead of hardcoding it all over the codebase
+    # e.g. get("conversations.prompt", "hello") => "What do you think about hello?"
     def get(key, *args)
       # todo: cache this
       # todo: allow overriding in database

@@ -1,6 +1,6 @@
 # == Schema Information
 #
-# Table name: chats
+# Table name: conversations
 #
 #  id            :uuid             not null, primary key
 #  analysis      :jsonb            not null
@@ -16,12 +16,12 @@
 #
 # Indexes
 #
-#  index_chats_on_bot_id         (bot_id)
-#  index_chats_on_public_access  (public_access)
-#  index_chats_on_title          (title)
-#  index_chats_on_user_id        (user_id)
+#  index_conversations_on_bot_id         (bot_id)
+#  index_conversations_on_public_access  (public_access)
+#  index_conversations_on_title          (title)
+#  index_conversations_on_user_id        (user_id)
 #
-class Chat < ApplicationRecord
+class Conversation < ApplicationRecord
   include PgSearch::Model
   include Settings
 
@@ -112,7 +112,7 @@ class Chat < ApplicationRecord
   def reprompt_with_human_override!(message)
     # grab the last two visible messages in correct order
     last_messages = self.messages.reload.latest.limit(3).to_a.reverse
-    prompt = Magma::Prompts.get("chats.reprompt_with_human_override", {
+    prompt = Magma::Prompts.get("conversations.reprompt_with_human_override", {
       bot_role: bot.role,
       bot_message: last_messages.first.content,
       user_message: last_messages.second.content
@@ -146,7 +146,7 @@ class Chat < ApplicationRecord
   def add_context_messages
     return unless bot.short_term_memory?
 
-    context_intro_prompt = Magma::Prompts.get("chats.context_intro",
+    context_intro_prompt = Magma::Prompts.get("conversations.context_intro",
       bot_name: bot.name,
       bot_role: bot.role,
       user_name: user.name,
@@ -160,9 +160,9 @@ class Chat < ApplicationRecord
 
     top_memories = bot.top_memories_of(user)
     if top_memories.any?
-      context_memories_prompt = Magma::Prompts.get("chats.context_memories", { m: top_memories.join("\n\n"), lang: user.preferred_language })
+      context_memories_prompt = Magma::Prompts.get("conversations.context_memories", { m: top_memories.join("\n\n"), lang: user.preferred_language })
       user_message!(context_memories_prompt, skip_broadcast: true, visible: false)
-      context_reply = Magma::Prompts.get("chats.context_memories_reply", lang: user.preferred_language)
+      context_reply = Magma::Prompts.get("conversations.context_memories_reply", lang: user.preferred_language)
       bot_message!(context_reply, skip_broadcast: true, visible: false)
     end
   end

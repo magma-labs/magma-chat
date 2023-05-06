@@ -9,7 +9,7 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :chats do
+  resources :conversations do
     collection do
       post :search
     end
@@ -26,14 +26,14 @@ Rails.application.routes.draw do
         post :promote
       end
     end
-    resources :chats
+    resources :conversations
     resources :users
   end
 
-  get "/tts/:message_id.mp3", to: "chats#tts", as: :tts
+  get "/tts/:message_id.mp3", to: "conversations#tts", as: :tts
 
-  get "/tag/:q", to: "chats#tag", as: :tag
-  get "/c/:id", to: "chats#readonly", as: :readonly
+  get "/tag/:q", to: "conversations#tag", as: :tag
+  get "/c/:id", to: "conversations#readonly", as: :readonly
 
   get "/auth/:provider/callback", to: "sessions#create"
   get "/logout", to: "sessions#destroy", as: :logout

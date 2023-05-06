@@ -14,7 +14,7 @@ module Magma
     attr_accessor :model, :temperature, :top_p, :frequency_penalty, :presence_penalty, :max_tokens, :stream, :debug
 
     ##
-    # Creates a new chat
+    # Creates a new chat object for facilitating chat-style completions with OpenAI
     # Takes optional parameters:
     # - model: String. Defaults to the value of the `OPENAI_DEFAULT_MODEL` environment variable or "gpt-3.5-turbo"
     # - directive: String. Defaults to the value of the "gpt.default_chat_directive" in `config/prompts.yml`

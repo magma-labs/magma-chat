@@ -5,8 +5,8 @@
       <span class="hidden sm:inline text-2xl flex-1 text-gray-100 tracking-widest text-gray-950">MagmaChat</span>
     <% end %>
     <div class="ml-16 flex gap-2 text-sm text-gray-700">
-      <%= link_to [:chats], class: "hover:text-indigo-700" do %>
-        <span>Chats</span>
+      <%= link_to [:conversations], class: "hover:text-indigo-700" do %>
+        <span>Conversations</span>
       <% end %>
       <%= link_to [:admin, :bots], class: "hover:text-indigo-700" do %>
         <span>Bots</span>
@@ -83,11 +83,11 @@
       <% else %>
         <%= link_to "Unpublish", "#", data: { reflex: "click->Bot#unpublish", id: @bot.id }, class: "bg-yellow-500 hover:bg-yellow-400 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" %>
       <% end %>
-      <% if @bot.persisted? && @bot.chats.empty? %>
+      <% if @bot.persisted? && @bot.conversations.empty? %>
         <%= link_to "Delete", "#", data: { reflex: "click->Bot#destroy", id: @bot.id }, class: "bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" %>
       <% else %>
         <div class="bg-gray-500 text-gray-400 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline cursor-not-allowed"
-              title="<%= it("Deletion not allowed once chats have been created with this bot.") %>">Delete</div>
+              title="<%= it("Deletion not allowed once conversations have been created with this bot.") %>">Delete</div>
       <% end %>
     </div>
   </div>

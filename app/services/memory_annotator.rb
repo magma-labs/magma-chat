@@ -6,13 +6,15 @@
 ## approaches. Read more at https://mattboegner.com/knowledge-retrieval-architecture-for-llms/
 ##
 class MemoryAnnotator
-  attr_reader :chat
+  attr_reader :conversation
   attr_reader :memories_message
 
+  delegate :bot, :user, to: :conversation
+
   ## takes the last number of n messages, generates a list of questions about the conversation, and searches for matching thoughts
-  ## if any matching thoughts are found in long term memory, they are added to the chat as hidden messages
-  def initialize(chat, memories_message)
-    @chat = chat
+  ## if any matching thoughts are found in long term memory, they are added to the conversation as hidden messages
+  def initialize(conversation, memories_message)
+    @conversation = conversation
     @memories_message = memories_message
   end
 
@@ -25,7 +27,7 @@ class MemoryAnnotator
     response = Gpt.chat(transcript: Magma::Prompts.get("conversation_analyzer.prelude"), prompt: prompt(number_of_messages_to_pop))
     questions = extract_questions(response)
     questions.each do |question|
-      filter = "bot_id:#{chat.bot.id} AND subject_id:#{chat.user.id}"
+      filter = "bot_id:#{bot.id} AND subject_id:#{user.id}"
       # todo: can https://docs.marqo.ai/0.0.18/API-Reference/search/#score-modifiers help with relevance?
       search_result = Marqo.client.search("thoughts", question, filter: filter, limit: 3)
       next if search_result.hits.nil? || search_result.hits.empty?
@@ -53,15 +55,15 @@ class MemoryAnnotator
   def prompt(number_of_messages_to_pop)
     Magma::Prompts.get(
       "conversation_analyzer.prompt",
-      user_name: chat.user.name,
-      bot_role: chat.bot.role,
-      bot_name: chat.bot.name,
+      user_name: user.name,
+      bot_role: bot.role,
+      bot_name: bot.name,
       t: transcript(number_of_messages_to_pop)
     )
   end
 
   def transcript(number_of_messages_to_pop)
-    messages = Message.where(chat_id: chat.id).latest.visible.limit(number_of_messages_to_pop)
+    messages = Message.where(conversation_id: conversation.id).latest.visible.limit(number_of_messages_to_pop)
     conversation = messages.to_a.reverse.map do |m|
       [m.sender_name, m.content].join(": ")
     end.join("\n\n")

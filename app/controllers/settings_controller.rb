@@ -1,6 +1,6 @@
 class SettingsController < ApplicationController
   before_action :require_user
-  before_action :load_latest_chats
+  before_action :load_latest_conversations
 
   def update
     current_user.update!(settings_params)

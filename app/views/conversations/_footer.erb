@@ -3,12 +3,12 @@
     <textarea id="prompt_textarea" type="text" class="w-full shadow-xl rounded-md bg-gray-700 text-white pl-3"
           placeholder="Send a message or type '/' for more options..." autocomplete="off" rows="1"
           onKeyUp="this.parentNode.dataset.replicatedValue = this.value"
-          data-controller="autocomplete chat"
-          data-action="input->autocomplete#input blur->autocomplete#blur keydown->chat#keydown"
-          <% if @chat.grow? %>
+          data-controller="autocomplete conversation"
+          data-action="input->autocomplete#input blur->autocomplete#blur keydown->conversation#keydown"
+          <% if @conversation.grow? %>
             data-grow="true"
           <% end %>
-          data-id="<%= @chat&.id %>"></textarea>
+          data-id="<%= @conversation&.id %>"></textarea>
     <button title="Send message" id="prompt_submit"
             class="absolute p-6 rounded-md hover:text-white text-gray-500 bottom-2 right-1 opacity-70">
       <svg stroke="currentColor" fill="none" stroke-width="2" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5 mr-1" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg">
@@ -25,7 +25,7 @@
     <div><span class="font-medium">/new</span><em class="pl-2 text-gray-300">optional first message</em></div>
     <div class="text-gray-500 text-sm">Start a new conversation</div>
   </div>
-  <% if @chat.messages.any? %>
+  <% if @conversation.messages.any? %>
     <div data-name="/clear">
       <div><span class="font-medium">/clear</span></div>
       <div class="text-gray-500 text-sm">Clear the current conversation transcript</div>
@@ -34,7 +34,7 @@
       <div><span class="font-medium">/redo</span> <em class="pl-2 text-gray-300">revised prompt</em></div>
       <div class="text-gray-500 text-sm">Discard the last prompt and try again</div>
     </div>
-    <% if @chat.public_access? %>
+    <% if @conversation.public_access? %>
       <div data-name="/private">
         <div><span class="font-medium">/private</span></div>
         <div class="text-gray-500 text-sm">Make this conversation private again</div>
@@ -60,7 +60,7 @@
   </div>
   <div data-name="/settings">
     <div><span class="font-medium">/settings</span></div>
-    <div class="text-gray-500 text-sm">Show current settings for this chat</div>
+    <div class="text-gray-500 text-sm">Show current settings for this conversation</div>
   </div>
   <% if current_user.admin? %>
     <div data-name="/debug">

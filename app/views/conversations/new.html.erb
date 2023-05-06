@@ -1,5 +1,5 @@
 <div class="hidden sm:flex justify-between items-center gap-4 shadow sticky top-0 z-50 bg-slate-800 p-4">
-  <h1 class="text-2xl font-medium">New Chat</h1>
+  <h1 class="text-2xl font-medium">New Conversation</h1>
 </div>
 <div class="grid xl:grid-cols-3 gap-4 p-4">
   <%= render Bot.published.order(:name) %>
@@ -8,9 +8,9 @@
 
 <% content_for :footer do %>
     <div class="w-full p-4">
-      <%= form_with model: @chat do |f| %>
+      <%= form_with model: @conversation do |f| %>
         <%= f.hidden_field :bot_id %>
-        <%= f.text_field :first_message, class: "w-full rounded-md bg-gray-700 text-white", data: { controller: "chat focus", action: "change->chat#submit" } %>
+        <%= f.text_field :first_message, class: "w-full rounded-md bg-gray-700 text-white", data: { controller: "conversation focus", action: "change->conversation#submit" } %>
     <% end %>
   </div>
 <% end %>

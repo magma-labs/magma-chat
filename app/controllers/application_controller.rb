@@ -14,8 +14,8 @@ class ApplicationController < ActionController::Base
     @current_user ||= session[:user_id] && User.find_by(id: session[:user_id])
   end
 
-  def load_latest_chats
-    @latest_chats = current_user.chats.order(updated_at: :desc).limit(10)
+  def load_latest_conversations
+    @latest_conversations = current_user.conversations.order(updated_at: :desc).limit(10)
   end
 
   def require_user

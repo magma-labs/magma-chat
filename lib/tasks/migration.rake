@@ -5,17 +5,17 @@ namespace :migrate do
     Message.transaction do
       last_message = nil # we will capture for setting the timestamps on assistant messages
       counter = 1
-      Chat.find_each do |chat|
-        chat.transcript.each do |data|
+      Conversation.find_each do |conversation|
+        conversation.transcript.each do |data|
           data.symbolize_keys!
-          message = chat.messages.build(role: data[:role], content: data[:content])
+          message = conversation.messages.build(role: data[:role], content: data[:content])
           if data[:role] == "user"
-            message.sender = chat.user
+            message.sender = conversation.user
           else
-            message.sender = chat.bot
+            message.sender = conversation.bot
           end
-          message.created_at = Time.at(data[:timestamp] || last_message&.created_at&.to_i || chat.created_at.to_i + counter)
-          message.updated_at = Time.at(data[:timestamp] || last_message&.updated_at&.to_i || chat.created_at.to_i + counter)
+          message.created_at = Time.at(data[:timestamp] || last_message&.created_at&.to_i || conversation.created_at.to_i + counter)
+          message.updated_at = Time.at(data[:timestamp] || last_message&.updated_at&.to_i || conversation.created_at.to_i + counter)
           message.save!
 
           last_message = message

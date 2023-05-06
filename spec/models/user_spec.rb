@@ -2,27 +2,27 @@
 #
 # Table name: users
 #
-#  id               :uuid             not null, primary key
-#  admin            :boolean          default(FALSE), not null
-#  chats_count      :integer          default(0), not null
-#  email            :string           not null
-#  image_url        :string
-#  name             :string           default(""), not null
-#  oauth_expires_at :datetime
-#  oauth_provider   :string           not null
-#  oauth_token      :string
-#  oauth_uid        :string           not null
-#  settings         :jsonb            not null
-#  type             :string           default("Human"), not null
-#  created_at       :datetime         not null
-#  updated_at       :datetime         not null
+#  id                  :uuid             not null, primary key
+#  admin               :boolean          default(FALSE), not null
+#  conversations_count :integer          default(0), not null
+#  email               :string           not null
+#  image_url           :string
+#  name                :string           default(""), not null
+#  oauth_expires_at    :datetime
+#  oauth_provider      :string           not null
+#  oauth_token         :string
+#  oauth_uid           :string           not null
+#  settings            :jsonb            not null
+#  type                :string           default("Human"), not null
+#  created_at          :datetime         not null
+#  updated_at          :datetime         not null
 #
 require 'rails_helper'
 
 RSpec.describe User, type: :model do
   describe '#tag_cloud' do
-    let(:chat) { create(:chat, analysis: { tags: tags }) }
-    let(:instance) { chat.user }
+    let(:conversation) { create(:conversation, analysis: { tags: tags }) }
+    let(:instance) { conversation.user }
     let(:tags) do
       [
         :tag_one,
