@@ -4,7 +4,7 @@
           placeholder="Send a message or type '/' for more options..." autocomplete="off" rows="1"
           onKeyUp="this.parentNode.dataset.replicatedValue = this.value"
           data-controller="autocomplete conversation"
-          data-action="input->autocomplete#input blur->autocomplete#blur keydown->conversation#keydown"
+          data-action="input->autocomplete#input blur->autocomplete#blur keydown->conversation#keydown keydown->autocomplete#keydown"
           <% if @conversation.grow? %>
             data-grow="true"
           <% end %>
@@ -20,53 +20,22 @@
 </div>
 <div id="autocompleteList"
      class="autocomplete-items absolute bg-gray-800 rounded-lg border-l-[40px] border-l-gray-900
-            p-4 w-[80%] flex hidden flex-col gap-3 text-white cursor-pointer">
-  <div data-name="/new">
-    <div><span class="font-medium">/new</span><em class="pl-2 text-gray-300">optional first message</em></div>
-    <div class="text-gray-500 text-sm">Start a new conversation</div>
-  </div>
+            w-[80%] flex flex-col hidden text-white cursor-pointer">
+  <%= render "autocomplete_item", name: "/new", description: "Start a new conversation" %>
   <% if @conversation.messages.any? %>
-    <div data-name="/clear">
-      <div><span class="font-medium">/clear</span></div>
-      <div class="text-gray-500 text-sm">Clear the current conversation transcript</div>
-    </div>
-    <div data-name="/redo">
-      <div><span class="font-medium">/redo</span> <em class="pl-2 text-gray-300">revised prompt</em></div>
-      <div class="text-gray-500 text-sm">Discard the last prompt and try again</div>
-    </div>
+    <%= render "autocomplete_item", name: "/clear", description: "Clear the current conversation transcript" %>
+    <%= render "autocomplete_item", name: "/redo", description: "Discard the last prompt and try again" %>
     <% if @conversation.public_access? %>
-      <div data-name="/private">
-        <div><span class="font-medium">/private</span></div>
-        <div class="text-gray-500 text-sm">Make this conversation private again</div>
-      </div>
+      <%= render "autocomplete_item", name: "/private", description: "Make this conversation private again" %>
     <% else %>
-      <div data-name="/public">
-        <div><span class="font-medium">/public</span></div>
-        <div class="text-gray-500 text-sm">Make this conversation public</div>
-      </div>
+      <%= render "autocomplete_item", name: "/public", description: "Make this conversation public" %>
     <% end %>
   <% end %>
-  <div data-name="/grow">
-    <div><span class="font-medium">/grow</span></div>
-    <div class="text-gray-500 text-sm">Toggles input "grow" mode. Submit with cmd+enter</div>
-  </div>
-  <div data-name="/delete">
-    <div><span class="font-medium">/delete</span></div>
-    <div class="text-gray-500 text-sm">Delete the conversation entirely</div>
-  </div>
-  <div data-name="/stream">
-    <div><span class="font-medium">/stream</span></div>
-    <div class="text-gray-500 text-sm">Toggle live-streaming mode for responses</div>
-  </div>
-  <div data-name="/settings">
-    <div><span class="font-medium">/settings</span></div>
-    <div class="text-gray-500 text-sm">Show current settings for this conversation</div>
-  </div>
+  <%= render "autocomplete_item", name: "/grow", description: "Toggles input \"grow\" mode. Submit with cmd+enter" %>
+  <%= render "autocomplete_item", name: "/delete", description: "Delete the conversation entirely" %>
+  <%= render "autocomplete_item", name: "/stream", description: "Toggle live-streaming mode for responses" %>
+  <%= render "autocomplete_item", name: "/settings", description: "Show current settings for this conversation" %>
   <% if current_user.admin? %>
-    <div data-name="/debug">
-      <div><span class="font-medium">/debug</span></div>
-      <div class="text-gray-500 text-sm">Toggle display of hidden messages (Admin Only)</div>
-    </div>
+    <%= render "autocomplete_item", name: "/debug", description: "Toggle display of hidden messages (Admin Only)" %>
   <% end %>
-
 </div>
