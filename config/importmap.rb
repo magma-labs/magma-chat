@@ -14,4 +14,3 @@ pin "stimulus-notification", to: "https://ga.jspm.io/npm:stimulus-notification@2
 pin_all_from "app/javascript/controllers", under: "controllers"
 pin_all_from "app/javascript/channels", under: "channels"
 pin_all_from "app/javascript/config", under: "config"
-pin "tributejs", to: "https://ga.jspm.io/npm:tributejs@5.1.3/dist/tribute.min.js"
