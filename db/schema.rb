@@ -40,7 +40,7 @@ ActiveRecord::Schema[7.1].define(version: 2023_05_05_193534) do
     t.datetime "updated_at", null: false
     t.jsonb "analysis", default: {}, null: false
     t.boolean "grow", default: false, null: false
-    t.uuid "user_id", default: "b48d0808-271f-451e-a190-8610009df363", null: false
+    t.uuid "user_id", default: "f2fa5fd0-b86d-414c-94dc-d7238f0f5a50", null: false
     t.uuid "bot_id"
     t.boolean "public_access", default: false, null: false
     t.jsonb "settings", default: {"show_invisibles"=>false, "response_length_tokens"=>400}, null: false
@@ -67,6 +67,14 @@ ActiveRecord::Schema[7.1].define(version: 2023_05_05_193534) do
     t.index ["conversation_id"], name: "index_messages_on_conversation_id"
     t.index ["role"], name: "index_messages_on_role"
     t.index ["sender_type", "sender_id"], name: "index_messages_on_sender"
+  end
+
+  create_table "nudges", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "bot_id", null: false
+    t.text "content"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["bot_id"], name: "index_nudges_on_bot_id"
   end
 
   create_table "things", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -125,5 +133,6 @@ ActiveRecord::Schema[7.1].define(version: 2023_05_05_193534) do
   end
 
   add_foreign_key "messages", "conversations"
+  add_foreign_key "nudges", "bots"
   add_foreign_key "tools", "bots"
 end
