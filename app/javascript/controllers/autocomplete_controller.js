@@ -1,4 +1,5 @@
 import ApplicationController from 'controllers/application_controller'
+import Tribute from "tributejs";
 
 export default class extends ApplicationController {
   connect() {
@@ -8,6 +9,16 @@ export default class extends ApplicationController {
     this.element.addEventListener('change', this.blur.bind(this));
     //this.element.addEventListener('keydown', this.handleTabKey.bind(this));
 
+    // var tribute = new Tribute({
+    //   collection: [{
+    //     trigger: '/',
+    //     values: [
+    //       {key: '/grow', value: 'grow'},
+    //       {key: 'Gordon Ramsey', value: 'gramsey'}
+    //     ]
+    //   }]
+    // })
+    // tribute.attach(this.element);
 
     for (const item of this.element.children) {
       item.addEventListener('click', function () {
