@@ -125,6 +125,5 @@ ActiveRecord::Schema[7.1].define(version: 2023_05_05_193534) do
   end
 
   add_foreign_key "messages", "conversations"
-  add_foreign_key "nudges", "bots"
   add_foreign_key "tools", "bots"
 end
