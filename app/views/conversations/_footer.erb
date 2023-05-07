@@ -19,8 +19,8 @@
   </div>
 </div>
 <div id="autocompleteList"
-     class="autocomplete-items absolute bg-gray-800 rounded-lg border-l-[40px] border-l-gray-900
-            w-[80%] flex flex-col hidden text-white cursor-pointer">
+     class="autocomplete-items absolute bg-gray-800 rounded-lg border-l-[30px] border-l-gray-900
+            w-[80%] flex flex-col hidden overflow-hidden text-white cursor-pointer">
   <%= render "autocomplete_item", name: "/new", description: "Start a new conversation" %>
   <% if @conversation.messages.any? %>
     <%= render "autocomplete_item", name: "/clear", description: "Clear the current conversation transcript" %>
