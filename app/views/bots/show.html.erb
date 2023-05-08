@@ -1,8 +1,24 @@
+<div class="space-y-4">
+  <div class="flex justify-between items-center gap-4 shadow sticky top-0 z-50 bg-slate-800 p-3">
+    <div>
+      <h1 class="text-2xl font-medium">
+        <%= @bot.name %>
+      </h1>
+      <div class="">
+        <%= @bot.role %>
+      </div>
+    </div>
+  </div>
 
-
-
-<% @thoughts.each do |thought| %>
-  <div class="font-medium">
-    <%= thought.brief %></p>
+  <div class="flex flex-col gap-2 px-3 pb-12">
+ <% @thoughts.latest.each do |thought| %>
+  <div class="flex items-center gap-3">
+    <span>🧠</span>
+    <div class="flex-1">
+      <%= tag.div(thought.brief, class: "font-medium") %>
+      <%= tag.div(l(thought.created_at, format: :long), class: "text-gray-500") %>
+    </div>
   </div>
 <% end %>
+
+</div>

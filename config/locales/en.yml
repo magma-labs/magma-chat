@@ -31,7 +31,22 @@
 
 # todo: move all this settings stuff to their own model settings files
 en:
+  time:
+    formats:
+      long: '%B %d, %Y %H:%M %Z'
+
   settings:
+    time_zone:
+      title: Timezone
+      admin: &default_timezone_field
+        field: time_zone_select
+        field_args:
+          - []
+          - { default: send:current_user.time_zone }
+          - { class: rounded-md text-gray-800 }
+      user:
+        <<: *default_timezone_field
+
     preferred_language:
       title: Preferred Language
       admin:

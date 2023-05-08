@@ -1,3 +1,5 @@
+time_zone:
+  default: America/New_York
 preferred_language:
   default: English
 streaming:

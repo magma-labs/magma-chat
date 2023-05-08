@@ -13,6 +13,10 @@
  *= require_tree .
  *= require_self
  */
+html {
+  font-size: 18px
+}
+
 html.dark {
   color-scheme: dark;
   scrollbar-face-color: rgb(75 85 99);
@@ -52,10 +56,10 @@ html.dark ::-webkit-resizer { background-color: #666;}
   color: #e3e2e0;
 }
 
-.message p {
+/* .message p {
   font-size: 16px !important;
   line-height: 24px !important;
-}
+} */
 /* not last p */
 .message p:not(:last-child) {
   margin-bottom: 20px !important;

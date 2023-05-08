@@ -55,6 +55,7 @@ gem "bootsnap", require: false
 gem "action-cable-redis-backport", "~> 1"
 gem "cable_ready", "~> 5.0.0"
 gem "faker"
+gem "google-apis-calendar_v3"
 gem "instant18n", "~> 0.3.0"
 gem "httparty"
 gem "mrsk", "~> 0.11.0"

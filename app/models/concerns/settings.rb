@@ -12,6 +12,11 @@ module Settings
         val.nil? ? default : val
       end
 
+      define_method("#{key}_before_type_cast") do
+        val = self.settings[key]
+        val.nil? ? default : val
+      end
+
       if [TrueClass, FalseClass].include? default.class
         define_method("#{key}?") do
           val = ActiveRecord::Type::Boolean.new.cast(self.settings[key])

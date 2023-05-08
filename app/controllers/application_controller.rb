@@ -1,6 +1,8 @@
 class ApplicationController < ActionController::Base
   include CableReady::Broadcaster
 
+  around_action :set_time_zone, if: :current_user
+
   helper_method :current_admin?
   helper_method :current_user
 
@@ -24,5 +26,11 @@ class ApplicationController < ActionController::Base
     else
       redirect_to root_path
     end
+  end
+
+  private
+
+  def set_time_zone(&block)
+    Time.use_zone(current_user.time_zone, &block)
   end
 end
