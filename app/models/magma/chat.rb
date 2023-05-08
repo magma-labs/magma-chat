@@ -18,6 +18,7 @@ module Magma
     # Takes optional parameters:
     # - model: String. Defaults to the value of the `OPENAI_DEFAULT_MODEL` environment variable or "gpt-3.5-turbo"
     # - directive: String. Defaults to the value of the "gpt.default_chat_directive" in `config/prompts.yml`
+    # - transcript: Array of existing entries to include as context. Defaults to []
     # - temperature: Float between 0 and 1. Defaults to 0.7
     # - top_p: Float between 0 and 1. Defaults to 1.0
     # - frequency_penalty: Float between 0 and 1. Defaults to 0.0
@@ -25,7 +26,7 @@ module Magma
     # - max_tokens: Integer. Defaults to 500
     # - stream: Proc that will be called with each response from OpenAI
     # - debug: Boolean. Defaults to false. Puts responses from OpenAI to the console
-    def initialize(model: nil, directive: nil, temperature: 0.7, top_p: 1.0, frequency_penalty: 0.0, presence_penalty: 0.0, max_tokens: 500, stream: nil, debug: false)
+    def initialize(model: nil, directive: nil, transcript: [], temperature: 0.7, top_p: 1.0, frequency_penalty: 0.0, presence_penalty: 0.0, max_tokens: 500, stream: nil, debug: false)
       self.model = model || ENV['OPENAI_DEFAULT_MODEL'] || 'gpt-3.5-turbo'
       self.temperature ||= temperature
       self.top_p ||= top_p
@@ -37,6 +38,7 @@ module Magma
 
       directive ||= Magma::Prompts.get("gpt.default_chat_directive")
       @messages = [ Message.new(role: :system, content: directive).to_entry ]
+      @messages += transcript
     end
 
     ##

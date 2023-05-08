@@ -11,11 +11,21 @@ class MemoryAnnotator
 
   delegate :bot, :user, to: :conversation
 
+  class Memory
+    attr_reader :question, :answer
+
+    def initialize(question, answer)
+      @question = question
+      @answer = answer
+    end
+  end
+
   ## takes the last number of n messages, generates a list of questions about the conversation, and searches for matching thoughts
   ## if any matching thoughts are found in long term memory, they are added to the conversation as hidden messages
-  def initialize(conversation, memories_message)
+  def initialize(conversation, memories_message=nil)
     @conversation = conversation
-    @memories_message = memories_message
+    @memories_message = memories_message || conversation.user_message!("", visible: false)
+    self
   end
 
   def perform(number_of_messages_to_pop: 6)
@@ -26,26 +36,31 @@ class MemoryAnnotator
 
     response = Gpt.chat(transcript: Magma::Prompts.get("conversation_analyzer.prelude"), prompt: prompt(number_of_messages_to_pop))
     questions = extract_questions(response)
-    questions.each do |question|
+    memories = questions.map do |question|
       filter = "bot_id:#{bot.id} AND subject_id:#{user.id}"
       # todo: can https://docs.marqo.ai/0.0.18/API-Reference/search/#score-modifiers help with relevance?
       search_result = Marqo.client.search("thoughts", question, filter: filter, limit: 3)
       next if search_result.hits.nil? || search_result.hits.empty?
 
-      search_result.hits.each { |hit| unique_hits << hit.brief.strip }
-    end
+      Memory.new(question, search_result.hits.map(&:brief).to_sentence)
+    end.compact
 
     # todo: consider relevance score and only add if above a certain threshold\
-    memories_message.update!(content: compile_content(questions, unique_hits), visible: false)
+    memories_message.update!(content: compile_content(memories), visible: false)
   end
 
   private
 
-  def compile_content(questions, answers)
-    [
-      "You asked your long-term memory: \n\n #{questions.join("\n")}",
-      "And you remembered the following: \n\n #{answers.join("\n")}"
-    ].join("\n\n")
+  def compile_content(memories)
+    memories.map do |memory|
+      [
+        "Q: #{memory.question}",
+        "A: #{memory.answer}"
+      ].join("\n")
+    end.join("\n").then do |content|
+      # wrap in brackets so that bot knows this is coming from MagmaChat system
+      "[BOT MEMORY: #{content}]"
+    end
   end
 
   def extract_questions(text)

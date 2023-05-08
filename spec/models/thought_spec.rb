@@ -41,6 +41,21 @@ RSpec.describe Thought, type: :model do
     end
   end
 
+  describe 'subject creation' do
+    let(:params) { {
+      "brief": "The Hands Down project involves working with AI vision models.",
+      "importance": 55,
+      "subject_type": "Project",
+      "subject_name": "Hands Down"
+      }
+
+      it 'creates a new subject' do
+        expect { described_class.create!(params) }
+          .to change { Project.count }.by(1)
+      end
+    }
+  end
+
   describe '#store_vector' do
     let(:instance) { create(:thought) }
     let(:marqo_client) { double(:marqo_client) }

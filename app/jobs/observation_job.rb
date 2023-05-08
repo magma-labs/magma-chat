@@ -6,8 +6,13 @@ class ObservationJob < ApplicationJob
 
   def perform(conversation)
     @conversation = conversation
-    make_observations.then do |list|
-      #rank_and_save!(list)
+    if time_to_observe?
+      Rails.logger.info("\n\nObservationJob for #{conversation.id} 👁👁\n\n")
+      make_observations!
+      conversation.touch!(:last_observations_at)
+    else
+      # defer to save resources
+      ObservationJob.set(wait_until: 1.minute.from_now).perform_later(conversation)
     end
   end
 
@@ -17,16 +22,15 @@ class ObservationJob < ApplicationJob
     [World.instance.things, user, bot].flatten
   end
 
-  def make_observations
+  def make_observations!
     directive = Magma::Prompts.get("conversations.observation.directive")
     prompt = Magma::Prompts.get(
       "conversations.observation.make.prompt",
       user_name: user.name, bot_name: bot.name, bot_role: bot.role
     )
-    tokens_used = TikToken.count(directive + prompt)
     Gpt.chat(
       directive: directive,
-      transcript: conversation.messages_for_gpt(tokens_used, only_visible: true),
+      transcript: conversation.messages_for_gpt(only_visible: true, since: :last_observations_at),
       prompt: prompt,
       temperature: 0.6, # todo: make configurable
       max_tokens: 300 # todo: make configurable
@@ -37,7 +41,7 @@ class ObservationJob < ApplicationJob
   end
 
   def refine_and_save!(observations)
-    directive = Magma::Prompts.get("conversations.observation.refine.directive")
+    directive = Magma::Prompts.get("conversations.observation.directive")
     prompt = Magma::Prompts.get(
       "conversations.observation.refine.prompt",
       known_subjects: entities.map(&:to_subject_name).join("\n"),
@@ -54,5 +58,10 @@ class ObservationJob < ApplicationJob
         bot.observations.create!(observations)
       end
     end
+  end
+
+  def time_to_observe?
+    return true if conversation.last_observations_at.nil?
+    conversation.last_observations_at > 1.minute.ago
   end
 end

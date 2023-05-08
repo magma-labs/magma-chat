@@ -21,7 +21,6 @@ class Admin::BotsController < AdminController
   def update
     Bot.find(params[:id]).then do |bot|
       bot.update!(bot_params)
-      redirect_to [:admin, bot]
     end
   end
 
@@ -29,7 +28,9 @@ class Admin::BotsController < AdminController
   private
 
   def bot_params
-    params.require(:bot).permit(:name, :role, :image_url, :intro, :directive, :goals_text, :auto_archive_mins).to_h
+    keys = [:name, :role, :image_url, :intro, :directive, :goals_text, :auto_archive_mins]
+    keys += Bot.settings_config.keys
+    params.require(:bot).permit(keys).to_h
   end
 
   def set_bot

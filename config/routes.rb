@@ -3,11 +3,7 @@ require 'sidekiq/web'
 Rails.application.routes.draw do
   resources :home, only: [:index]
 
-  resources :bots do
-    member do
-      get :observations
-    end
-  end
+  resources :bots, only: [:show]
 
   resources :conversations do
     collection do

@@ -21,12 +21,4 @@ class ApplicationRecord < ActiveRecord::Base
       send("#{attr_name}=", value.to_s.strip.split(/\n\n+/).reject(&:blank?))
     end
   end
-
-  # loads a YAML file from config/settings/{model_name.plural}.yml
-  def self.settings_config
-    @config ||= begin
-      file = Rails.root.join('config', 'settings', "#{model_name.plural}.yml")
-      YAML.load_file(file)
-    end.deep_symbolize_keys
-  end
 end

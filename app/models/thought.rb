@@ -22,6 +22,8 @@
 class Thought < ApplicationRecord
   INDEX = :thoughts
 
+  attribute :subject_name, :string
+
   belongs_to :bot
   belongs_to :subject, polymorphic: true, optional: true
 
@@ -32,6 +34,8 @@ class Thought < ApplicationRecord
     # assigns a higher score to memory objects that were recently created so that events from a moment ago or this morning are likely to remain in the agent’s attentional sphere
     select("thoughts.*, ROUND(POW(2, (-EXTRACT(EPOCH FROM (NOW() - created_at)) / 2592000)) * ((importance - 10) / 90.0) * 100, 2) as decayed_score").order("decayed_score DESC")
   }
+
+  before_create :create_new_subject, if: :subject_name?
 
   after_commit :store_vector, on: %i[create update]
   after_commit :delete_vector, on: %i[destroy]
@@ -44,6 +48,12 @@ class Thought < ApplicationRecord
   end
 
   private
+
+  def create_new_subject
+    return if subject_id?
+    raise "Cannot create new subject with name and no type" if subject_type.blank?
+    self.subject = subject_type.constantize.create!(name: subject_name)
+  end
 
   def store_vector
     fields = attributes.symbolize_keys.slice(:type, :brief, :bot_id, :subject_id, :subject_type, :importance)

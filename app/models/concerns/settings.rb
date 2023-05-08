@@ -34,6 +34,16 @@ module Settings
     end
   end
 
+  class_methods do
+    # loads a YAML file from config/settings/{model_name.plural}.yml
+    def settings_config
+      @config ||= begin
+        file = Rails.root.join('config', 'settings', "#{model_name.plural}.yml")
+        YAML.load_file(file)
+      end.deep_symbolize_keys
+    end
+  end
+
   def initialize_settings
     # todo: why needed on Rails 7.1
     if settings.is_a? String

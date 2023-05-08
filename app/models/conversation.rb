@@ -2,17 +2,19 @@
 #
 # Table name: conversations
 #
-#  id            :uuid             not null, primary key
-#  analysis      :jsonb            not null
-#  grow          :boolean          default(FALSE), not null
-#  public_access :boolean          default(FALSE), not null
-#  settings      :jsonb            not null
-#  title         :string           not null
-#  transcript    :jsonb            not null
-#  created_at    :datetime         not null
-#  updated_at    :datetime         not null
-#  bot_id        :uuid
-#  user_id       :uuid             default("b48d0808-271f-451e-a190-8610009df363"), not null
+#  id                   :uuid             not null, primary key
+#  analysis             :jsonb            not null
+#  grow                 :boolean          default(FALSE), not null
+#  last_analysis_at     :datetime
+#  last_observations_at :datetime
+#  public_access        :boolean          default(FALSE), not null
+#  settings             :jsonb            not null
+#  title                :string           not null
+#  transcript           :jsonb            not null
+#  created_at           :datetime         not null
+#  updated_at           :datetime         not null
+#  bot_id               :uuid
+#  user_id              :uuid             default("b48d0808-271f-451e-a190-8610009df363"), not null
 #
 # Indexes
 #
@@ -28,7 +30,8 @@ class Conversation < ApplicationRecord
   attribute :first_message
 
   belongs_to :bot, optional: true, counter_cache: true
-  belongs_to :user # todo: rename to owner or initiator
+  # todo: rename to owner or initiator because there will be multiple participants in a single convo
+  belongs_to :user, counter_cache: true
 
   has_many :messages, dependent: :destroy, enable_cable_ready_updates: true
 
@@ -94,12 +97,27 @@ class Conversation < ApplicationRecord
     messages.sum(:tokens_count)
   end
 
-  def messages_for_gpt(tokens_in_prompt, only_visible: false)
-    puts
-    puts "tokens_in_prompt: #{tokens_in_prompt}"
-    puts
-    max_tokens = 1500 - tokens_in_prompt # todo: move to setting or constant
-    Message.up_to_token_limit(self, max_tokens, only_visible: only_visible).map do |message|
+  ##
+  # Returns the last messages exchanged in this conversation
+  # in format suitable for GPT's chat completion API
+  #
+  # @param tokens_in_prompt [Integer] the number of tokens in the directive and user prompt (Default: nil)
+  # @param token_limit [Integer] the maximum number of tokens to return (Default: 2000)
+  # @param only_visible [Boolean] whether to return only visible messages (Default: false)
+  # @param since [Symbol, Time] the time to start from (Default: nil)
+  # @return [Array<Hash>] an array of hashes with role and content keys
+  def messages_for_gpt(tokens_in_prompt: nil, token_limit: 2000, only_visible: false, since:  nil)
+    # don't blow the context window limitation of the model
+    if tokens_in_prompt
+      model_max_tokens = model["gpt-4"] ? 8000 : 4000
+      token_limit = model_max_tokens - tokens_in_prompt
+    end
+    query = Message
+    if since
+      since = send(since) if since.kind_of?(Symbol)
+      query = query.where("created_at > ?", since)
+    end
+    query.up_to_token_limit(self, token_limit, only_visible: only_visible).map do |message|
       { role: message.role, content: message.content }
     end
   end
@@ -144,7 +162,13 @@ class Conversation < ApplicationRecord
   private
 
   def add_context_messages
+    # at least for the moment, this is the way that short term memory is implemented
+    # so if the bot doesn't have short term memory, we don't need this routine
     return unless bot.short_term_memory?
+    # if the bot is talking to the user for the first time, there will be no context
+    # todo: this will change once a bot has memory of conversations with other users
+    # that it is allowed to use to inform its conversation with a new user
+    return if bot.conversations.where(user_id: user.id).empty?
 
     context_intro_prompt = Magma::Prompts.get("conversations.context_intro",
       bot_name: bot.name,

@@ -2,17 +2,19 @@
 #
 # Table name: conversations
 #
-#  id            :uuid             not null, primary key
-#  analysis      :jsonb            not null
-#  grow          :boolean          default(FALSE), not null
-#  public_access :boolean          default(FALSE), not null
-#  settings      :jsonb            not null
-#  title         :string           not null
-#  transcript    :jsonb            not null
-#  created_at    :datetime         not null
-#  updated_at    :datetime         not null
-#  bot_id        :uuid
-#  user_id       :uuid             default("b48d0808-271f-451e-a190-8610009df363"), not null
+#  id                   :uuid             not null, primary key
+#  analysis             :jsonb            not null
+#  grow                 :boolean          default(FALSE), not null
+#  last_analysis_at     :datetime
+#  last_observations_at :datetime
+#  public_access        :boolean          default(FALSE), not null
+#  settings             :jsonb            not null
+#  title                :string           not null
+#  transcript           :jsonb            not null
+#  created_at           :datetime         not null
+#  updated_at           :datetime         not null
+#  bot_id               :uuid
+#  user_id              :uuid             default("b48d0808-271f-451e-a190-8610009df363"), not null
 #
 # Indexes
 #
@@ -126,7 +128,7 @@ RSpec.describe Conversation do
   end
 
   describe '#messages_for_gpt' do
-    subject(:messages_for_gpt) { conversation.messages_for_gpt(400) }
+    subject(:messages_for_gpt) { conversation.messages_for_gpt(token_limit: 400) }
 
     let(:conversation) { create(:conversation, message_count: 1) }
     let(:message) { conversation.messages.first }

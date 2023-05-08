@@ -7,7 +7,7 @@ describe Magma::Chat do
   describe '#initialize' do
     context 'with default settings' do
       it 'initializes with default parameters' do
-        expect(chat.model).to eq('gpt-3.5-turbo')
+        expect(chat.model).to eq(ENV['OPENAI_DEFAULT_MODEL'])
         expect(chat.temperature).to eq(0.7)
         expect(chat.top_p).to eq(1.0)
         expect(chat.frequency_penalty).to eq(0.0)

@@ -29,7 +29,7 @@ module Gpt
       client.chat(parameters: params).then do |response|
         Rails.logger.info("GPT RESPONSE: #{response}")
         if response.any?
-          response.dig("error","message") || response.dig("choices", 0, "message", "content")
+          response.dig("error","message") || response.dig("choices", 0, "message", "content").force_encoding("UTF-8")
         end
       end
     end
@@ -55,7 +55,7 @@ module Gpt
   private
 
   def key(params)
-    "gpt:#{Digest::SHA256.hexdigest(params.join)}"
+    "gpt:#{Digest::SHA256.hexdigest(params.to_json)}"
   end
 
   def message(role, content)

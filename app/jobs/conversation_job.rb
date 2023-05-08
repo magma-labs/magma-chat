@@ -3,13 +3,12 @@ class ConversationJob < ApplicationJob
 
   attr_reader :conversation
 
-  delegate :bot, :bot_message!,
-           :messages_for_gpt,
-           :user, :user_message!,
-           to: :conversation
+  delegate :bot, :bot_message!, :messages_for_gpt, :user, :user_message!,
+   to: :conversation
 
-  def perform(conversation, content, visible)
+  def perform(conversation, user_message, visible)
     @conversation = conversation
+
     if bot.long_term_memory?
       # create both placeholders in the right order
       memories_message = user_message!("", visible: false)
@@ -21,26 +20,25 @@ class ConversationJob < ApplicationJob
       message = bot_message!("", visible: true)
     end
 
-    # calculate maximum tokens to ask for in response
-    tokens_count = TikToken.count(conversation.directive + content)
+    tokens_count = TikToken.count(conversation.directive + user_message)
 
-    opts = {
+    chat = Magma::Chat.new(
       model: conversation.model,
       directive: conversation.directive,
-      prompt: content,
+      transcript: messages_for_gpt(tokens_in_prompt: tokens_count, only_visible: false),
       max_tokens: conversation.max_tokens,
       temperature: conversation.temperature,
       top_p: conversation.top_p,
       presence_penalty: conversation.presence_penalty,
       frequency_penalty: conversation.frequency_penalty,
-      transcript: messages_for_gpt(tokens_count + conversation.max_tokens),
       stream: user.streaming && stream_proc(message: message)
-    }
+    )
 
-    Gpt.chat(**opts).then do |reply|
+    chat.prompt(content: user_message).then do |reply|
       if reply.nil? # streaming
-        ObservationJob.perform_later(observation) if bot.enable_observations?
-        AnalysisJob.perform_later(observation) if conversation.enable_analysis?
+        # todo: don't like that this is here and in message model
+        ObservationJob.perform_later(conversation) if bot.enable_observations?
+        AnalysisJob.perform_later(conversation) if conversation.enable_analysis?
       else
         message.update!(content: reply, run_analysis_after_saving: true)
       end
@@ -53,7 +51,9 @@ class ConversationJob < ApplicationJob
   def stream_proc(message:)
     proc do |chunk, _bytesize|
       new_content = chunk.dig("choices", 0, "delta", "content")
-      message.update(content: message.content + new_content) if new_content
+      ActiveRecord::Base.logger.silence do
+        message.update!(content: message.content + new_content) if new_content
+      end
     end
   end
 end
