@@ -24,7 +24,21 @@ module MagmaChat
     # in config/environments, which are processed later.
     #
     # config.time_zone = "Central Time (US & Canada)"
-    # config.eager_load_paths << Rails.root.join("extras")
+    # config.eager_load_paths << Rails.root.join("lib")
+
+    config.autoload_paths += %W(#{config.root}/lib/magma_chat/app/bot_tools)
+    config.autoload_paths += %W(#{config.root}/lib/magma_chat/app/channels)
+    config.autoload_paths += %W(#{config.root}/lib/magma_chat/app/constraints)
+    config.autoload_paths += %W(#{config.root}/lib/magma_chat/app/controllers)
+    config.autoload_paths += %W(#{config.root}/lib/magma_chat/app/controllers/concerns)
+    config.autoload_paths += %W(#{config.root}/lib/magma_chat/app/helpers)
+    config.autoload_paths += %W(#{config.root}/lib/magma_chat/app/jobs)
+    config.autoload_paths += %W(#{config.root}/lib/magma_chat/app/mailers)
+    config.autoload_paths += %W(#{config.root}/lib/magma_chat/app/models)
+    config.autoload_paths += %W(#{config.root}/lib/magma_chat/app/models/concerns)
+    config.autoload_paths += %W(#{config.root}/lib/magma_chat/app/reflexes)
+    config.autoload_paths += %W(#{config.root}/lib/magma_chat/app/services)
+    config.autoload_paths += %W(#{config.root}/lib/magma_chat/lib)
 
     config.action_dispatch.default_headers = {
       "Referrer-Policy" => "same-origin"
