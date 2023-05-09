@@ -7,9 +7,6 @@ class AnalysisJob < ApplicationJob
     @conversation = conversation
     # todo: make idle time configurable
     if time_to_analyze?
-      # save resources by skipping analysis until conversation is idle
-      AnalysisJob.set(wait_until: 1.minute.from_now).perform_later(conversation)
-    else
       directive = Magma::Prompts.get("conversations.analysis_directive")
       prompt = Magma::Prompts.get("conversations.analyze", lang: conversation.user.preferred_language)
       prompt_tokens = TikToken.count(prompt)
@@ -31,6 +28,9 @@ class AnalysisJob < ApplicationJob
         end
       end
       conversation.touch!(:last_analysis_at)
+    else
+      # save resources by skipping analysis until conversation is idle
+      AnalysisJob.set(wait_until: 1.minute.from_now).perform_later(conversation)
     end
   end
 

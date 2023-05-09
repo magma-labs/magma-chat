@@ -74,9 +74,16 @@ module Magma
       content = content || Magma::Prompts.get(key, **opts)
       @messages << Message.new(role: :user, content: content).to_entry
       response = send
-      reply = response.dig("choices", 0, "message", "content")
+      # return the error message if there is one, otherwise the first response
+      reply = response.dig("error", "message") || response.dig("choices", 0, "message", "content")
+
+      # stop if we didn't get a reply
+      return if reply.nil? || reply.empty?
+
+      reply = reply.force_encoding("UTF-8") # todo: is this enough?
       @messages << Message.new(role: :assistant, content: reply).to_entry
       yield(reply) if block_given?
+      # todo: in testing, sometimes we don't get a stop reason which causes a runaway loop
       while auto_continue && response["choices"].last["finish_reason"].match?(/length/)
         sleep 1 # don't hit the API too hard because rate limits
         if block_given?
@@ -84,6 +91,7 @@ module Magma
         else
           reply += continue.dig("choices", 0, "message", "content")
         end
+        # todo: make max continues configurable
       end
       reply
     end
