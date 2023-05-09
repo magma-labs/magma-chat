@@ -9,7 +9,7 @@ Rails.application.configure do
     serializer: :json,
     on_redis_down: ->(*a) { Rails.logger.error("Redis down! #{a.inspect}") },
     redis: {
-      expire_after: 120.minutes,
+      expire_after: 120.days,
       key_prefix: "session:",
       url: ENV.fetch("REDIS_URL") { "redis://default:password@host.docker.internal:6379/1" }
     }
