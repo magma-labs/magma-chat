@@ -37,9 +37,7 @@ class MemoryAnnotator
     response = Gpt.chat(transcript: Magma::Prompts.get("conversation_analyzer.prelude"), prompt: prompt(number_of_messages_to_pop))
     questions = extract_questions(response)
     memories = questions.map do |question|
-      filter = "bot_id:#{bot.id} AND subject_id:#{user.id}"
-      # todo: can https://docs.marqo.ai/0.0.18/API-Reference/search/#score-modifiers help with relevance?
-      search_result = Marqo.client.search("thoughts", question, filter: filter, limit: 3)
+      search_result = bot.ask(question, subject_id: user.id)
       next if search_result.hits.nil? || search_result.hits.empty?
 
       Memory.new(question, search_result.hits.map(&:brief).to_sentence)

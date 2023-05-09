@@ -6,6 +6,8 @@ class ConversationReflex < ApplicationReflex
 
   before_reflex :load_conversation
 
+  delegate :bot, :user, to: :conversation
+
   def prompt(message: value)
     slash_filter do
       conversation.prompt!(message: message, sender: current_user)
@@ -45,8 +47,8 @@ class ConversationReflex < ApplicationReflex
       case value.strip
       when /^\/new/
         # assume the title is whatever string supplied after the /new command
-        title = value.split("/new").last&.strip.presence || "New Conversation"
-        @conversation = current_user.conversations.create!(title: title)
+        msg = value.split("/new").last&.strip.presence || I18n.it("Hello")
+        @conversation = current_user.conversations.create!(bot: bot, first_message: msg)
         reload
       when /^\/delete/
         destroy

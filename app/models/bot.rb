@@ -33,8 +33,8 @@ class Bot < ApplicationRecord
   # todo: need an attribute for desired response size in tokens
 
   has_many :conversations, dependent: :nullify
-  has_many :thoughts, dependent: :destroy
-  has_many :observations, dependent: :destroy
+  has_many :thoughts, dependent: :destroy, enable_cable_ready_updates: true
+  has_many :observations, dependent: :destroy, enable_cable_ready_updates: true
 
   has_many :tools, dependent: :destroy
 
@@ -49,6 +49,13 @@ class Bot < ApplicationRecord
 
   def generated_image_url
     @generated_image_url ||= "https://robohash.org/#{name}.png?size=640x640&set=set1"
+  end
+
+  def ask(question, subject_id: nil)
+    filter = "bot_id:#{id}"
+    filter += " AND subject_id:#{subject_id}" if subject_id
+    # todo: can https://docs.marqo.ai/0.0.18/API-Reference/search/#score-modifiers help with relevance?
+    Marqo.client.search("thoughts", question, filter: filter, limit: 3)
   end
 
   def observed!(conversation, list_of_observations)

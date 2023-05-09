@@ -13,10 +13,8 @@
  *= require_tree .
  *= require_self
  */
-@media (min-width: 768px) {
-  html {
-    font-size: 18px
-  }
+html {
+  font-size: 16px
 }
 
 html.dark {

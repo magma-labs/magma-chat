@@ -27,6 +27,8 @@ class Thought < ApplicationRecord
   belongs_to :bot
   belongs_to :subject, polymorphic: true, optional: true
 
+  enable_cable_ready_updates
+
   scope :by_bot, ->(bot) { where(bot: bot) }
   scope :by_user, ->(user) { where(subject: user) }
 
@@ -45,6 +47,10 @@ class Thought < ApplicationRecord
 
   def brief_with_timestamp
     "[#{created_at.strftime('%d/%m/%Y %H:%M')}] #{brief.strip.gsub(/\.$/,"")}"
+  end
+
+  def to_partial_path
+    "thoughts/#{self.class.name.underscore}"
   end
 
   private
