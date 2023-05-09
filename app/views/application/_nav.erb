@@ -11,9 +11,10 @@
       <div>
         <div class="flex items-end justify-between h-8 border-b border-gray-500 mb-1">
           <div class="font-medium">
-            <%= [conversations.first.bot.name, it(conversations.first.bot.role).presence].compact.join(", ") %>
+            <% bot = conversations.first.bot %>
+            <%= [bot.name, it(bot.role).presence].compact.join(", ") %>
           </div>
-          <%= image_tag conversations.first.bot.image_url, class: "w-12 object-cover -ml-3" %>
+          <%= link_to image_tag(bot.image_url, class: "w-12 object-cover -ml-3"), [bot] %>
         </div>
         <%= render conversations %>
       </div>

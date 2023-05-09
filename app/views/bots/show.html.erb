@@ -1,24 +1,38 @@
 <div class="space-y-4">
-  <div class="flex justify-between items-center gap-4 shadow sticky top-0 z-50 bg-slate-800 p-3">
-    <div>
+  <div class="flex justify-between items-center gap-4 shadow sticky top-0 z-50 bg-slate-800">
+    <div class="p-3">
       <h1 class="text-2xl font-medium">
         <%= @bot.name %>
       </h1>
-      <div class="">
+      <div class="text-gray-400">
         <%= @bot.role %>
       </div>
     </div>
+    <%= image_tag(@bot.image_url, class: "w-20 object-cover mr-4 mt-4") %>
   </div>
 
-  <div class="flex flex-col gap-2 px-3 pb-12">
- <% @thoughts.latest.each do |thought| %>
-  <div class="flex items-center gap-3">
-    <span>🧠</span>
-    <div class="flex-1">
-      <%= tag.div(thought.brief, class: "font-medium") %>
-      <%= tag.div(l(thought.created_at, format: :long), class: "text-gray-500") %>
+  <div class="flex flex-col gap-1 px-3 pb-12">
+    <div class="flex gap-4 items-center">
+      <div class="flex flex-1 relative items-center gap-2">
+        <input type="text" data-reflex="change->Bot#search_thoughts" data-id="<%= @bot.id %>"
+               placeholder="<%= it("Search memories...") %>" data-controller="bot"
+               class="w-full border-4 py-1 pl-10 bg-slate-400 text-gray-800 focus:outline-none border-2 border-gray-900 rounded-md mb-2">
+        <select class="py-1 border-4 mb-2 border-slate-400 bg-slate-400 text-gray-800 rounded-md">
+          <option value="importance">Importance</option>
+          <option value="created_at">Date</option>
+        </select>
+        <div class="absolute bottom-4 left-4 opacity-60 text-sm">🔎</div>
+      </div>
     </div>
+    <% if @stimulus_reflex %>
+      <div class="">
+        <%= @thoughts.length %>
+        <%= it("matching thoughts found") %>
+        <%= link_to it("clear"), bot_path(@bot), class: "text-indigo-300 underline font-medium" %>
+      </div>
+    <% end %>
+    <%= cable_ready_updates_for @bot, :thoughts, html_options: { class: "flex flex-col gap-2 mb-24 text-xs" } do %>
+      <%= render @thoughts %>
+    <% end %>
   </div>
-<% end %>
-
 </div>

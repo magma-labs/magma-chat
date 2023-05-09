@@ -16,6 +16,10 @@ class BotReflex < ApplicationReflex
     @bot.update(published_at: nil)
   end
 
+  def search_thoughts
+    @thoughts = Thought.where(id: @bot.ask(element.value, subject_id: current_user.id).hits.map(&:_id))
+  end
+
   def destroy
     if @bot.conversations.empty?
       @bot.destroy!

@@ -1,10 +1,12 @@
 class BotsController < ApplicationController
+  before_action :require_user
   before_action :load_latest_conversations
   before_action :set_bot
 
   def show
     @conversations = @bot.conversations
-    @thoughts = @bot.thoughts
+    # can be set by reflex
+    @thoughts ||= @bot.thoughts.latest
   end
 
   private
