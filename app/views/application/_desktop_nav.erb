@@ -1,4 +1,4 @@
-<nav class="p-4 max-w-[30vw] min-w-[250px] bg-gray-800 bg-gradient-to-l from-gray-900 text-gray-300 flex flex-col gap-3 items-start h-screen">
+<div class="p-4 max-w-[30vw] min-w-[250px] bg-gray-800 bg-gradient-to-l from-gray-900 text-gray-300 flex flex-col gap-3 items-start h-screen">
   <% if current_user && @latest_conversations %>
     <%= link_to [:conversations] do %>
       <%= image_tag("nav_logo.svg", class: "h-6 xl:h-10 object-fit m-auto") %>
@@ -44,4 +44,4 @@
       </div>
     </div>
   <% end %>
-</nav>
+</div>
