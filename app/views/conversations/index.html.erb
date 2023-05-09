@@ -1,15 +1,21 @@
 <div class="space-y-4">
-  <%= form_for :search, url: "/conversations/search", class: "flex justify-between items-center gap-4 shadow sticky top-0 bg-slate-800 p-3" do |f| %>
-    <h1 class="text-2xl font-medium"><%= it("Conversations") %></h1>
-    <input type="text" placeholder="<%= it("Search...") %>" autocomplete="off" name="q"
-           class="rounded-md bg-gray-400 border-gray-200 border-2 text-gray-800 p-1 w-28 max-w-[50%]
-                focus:bg-white focus:flex-1 focus:pr-12 transition-all duration-300 transform">
-    <div class="absolute right-4 opacity-60">🔎</div>
-  <% end %>
+
+  <div class="bg-slate-800 p-3 flex justify-between items-center">
+    <h1 class="text-xl sm:text-2xl font-medium"><%= it("Conversations") %></h1>
+    <%= link_to it("New"), new_conversation_path, class:"bg-magma-red-400 text-gray-100 hover:scale-105 py-1 px-2 rounded", title: "New conversation" %>
+  </div>
+
+  <div class="flex justify-end px-3 items-center gap-3">
+    <%= form_for :search, url: "/conversations/search", class: "relative" do |f| %>
+      <input type="text" placeholder="<%= it("Search...") %>" autocomplete="off" name="q" class="rounded-md bg-gray-300 border-gray-200 border-2 text-gray-800 p-1 w-32 focus:w-52 focus:bg-gray-100 transition-all">
+      <div class="absolute right-2 top-1/2 -translate-y-1/2 text-gray-800"><%= heroicon "magnifying-glass" %></div>
+    <% end %>
+    <div data-controller="visibility" class="bg-gray-500 p-2 rounded-md text-gray-300">
+      <%= heroicon "funnel" %>
+    </div>
+  </div>
+
   <div class="flex flex-col gap-2 px-3 pb-12">
-      <a href="/conversations/new" class="text-gray-500 text-sm border bg-slate-800 border-gray-600 sm:-mt-2
-               hover:border-gray-400 p-1 sm:mr-4 rounded-md hover:text-gray-200" title="New conversation"> 
-        <%= it("New Conversation") %></a>
     <% @conversations.each do |conversation| %>
       <div class="flex justify-between items-bottom card clickable-region">
         <div class="flex flex-1 gap-2 items-center p-4">
@@ -34,7 +40,8 @@
         <div class="flex gap-2 items-center relative w-28">
           <%= image_tag(conversation.bot.image_url, class: "h-full object-cover") %>
         </div>
-
       </div>
     <% end %>
+  </div>
+
 </div>
