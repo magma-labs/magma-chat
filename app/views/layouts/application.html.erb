@@ -41,14 +41,7 @@
           <footer class="absolute bottom-0 w-full"><%= yield :footer %></footer>
         <% end %>
       </main>
-      <% if current_user %>
-        <nav class="order-first sm:w-[20%] bg-gray-800 bg-gradient-to-l from-gray-900 text-gray-300
-              absolute sm:relative w-full h-12
-              flex sm:flex-col sm:gap-3 items-center sm:items-start sm:h-screen
-              sm:overflow-y-auto sm:max-h-screen sm:min-w-[250px]">
-          <%= render "nav" %>
-        </nav>
-      <% end %>
+      <%= render "nav" if current_user %>
       <% if content_for?(:right) %>
         <aside class="sm:w-[20%] bg-gray-900 relative h-16 sm:h-screen overflow-clip">
           <%= yield :right %>
