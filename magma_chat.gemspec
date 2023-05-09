@@ -18,6 +18,10 @@ Gem::Specification.new do |spec|
   spec.metadata['changelog_uri'] = 'https://github.com/magma-labs/magma-chat/CHANGELOG.md'
 
   spec.files = Dir.chdir(File.expand_path(__dir__)) do
-    Dir["lib/magma_chat/{app,config,db,lib}/**/*", 'LICENSE', 'Rakefile', 'README.md']
+    Dir["lib/magma_chat/{config,db,lib}/**/*", 'Rakefile', 'README.md']
   end
+
+  # spec.require_paths = ['lib/magma_chat/lib']
+
+  spec.add_dependency 'rails', '>= 7.1.0.alpha'
 end

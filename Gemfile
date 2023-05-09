@@ -111,5 +111,3 @@ group :production do
   gem "judoscale-sidekiq"
   gem 'scout_apm'
 end
-
-#gem 'magma_chat', path: 'magma_chat'
