@@ -16,7 +16,8 @@
 
   <body class="min-h-screen flex flex-col overflow-clip dark">
     <div class="flex-1 flex flex-col sm:flex-row h-full">
-      <main class="flex-1 flex flex-col min-h-full top-0 bottom-0 max-h-[100vh] overflow-y-auto bg-gray-600 scroll-smooth relative pt-12 sm:pt-0">
+      <main class="flex-1 flex flex-col min-h-full top-0 bottom-0 max-h-[100vh] overflow-y-auto bg-gray-600 scroll-smooth relative">
+      <%= render "nav" if current_user %>
         <div id="awesome-notification"
              class="bg-gray-200 rounded-lg shadow-lg py-2 px-4 border-2 border-red-900 text-gray-800
                     transition transform duration-1000 hidden absolute right-10 top-10 space-y-2 min-w-[250px]"
@@ -41,7 +42,6 @@
           <footer class="absolute bottom-0 w-full"><%= yield :footer %></footer>
         <% end %>
       </main>
-      <%= render "nav" if current_user %>
       <% if content_for?(:right) %>
         <aside class="sm:w-[20%] bg-gray-900 relative h-16 sm:h-screen overflow-clip">
           <%= yield :right %>

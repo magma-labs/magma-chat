@@ -1,0 +1,12 @@
+<nav class="p-2 bg-gray-900 flex justify-between">
+  <%= link_to [:conversations], class: "flex gap-3 md:p-4" do %>
+    <%= image_tag("nav_logo.svg", class: "h-6 xl:h-10 object-fit sm:m-auto") %>
+  <% end %>
+  <div data-controller="visibility">
+    <%= heroicon "user-circle", options: {"data-action": "click->visibility#toggleTargets", class:"w-6 h-6"} %>
+    <div class="hidden divide-y absolute bg-gray-400 text-gray-700 shadow rounded-md overflow-hidden right-2 top-10 z-10" data-visibility-target="hideable">
+      <%= link_to heroicon("cog-8-tooth") + " Settings", "/settings", class: "menu-item border-gray-500" %>
+      <%= link_to heroicon("arrow-right-on-rectangle") + " Logout", "/logout", class: "menu-item border-gray-500" %>
+    </div>
+  </div>
+</nav>
