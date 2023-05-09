@@ -1,17 +1,13 @@
 <div class="space-y-4">
 
-  <div class="bg-slate-800 p-3 flex justify-between items-center">
+  <div class="bg-slate-800 p-3 sm:p-4 flex justify-between items-center">
     <h1 class="text-xl sm:text-2xl font-medium"><%= it("Conversations") %></h1>
-    <%= link_to it("New"), new_conversation_path, class:"bg-magma-red-400 text-gray-100 hover:scale-105 py-1 px-2 rounded", title: "New conversation" %>
-  </div>
-
-  <div class="flex justify-end px-3 items-center gap-3">
+    <div class="flex gap-3 sm:gap-4">
     <%= form_for :search, url: "/conversations/search", class: "relative" do |f| %>
-      <input type="text" placeholder="<%= it("Search...") %>" autocomplete="off" name="q" class="rounded-md bg-gray-300 border-gray-200 border-2 text-gray-800 p-1 w-32 focus:w-52 focus:bg-gray-100 transition-all">
+      <input type="text" placeholder="<%= it("Search...") %>" autocomplete="off" name="q" class="rounded-md bg-gray-300 border-gray-200 border-2 text-gray-800 p-1 w-32">
       <div class="absolute right-2 top-1/2 -translate-y-1/2 text-gray-800"><%= heroicon "magnifying-glass" %></div>
     <% end %>
-    <div data-controller="visibility" class="bg-gray-500 p-2 rounded-md text-gray-300">
-      <%= heroicon "funnel" %>
+    <%= link_to it("New"), new_conversation_path, class:"bg-magma-red-400 text-gray-100 hover:scale-105 py-1 px-2 rounded", title: "New conversation" %>
     </div>
   </div>
 
