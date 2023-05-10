@@ -14,9 +14,9 @@
     <%= javascript_importmap_tags %>
   </head>
 
-  <body class="min-h-screen flex flex-col overflow-clip dark">
-    <div class="flex-1 flex flex-col sm:flex-row h-full">
-      <main class="flex-1 flex flex-col min-h-full top-0 bottom-0 max-h-[100vh] overflow-y-auto bg-gray-600 scroll-smooth relative pt-12 sm:pt-0">
+  <body class="flex flex-col sm:flex-row dark h-screen w-full overflow-hidden">
+      <%= render "nav" if current_user %>
+      <main class="flex-1 flex flex-col overflow-y-auto bg-gray-600 scroll-smooth">
         <div id="awesome-notification"
              class="bg-gray-200 rounded-lg shadow-lg py-2 px-4 border-2 border-red-900 text-gray-800
                     transition transform duration-1000 hidden absolute right-10 top-10 space-y-2 min-w-[250px]"
@@ -41,19 +41,6 @@
           <footer class="absolute bottom-0 w-full"><%= yield :footer %></footer>
         <% end %>
       </main>
-      <% if current_user %>
-        <nav class="order-first sm:w-[20%] bg-gray-800 bg-gradient-to-l from-gray-900 text-gray-300
-              absolute sm:relative w-full h-12
-              flex sm:flex-col sm:gap-3 items-center sm:items-start sm:h-screen
-              sm:overflow-y-auto sm:max-h-screen sm:min-w-[250px]">
-          <%= render "nav" %>
-        </nav>
-      <% end %>
-      <% if content_for?(:right) %>
-        <aside class="sm:w-[20%] bg-gray-900 relative h-16 sm:h-screen overflow-clip">
-          <%= yield :right %>
-        </aside>
-      <% end %>
-    </div>
+      <%= render 'aside' if content_for?(:right) %>
   </body>
 </html>

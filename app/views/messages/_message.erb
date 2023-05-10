@@ -1,7 +1,7 @@
 <% if message.visible %>
-  <div class="message <%= message.role %> w-full p-4 <%= "highlight" if params[:message] == message.id %>">
-    <div class="text-lg xl:max-w-[80%] mx-auto flex items-start gap-6">
-      <div class="flex-shrink-0 relative h-[36px] w-[36px] rounded-md  text-white flex items-center justify-center mt-1 bg-gray-800 transition hover:bg-gray-900 select-none">
+  <div class="message <%= message.role %> w-full p-1 md:p-4 <%= "highlight" if params[:message] == message.id %>">
+    <div class="text-lg xl:max-w-[80%] mx-auto flex items-start gap-2 md:gap-6">
+      <div class="flex-shrink-0 relative h-[36px] w-[36px] rounded-md  text-white flex items-center justify-center bg-gray-800 transition hover:bg-gray-900 select-none">
         <% if message.role.assistant? && message.conversation.bot.voice_id.present? %>
           <img src="<%= message.sender_image_url %>" alt="" class="transform origin-bottom object-fit rounded-md select-none cursor-pointer" referrerpolicy="no-referrer"
                data-controller="voiceplay"><audio controls preload="none"><source src="<%= tts_path(message) %>" type="audio/mpeg"></audio>
@@ -9,7 +9,7 @@
           <img src="<%= message.sender_image_url %>" alt="" class="object-fit rounded-md select-none" referrerpolicy="no-referrer">
         <% end %>
       </div>
-      <div class="flex-1 max-w-full relative min-h-[40px]">
+      <div class="flex-1 max-w-full relative md:min-h-[40px]">
         <% if message.content.blank? %>
           <%= render "loading" %>
         <% else %>
@@ -19,12 +19,12 @@
       </div>
       <% if current_user == message.conversation.user %>
         <div class="menu-container relative" data-controller="messagemenu">
-          <button data-messagemenu-target="button" data-action="click->messagemenu#toggle" class="rounded-full p-2">
+          <button data-messagemenu-target="button" data-action="click->messagemenu#toggle" class="rounded-full md:p-2">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
               <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 12.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 18.75a.75.75 0 110-1.5.75.75 0 010 1.5z"/>
             </svg>
           </button>
-          <div data-messagemenu-target="menu" class="absolute bg-gray-400 shadow-lg text-gray-700 text-sm flex flex-col gap-1 mt-1 py-2 rounded-md overflow-hidden right-0 z-50 hidden">
+          <div data-messagemenu-target="menu" class="absolute bg-gray-400 shadow-lg text-gray-700 text-sm flex flex-col gap-1 py-2 rounded-md overflow-hidden right-0 z-50 hidden">
             <% unless message.content.blank? %>
               <a class="menu-item hover:bg-gray-300" href="#" data-controller="clipboard"
                 data-action="click->clipboard#target"
@@ -85,9 +85,9 @@
     </div>
   </div>
 <% elsif current_user&.admin? && message.conversation.show_invisibles %>
-  <div class="message <%= message.role %> w-full p-4 opacity-75 text-gray-500" style="background-color: #cccccc; border-top: 1px solid gray">
-    <div class="text-lg xl:max-w-[80%] mx-auto flex items-start gap-6">
-      <div class="flex-shrink-0 relative h-[36px] w-[36px] rounded-md flex items-center justify-center mt-1 bg-gray-800">
+  <div class="message <%= message.role %> w-full p-1 opacity-75 text-gray-500" style="background-color: #cccccc; border-top: 1px solid gray">
+    <div class="text-lg xl:max-w-[80%] mx-auto flex items-start gap-2 md:gap-6">
+      <div class="flex-shrink-0 relative h-[36px] w-[36px] rounded-md flex items-center justify-center bg-gray-800">
         <img src="<%= message.sender_image_url %>" alt="" class="object-fit rounded-md">
       </div>
       <div class="flex-1 max-w-full relative min-h-[40px] text-gray-500 ">
