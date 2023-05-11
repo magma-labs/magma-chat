@@ -20,41 +20,27 @@
 </div>
 
 <% content_for :sidebar_prepend do %>
-  <div class="p-2 sm:p-3">
-    <div class="bg-gray-700 rounded-md overflow-hidden">
+  <div class="p-2 sm:p-3 space-y-4">
 
-      <%= image_tag @conversation.bot.image_url, class: "bg-gray-600" %>
+    <h2 class="text-md text-gray-300"><%= @conversation.title %></h2>
 
-      <div class="p-2 space-y-4" >
-
-        <div>
-          <div class="flex items-center gap-2">
-            <%= link_to @conversation.bot.name, [@conversation.bot], class: "text-gray-200 text-lg" %>
-            <%= link_to heroicon("cog"), [:admin, @conversation.bot] if current_user&.admin? %>
-          </div>
-          <div class="text-gray-400"><%= @conversation.bot.role %></div>
-        </div>
-
-        <% if (current_user != @conversation.user) %>
-          <div>
-            <label>User</label>
-            <p><%= @conversation.user.name %></p>
-          </div>
-        <% end %>
-
-        <%= cable_ready_updates_for @conversation, html_options: { class: "analysis text-sm space-y-2 w-full text-gray-300 flex flex-col gap-2", } do %>
-
-          <%= render "analysis" if @conversation.analysis.present? %>
-
-          <div class="text-xs text-gray-500">
-            <%= @conversation.total_token_count %> tokens consumed in this conversation
-          </div>
-
-        <% end %>
-
+    <%= link_to @conversation.bot, class:'flex items-center gap-2' do %>
+      <%= image_tag @conversation.bot.image_url, class: "rounded-md w-16 bg-gray-600" %>
+      <div>
+        <div class="text-gray-200"><%= @conversation.bot.name %></div>
+        <div class="text-sm text-gray-400"><%= @conversation.bot.role %></div>
       </div>
+    <% end %>
 
+    <div class="flex items-center gap-2">
+      <%= image_tag @conversation.user.image_url, class: "rounded-md w-12 bg-gray-600" %>
+      <p class="text-gray-300 text-sm"><%= @conversation.user.name %></p>
     </div>
+
+    <%= cable_ready_updates_for @conversation, html_options: { class: "analysis text-sm space-y-2 w-full text-gray-300 flex flex-col gap-2", } do %>
+      <%= render "analysis" if @conversation.analysis.present? %>
+    <% end %>
+
   </div>
 <% end %>
 

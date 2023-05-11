@@ -51,7 +51,7 @@ body {
   }
 
   .analysis label {
-    @apply text-gray-500 block text-xs;
+    @apply text-gray-500 block text-sm;
   }
 
   .chatnav.active {

@@ -1,34 +1,39 @@
-<% if (@conversation.public_access? && current_user == @conversation.user) %>
-  <div class="text-xs text-gray-400">
-    <span>Available to public at <%= link_to "this URL", readonly_url(@conversation), class: "text-xs font-medium text-yellow-500", target: "_blank" %></span>
-    <span class="pl-1 opacity-75 hover:opacity-100 cursor-pointer" data-content="<%= readonly_url(@conversation) %>" data-controller="clipboard" data-action="click->clipboard#content" title="Copy to clipboard">📋</span>
-  </div>
-<% end %>
+<details class="space-y-4">
+  <summary class="text-gray-400">Analysis</summary>
 
-<% if @conversation.analysis[:summary].present? %>
-  <h2 class="text-lg"><%= @conversation.title %></h2>
-  <details>
-    <summary>Summary</summary>
-    <p class="text-sm text-gray-400"><%= @conversation.analysis[:summary] %></p>
-  </details>
-<% end %>
+  <% if (@conversation.public_access? && current_user == @conversation.user) %>
+    <div class="text-xs text-gray-400">
+      <span>Available to public at <%= link_to "this URL", readonly_url(@conversation), class: "text-xs font-medium text-yellow-500", target: "_blank" %></span>
+      <span class="pl-1 opacity-75 hover:opacity-100 cursor-pointer" data-content="<%= readonly_url(@conversation) %>" data-controller="clipboard" data-action="click->clipboard#content" title="Copy to clipboard">📋</span>
+    </div>
+  <% end %>
 
-<% unless @conversation.tags.empty? %>
-  <div>
-    <label class="mb-1"><%= it("Tags") %></label>
+  <% if @conversation.analysis[:summary].present? %>
     <div>
-      <% @conversation.tags.each do |tag| %>
-        <span class="bg-gray-600 p-1 rounded text-gray-300"><%= tag %></span>
+      <label class="mb-1"><%= it("Summary") %></label>
+      <p class="text-sm text-gray-400"><%= @conversation.analysis[:summary] %></p>
+    </div>
+  <% end %>
+
+  <% unless @conversation.tags.empty? %>
+    <div>
+      <label class="mb-2"><%= it("Tags") %></label>
+      <div>
+        <% @conversation.tags.each do |tag| %>
+          <span class="bg-gray-700/50 py-1 px-2 rounded text-gray-400"><%= tag %></span>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+
+  <% if @conversation.analysis_next.present? %>
+    <div>
+      <label class="mb-2"><%= it("Suggested Topics") %></label>
+      <% @conversation.analysis_next.each do |sugg| %>
+        <%= tag.div sugg, data: { id: @conversation&.id, value: sugg, reflex: current_user ? 'click->Conversation#suggested' : nil }, class: 'cursor-pointer bg-gray-600 hover:bg-gray-500 p-2 mb-2 rounded-md' %>
       <% end %>
     </div>
-  </div>
-<% end %>
+  <% end %>
 
-<% if @conversation.analysis_next.present? %>
-  <div>
-    <label class="mb-1"><%= it("Suggested Topics") %></label>
-    <% @conversation.analysis_next.each do |sugg| %>
-      <%= tag.div sugg, data: { id: @conversation&.id, value: sugg, reflex: current_user ? 'click->Conversation#suggested' : nil }, class: 'cursor-pointer hover:text-white mb-2' %>
-    <% end %>
-  </div>
-<% end %>
+  <div class="text-xs text-gray-400"><%= @conversation.total_token_count %> tokens consumed in this conversation</div>
+</details>
