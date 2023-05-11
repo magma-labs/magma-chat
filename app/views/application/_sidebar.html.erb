@@ -1,9 +1,19 @@
-<div data-sidebar-target="sidebaroverlay" data-action="click->sidebar#hide" class="hidden sm:hidden fixed inset-0 bg-gray-500/80">
-</div>
+<div data-sidebar-target="sidebaroverlay" data-action="click->sidebar#hide" class="hidden sm:hidden fixed inset-0 bg-gray-500/80"> </div>
 
-<aside data-sidebar-target="sidebar" style="left:-100%" class="flex flex-col overflow-hidden z-10 top-0 bottom-0 absolute sm:static w-64 bg-gray-800 transition-all">
-  <%= yield :right %>
-  <div class="flex-1 p-3">
-    Bots
+<aside data-sidebar-target="sidebar" class="flex flex-col overflow-hidden z-10 top-0 bottom-0 absolute sm:static w-64 bg-gray-800 transition-all drop-shadow-lg">
+  <%= yield :sidebar_prepend %>
+  <div class="flex-1 p-3 space-y-10">
+
+    <div class="flex flex-col gap-1">
+      <%= render "sidebar_link", path: conversations_path, text: it("Conversations"), icon: "chat-bubble-left-ellipsis" %>
+      <%= render "sidebar_link", path: new_conversation_path, text: it("Bots"), icon: "users" %>
+      <%= render "sidebar_link", path: settings_path, text: it("Settings"), icon: "cog-8-tooth" %>
+    </div>
+
+    <div class="flex flex-col gap-1">
+      <h2 class="text-gray-500 text-xs uppercase font-bold">Admin</h2>
+      <%= link_to "Bot Configuration", "/admin/bots", class: "text-gray-400 hover:text-yellow-500 block" if current_admin? %>
+    </div>
+
   </div>
 </aside>
