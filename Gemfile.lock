@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/rails/rails.git
-  revision: 533161a73df4bfaccb7856dad45c531ac6cafde7
+  revision: d954155dd8ccb183fc666d944740f552629be68d
   branch: main
   specs:
     actioncable (7.1.0.alpha)
@@ -91,7 +91,7 @@ GIT
       irb
       rackup (>= 1.0.0)
       rake (>= 12.2)
-      thor (~> 1.0)
+      thor (~> 1.0, >= 1.2.2)
       zeitwerk (~> 2.6)
 
 GEM
@@ -129,7 +129,7 @@ GEM
     connection_pool (2.4.0)
     crass (1.0.6)
     date (3.3.3)
-    debug (1.7.2)
+    debug (1.8.0)
       irb (>= 1.5.0)
       reline (>= 0.3.1)
     declarative (0.0.20)
@@ -176,13 +176,14 @@ GEM
     hashie (5.0.0)
     heroicon (1.0.0)
       rails (>= 5.2)
+    honeybadger (5.2.1)
     httparty (0.21.0)
       mini_mime (>= 1.0.0)
       multi_xml (>= 0.5.2)
     httpclient (2.8.3)
     i18n (1.13.0)
       concurrent-ruby (~> 1.0)
-    importmap-rails (1.1.5)
+    importmap-rails (1.1.6)
       actionpack (>= 6.0.0)
       railties (>= 6.0.0)
     instant18n (0.3.0)
@@ -196,20 +197,20 @@ GEM
     jbuilder (2.11.5)
       actionview (>= 5.0.0)
       activesupport (>= 5.0.0)
-    judoscale-rails (1.4.0)
-      judoscale-ruby (= 1.4.0)
+    judoscale-rails (1.4.1)
+      judoscale-ruby (= 1.4.1)
       railties
-    judoscale-ruby (1.4.0)
-    judoscale-sidekiq (1.4.0)
-      judoscale-ruby (= 1.4.0)
+    judoscale-ruby (1.4.1)
+    judoscale-sidekiq (1.4.1)
+      judoscale-ruby (= 1.4.1)
       sidekiq (>= 5.0)
     jwt (2.7.0)
     listen (3.8.0)
       rb-fsevent (~> 0.10, >= 0.10.3)
       rb-inotify (~> 0.9, >= 0.9.10)
-    loofah (2.20.0)
+    loofah (2.21.2)
       crass (~> 1.0.2)
-      nokogiri (>= 1.5.9)
+      nokogiri (>= 1.12.0)
     mail (2.8.1)
       mini_mime (>= 0.1.1)
       net-imap
@@ -246,13 +247,7 @@ GEM
       net-protocol
     net-ssh (7.1.0)
     nio4r (2.5.9)
-    nokogiri (1.14.3-aarch64-linux)
-      racc (~> 1.4)
-    nokogiri (1.14.3-arm64-darwin)
-      racc (~> 1.4)
-    nokogiri (1.14.3-x86_64-darwin)
-      racc (~> 1.4)
-    nokogiri (1.14.3-x86_64-linux)
+    nokogiri (1.14.4-arm64-darwin)
       racc (~> 1.4)
     oauth2 (2.0.9)
       faraday (>= 0.17.3, < 3.0)
@@ -277,14 +272,14 @@ GEM
       actionpack (>= 4.2)
       omniauth (~> 2.0)
     os (1.1.4)
-    parser (3.2.2.0)
+    parser (3.2.2.1)
       ast (~> 2.4.1)
     pg (1.5.3)
     pg_search (2.3.6)
       activerecord (>= 5.2)
       activesupport (>= 5.2)
     public_suffix (5.0.1)
-    puma (5.6.5)
+    puma (6.2.2)
       nio4r (~> 2.0)
     racc (1.6.2)
     rack (3.0.7)
@@ -313,13 +308,13 @@ GEM
       ffi (~> 1.0)
     recursive-open-struct (1.1.3)
     redcarpet (3.6.0)
-    redis (4.0.3)
+    redis (4.8.1)
     redis-client (0.14.1)
       connection_pool
     redis-session-store (0.11.5)
       actionpack (>= 6, < 8)
       redis (>= 3, < 6)
-    regexp_parser (2.7.0)
+    regexp_parser (2.8.0)
     reline (0.3.3)
       io-console (~> 0.5)
     representable (3.2.0)
@@ -328,22 +323,22 @@ GEM
       uber (< 0.2.0)
     retriable (3.1.2)
     rexml (3.2.5)
-    rspec-core (3.12.1)
+    rspec-core (3.12.2)
       rspec-support (~> 3.12.0)
-    rspec-expectations (3.12.2)
+    rspec-expectations (3.12.3)
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.12.0)
     rspec-mocks (3.12.5)
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.12.0)
-    rspec-rails (6.0.1)
+    rspec-rails (6.0.2)
       actionpack (>= 6.1)
       activesupport (>= 6.1)
       railties (>= 6.1)
-      rspec-core (~> 3.11)
-      rspec-expectations (~> 3.11)
-      rspec-mocks (~> 3.11)
-      rspec-support (~> 3.11)
+      rspec-core (~> 3.12)
+      rspec-expectations (~> 3.12)
+      rspec-mocks (~> 3.12)
+      rspec-support (~> 3.12)
     rspec-support (3.12.0)
     rspec_junit_formatter (0.6.0)
       rspec-core (>= 2, < 4, != 2.12.0)
@@ -354,15 +349,15 @@ GEM
     rubyzip (2.3.2)
     scout_apm (5.3.3)
       parser
-    selenium-webdriver (4.8.6)
+    selenium-webdriver (4.9.1)
       rexml (~> 3.2, >= 3.2.5)
       rubyzip (>= 1.2.2, < 3.0)
       websocket (~> 1.0)
-    sidekiq (7.0.9)
+    sidekiq (7.1.0)
       concurrent-ruby (< 2)
       connection_pool (>= 2.3.0)
       rack (>= 2.2.4)
-      redis-client (>= 0.11.0)
+      redis-client (>= 0.14.0)
     signet (0.17.0)
       addressable (~> 2.8)
       faraday (>= 0.17.5, < 3.a)
@@ -400,20 +395,11 @@ GEM
       railties (>= 5.2, < 8)
       redis (>= 4.0, < 6.0)
     strategic (1.2.0)
-    tailwindcss-rails (2.0.29-aarch64-linux)
-      railties (>= 6.0.0)
     tailwindcss-rails (2.0.29-arm64-darwin)
       railties (>= 6.0.0)
-    tailwindcss-rails (2.0.29-x86_64-darwin)
-      railties (>= 6.0.0)
-    tailwindcss-rails (2.0.29-x86_64-linux)
-      railties (>= 6.0.0)
-    thor (1.2.1)
+    thor (1.2.2)
     thread-local (1.1.0)
-    tiktoken_ruby (0.0.4-aarch64-linux)
-    tiktoken_ruby (0.0.4-arm64-darwin)
-    tiktoken_ruby (0.0.4-x86_64-darwin)
-    tiktoken_ruby (0.0.4-x86_64-linux)
+    tiktoken_ruby (0.0.5-arm64-darwin)
     timeout (0.3.2)
     trailblazer-option (0.1.2)
     turbo-rails (1.4.0)
@@ -443,11 +429,7 @@ GEM
     zeitwerk (2.6.8)
 
 PLATFORMS
-  aarch64-linux
-  arm64-darwin-21
   arm64-darwin-22
-  x86_64-darwin-22
-  x86_64-linux
 
 DEPENDENCIES
   action-cable-redis-backport (~> 1)
@@ -461,6 +443,7 @@ DEPENDENCIES
   faker
   google-apis-calendar_v3
   heroicon
+  honeybadger
   httparty
   importmap-rails
   instant18n (~> 0.3.0)

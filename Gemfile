@@ -109,6 +109,7 @@ group :test do
 end
 
 group :production do
+  gem "honeybadger"
   gem "judoscale-rails"
   gem "judoscale-sidekiq"
   gem 'scout_apm'
