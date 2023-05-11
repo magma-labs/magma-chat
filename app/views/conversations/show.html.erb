@@ -11,12 +11,12 @@
 <% end %>
 
 <div class="grow flex flex-col">
-<%= cable_ready_updates_for @conversation, :messages, html_options: { class: "grow flex flex-col gap-0 mb-24", data: { controller: "newmessage" } } do %>
-  <%= render @conversation.messages.order(:updated_at) %>
-  <% unless params[:message] || action_name["readonly"] %><span data-controller="scroll" data-action="scroll#scroll"></span><% end %>
-<% end %>
+  <%= cable_ready_updates_for @conversation, :messages, html_options: { class: "grow flex flex-col gap-0 mb-24", data: { controller: "newmessage" } } do %>
+    <%= render @conversation.messages.order(:updated_at) %>
+    <% unless params[:message] || action_name["readonly"] %><span data-controller="scroll" data-action="scroll#scroll"></span><% end %>
+  <% end %>
 
-<%= render "conversations/footer" if current_user == @conversation.user %>
+  <%= render "conversations/footer" if current_user == @conversation.user %>
 </div>
 
 <% content_for :sidebar_prepend do %>
@@ -26,6 +26,7 @@
       <%= image_tag @conversation.bot.image_url, class: "bg-gray-600" %>
 
       <div class="p-2 space-y-4" >
+
         <div>
           <div class="flex items-center gap-2">
             <%= link_to @conversation.bot.name, [@conversation.bot], class: "text-gray-200 text-lg" %>
@@ -34,19 +35,6 @@
           <div class="text-gray-400"><%= @conversation.bot.role %></div>
         </div>
 
-      <%= cable_ready_updates_for @conversation, html_options: { class: "analysis text-sm space-y-2 w-full text-gray-300 flex flex-col gap-2", } do %>
-        <div>
-          <label><%= it("Conversation Title") %></label>
-          <p><%= @conversation.title %></p>
-        </div>
-
-        <% if (@conversation.public_access? && current_user == @conversation.user) %>
-          <div class="text-xs text-gray-400">
-            <span>Available to public at <%= link_to "this URL", readonly_url(@conversation), class: "text-xs font-medium text-yellow-500", target: "_blank" %></span>
-            <span class="pl-1 opacity-75 hover:opacity-100 cursor-pointer" data-content="<%= readonly_url(@conversation) %>" data-controller="clipboard" data-action="click->clipboard#content" title="Copy to clipboard">📋</span>
-          </div>
-        <% end %>
-
         <% if (current_user != @conversation.user) %>
           <div>
             <label>User</label>
@@ -54,37 +42,15 @@
           </div>
         <% end %>
 
-        <% unless @conversation.analysis.blank? %>
-          <% unless @conversation.analysis[:summary].blank? %>
-            <div>
-              <label><%= it("Summary") %></label>
-              <p><%= @conversation.analysis[:summary] %>&nbsp;</p>
-            </div>
-          <% end %>
-          <% unless @conversation.tags.empty? %>
-            <div>
-              <label class="mb-1"><%= it("Tags") %></label>
-              <div>
-                <% @conversation.tags.each do |tag| %>
-                  <span class="tag"><%= tag %></span>
-                <% end %>
-              </div>
-            </div>
-          <% end %>
-          <% unless @conversation.analysis_next.empty? %>
-            <div>
-              <label class="mb-1"><%= it("Suggested Topics") %></label>
-              <% @conversation.analysis_next.each do |sugg| %>
-                <%= tag.div sugg, data: { id: @conversation&.id, value: sugg, reflex: current_user ? 'click->Conversation#suggested' : nil }, class: 'cursor-pointer hover:text-white mb-2' %>
-              <% end %>
-            </div>
-          <% end %>
-        <% end %>
+        <%= cable_ready_updates_for @conversation, html_options: { class: "analysis text-sm space-y-2 w-full text-gray-300 flex flex-col gap-2", } do %>
 
-        <div class="text-xs text-gray-500">
-          <%= @conversation.total_token_count %> tokens consumed in this conversation
-        </div>
-      <% end %>
+          <%= render "analysis" if @conversation.analysis.present? %>
+
+          <div class="text-xs text-gray-500">
+            <%= @conversation.total_token_count %> tokens consumed in this conversation
+          </div>
+
+        <% end %>
 
       </div>
 

@@ -9,6 +9,7 @@ class ConversationReflex < ApplicationReflex
   delegate :bot, :user, to: :conversation
 
   def prompt(message: value)
+    puts "prompting with #{message}"
     slash_filter do
       conversation.prompt!(message: message, sender: current_user)
     end

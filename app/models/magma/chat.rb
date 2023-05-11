@@ -74,6 +74,9 @@ module Magma
       content = content || Magma::Prompts.get(key, **opts)
       @messages << Message.new(role: :user, content: content).to_entry
       response = send
+      # stop if we didn't get a reply
+      return if response.nil? || response.empty?
+
       # return the error message if there is one, otherwise the first response
       reply = response.dig("error", "message") || response.dig("choices", 0, "message", "content")
 

@@ -1,6 +1,4 @@
-<div data-sidebar-target="sidebaroverlay" data-action="click->sidebar#hide" class="hidden sm:hidden fixed inset-0 bg-gray-500/80"> </div>
-
-<aside data-sidebar-target="sidebar" class="flex flex-col overflow-hidden z-10 top-0 bottom-0 absolute sm:static w-64 bg-gray-800 transition-all drop-shadow-lg">
+<aside data-sidebar-target="sidebar" style="fleft: -100%;" class="flex flex-col overflow-hidden z-10 top-0 bottom-0 absolute sm:static w-64 bg-gray-800 transition-all drop-shadow-lg overflow-y-auto">
   <%= yield :sidebar_prepend %>
   <div class="flex-1 p-3 space-y-10">
 
@@ -17,3 +15,5 @@
 
   </div>
 </aside>
+
+<div data-sidebar-target="sidebaroverlay" data-action="click->sidebar#hide" class="hidden sm:hidden fixed inset-0 bg-gray-500/80"> </div>

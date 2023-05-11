@@ -1,0 +1,34 @@
+<% if (@conversation.public_access? && current_user == @conversation.user) %>
+  <div class="text-xs text-gray-400">
+    <span>Available to public at <%= link_to "this URL", readonly_url(@conversation), class: "text-xs font-medium text-yellow-500", target: "_blank" %></span>
+    <span class="pl-1 opacity-75 hover:opacity-100 cursor-pointer" data-content="<%= readonly_url(@conversation) %>" data-controller="clipboard" data-action="click->clipboard#content" title="Copy to clipboard">📋</span>
+  </div>
+<% end %>
+
+<% if @conversation.analysis[:summary].present? %>
+  <h2 class="text-lg"><%= @conversation.title %></h2>
+  <details>
+    <summary>Summary</summary>
+    <p class="text-sm text-gray-400"><%= @conversation.analysis[:summary] %></p>
+  </details>
+<% end %>
+
+<% unless @conversation.tags.empty? %>
+  <div>
+    <label class="mb-1"><%= it("Tags") %></label>
+    <div>
+      <% @conversation.tags.each do |tag| %>
+        <span class="bg-gray-600 p-1 rounded text-gray-300"><%= tag %></span>
+      <% end %>
+    </div>
+  </div>
+<% end %>
+
+<% if @conversation.analysis_next.present? %>
+  <div>
+    <label class="mb-1"><%= it("Suggested Topics") %></label>
+    <% @conversation.analysis_next.each do |sugg| %>
+      <%= tag.div sugg, data: { id: @conversation&.id, value: sugg, reflex: current_user ? 'click->Conversation#suggested' : nil }, class: 'cursor-pointer hover:text-white mb-2' %>
+    <% end %>
+  </div>
+<% end %>
