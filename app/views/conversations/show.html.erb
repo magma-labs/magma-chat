@@ -16,87 +16,77 @@
 <% end %>
 
 <% content_for :right do %>
-
-  <div class="h-full flex flex-col">
-
-    <% if current_user.blank? %>
-      <div class="pt-6"><%= link_to image_tag("nav_logo.svg", class: "h-6 xl:h-10 object-fit sm:m-auto"), root_path %></div>
-    <% end %>
-
-    <div class="grow">
-      <%= cable_ready_updates_for @conversation, html_options: { class: "flex-1 grow p-4 analysis text-sm space-y-2 w-full text-gray-300 flex flex-col gap-2 z-10", } do %>
-        <div>
-          <label><%= it("Title") %></label>
-          <%= @conversation.title %>
-          <% if @conversation.public_access? && current_user == @conversation.user %>
-            <div class="text-xs text-gray-400">
-              Available to public at
-              <%= link_to "this URL", readonly_url(@conversation), class: "text-xs font-medium text-yellow-500", target: "_blank" %>
-              <span class="pl-1 opacity-75 hover:opacity-100 cursor-pointer"
-                    data-content="<%= readonly_url(@conversation) %>"
-                    data-controller="clipboard" data-action="click->clipboard#content",
-                                                title="Copy to clipboard">📋</span>
-            </div>
-          <% end %>
-        </div>
-        <% if current_user != @conversation.user %>
-          <div>
-            <label>User</label>
-            <%= @conversation.user.name %>
-          </div>
-        <% end %>
-        <% unless @conversation.analysis.blank? %>
-          <% unless @conversation.analysis[:summary].blank? %>
-            <div>
-              <label><%= it("Summary") %></label>
-              <%= @conversation.analysis[:summary] %>&nbsp;
-            </div>
-          <% end %>
-          <% unless @conversation.tags.empty? %>
-            <div>
-              <label class="mb-1"><%= it("Tags") %></label>
-              <div>
-                <% @conversation.tags.each do |tag| %>
-                  <span class="tag"><%= tag %></span>
-                <% end %>
-              </div>
-            </div>
-          <% end %>
-          <% unless @conversation.analysis_next.empty? %>
-            <div>
-              <label class="mb-1"><%= it("Suggested Topics") %></label>
-              <% @conversation.analysis_next.each do |sugg| %>
-                <div data-id="<%= @conversation&.id %>" data-value="<%= sugg %>"
-                  <% if current_user %>data-reflex="click->Conversation#suggested"<% end %>
-                                                        class="cursor-pointer hover:text-white mb-2">
-                                                        <%= sugg %>
-                </div>
-              <% end %>
-            </div>
-          <% end %>
-        <% end %>
-        <div class="text-xs text-gray-500">
-          <%= @conversation.total_token_count %> tokens consumed in this conversation
+  <% if current_user.blank? %>
+    <div class="pt-6"><%= link_to image_tag("nav_logo.svg", class: "h-6 xl:h-10 object-fit sm:m-auto"), root_path %></div>
+  <% end %>
+  <%= cable_ready_updates_for @conversation, html_options: { class: "p-4 analysis text-sm space-y-2 w-full h-full text-gray-300 flex flex-col gap-2 z-10 absolute", } do %>
+    <div>
+      <label><%= it("Title") %></label>
+      <%= @conversation.title %>
+      <% if @conversation.public_access? && current_user == @conversation.user %>
+        <div class="text-xs text-gray-400">
+          Available to public at
+          <%= link_to "this URL", readonly_url(@conversation), class: "text-xs font-medium text-yellow-500", target: "_blank" %>
+          <span class="pl-1 opacity-75 hover:opacity-100 cursor-pointer"
+                data-content="<%= readonly_url(@conversation) %>"
+                data-controller="clipboard" data-action="click->clipboard#content",
+                title="Copy to clipboard">📋</span>
         </div>
       <% end %>
     </div>
-
-    <div class="flex-1 relative">
-      <%= image_tag @conversation.bot.image_url, class: "w-full z-10 absolute bottom-0 opacity-60" %>
-      <div class="w-full absolute z-50 bottom-0 text-sm lg:text-base p-3 tracking-widest font-bold text-center w-full bg-opacity-30 bg-gradient-to-t from-black to-transparent shadow text-white">
-        <div class="flex gap-3 items-center w-full justify-center">
-          <%= @conversation.bot.name %>
-          <%= link_to "🤖", [@conversation.bot] %>
-          <% if current_user&.admin? %>
-            <%= link_to "📝", [:admin, @conversation.bot] %>
+    <% if current_user != @conversation.user %>
+      <div>
+        <label>User</label>
+        <%= @conversation.user.name %>
+      </div>
+    <% end %>
+    <% unless @conversation.analysis.blank? %>
+      <% unless @conversation.analysis[:summary].blank? %>
+        <div>
+          <label><%= it("Summary") %></label>
+          <%= @conversation.analysis[:summary] %>&nbsp;
+        </div>
+      <% end %>
+      <% unless @conversation.tags.empty? %>
+        <div>
+          <label class="mb-1"><%= it("Tags") %></label>
+          <div>
+            <% @conversation.tags.each do |tag| %>
+              <span class="tag"><%= tag %></span>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+      <% unless @conversation.analysis_next.empty? %>
+        <div>
+          <label class="mb-1"><%= it("Suggested Topics") %></label>
+          <% @conversation.analysis_next.each do |sugg| %>
+            <div data-id="<%= @conversation&.id %>" data-value="<%= sugg %>"
+                 <% if current_user %>data-reflex="click->Conversation#suggested"<% end %>
+                 class="cursor-pointer hover:text-white mb-2">
+                <%= sugg %>
+            </div>
           <% end %>
         </div>
-        <div class="font-light"><%= @conversation.bot.role %></div>
-      </div>
+      <% end %>
+    <% end %>
+    <div class="text-xs text-gray-500">
+      <%= @conversation.total_token_count %> tokens consumed in this conversation
     </div>
-
+  <% end %>
+  <div class="hidden sm:block">
+    <%= image_tag @conversation.bot.image_url, class: "object-fit absolute bottom-0 opacity-60" %>
+    <div class="absolute z-30 bottom-0 text-xs sm:text-sm lg:text-base p-3 tracking-widest font-bold text-center w-full bg-opacity-30 bg-gradient-to-t from-black to-transparent  shadow text-white">
+      <div class="flex gap-3 items-center w-full justify-center">
+        <%= @conversation.bot.name %>
+        <%= link_to "🤖", [@conversation.bot] %>
+        <% if current_user&.admin? %>
+          <%= link_to "📝", [:admin, @conversation.bot] %>
+        <% end %>
+      </div>
+      <div class="font-light"><%= @conversation.bot.role %></div>
+    </div>
   </div>
-
 <% end %>
 
 <% content_for :footer do %>
