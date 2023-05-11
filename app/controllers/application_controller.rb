@@ -22,7 +22,7 @@ class ApplicationController < ActionController::Base
 
   def require_user
     if current_user
-      cookies.encrypted[:user_id] = current_user&.id
+      cookies[:user_id] = current_user.id
     else
       redirect_to root_path
     end
