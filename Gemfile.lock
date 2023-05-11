@@ -173,6 +173,7 @@ GEM
       os (>= 0.9, < 2.0)
       signet (>= 0.16, < 2.a)
     hashie (5.0.0)
+    honeybadger (5.2.1)
     httparty (0.21.0)
       mini_mime (>= 1.0.0)
       multi_xml (>= 0.5.2)
@@ -446,6 +447,7 @@ DEPENDENCIES
   factory_bot_rails
   faker
   google-apis-calendar_v3
+  honeybadger
   httparty
   importmap-rails
   instant18n (~> 0.3.0)
@@ -486,4 +488,4 @@ RUBY VERSION
    ruby 3.2.1p31
 
 BUNDLED WITH
-   2.4.12
+   2.4.10
