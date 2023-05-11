@@ -14,10 +14,15 @@
   <div class="p-3 space-y-8">
   <% @latest_conversations.group_by(&:bot_id).each do |_, conversations| %>
     <div>
-      <div class="flex items-end mb-3 gap-2">
-        <%= image_tag conversations.first.bot.image_url, class: "bg-gray-700 rounded-md w-12" %>
-        <div class="text-md font-medium text-gray-200"><%= [conversations.first.bot.name, it(conversations.first.bot.role).presence].compact.join(", ") %></div>
-      </div>
+      <%= link_to conversations.first.bot do %>
+        <div class="flex mb-3 items-end gap-2">
+          <%= image_tag conversations.first.bot.image_url, class: "bg-gray-700 rounded-md w-16" %>
+          <div>
+            <div class="text-xl text-gray-200"><%= conversations.first.bot.name %></div>
+            <div class="text-md text-gray-300"><%= it(conversations.first.bot.role) %></div>
+          </div>
+        </div>
+      <% end %>
       <div class="space-y-3">
         <%= render conversations %>
       </div>

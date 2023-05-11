@@ -1,38 +1,37 @@
-<div class="space-y-4">
-  <div class="flex justify-between items-center gap-4 shadow sticky top-0 z-50 bg-slate-800">
-    <div class="p-3">
-      <h1 class="text-2xl font-medium">
-        <%= @bot.name %>
-      </h1>
-      <div class="text-gray-400">
-        <%= @bot.role %>
-      </div>
+<div class="space-y-4 p-4">
+
+  <div class="flex items-end gap-3">
+    <%= image_tag(@bot.image_url, class: "bg-gray-700 rounded-xl w-36 sm:w-48") %>
+    <div>
+      <h1 class="text-3xl font-medium"> <%= @bot.name %> </h1>
+      <div class="text-gray-400"> <%= @bot.role %> </div>
     </div>
-    <%= image_tag(@bot.image_url, class: "w-20 object-cover mr-4 mt-4") %>
   </div>
 
-  <div class="flex flex-col gap-1 px-3 pb-12">
-    <div class="flex gap-4 items-center">
-      <div class="flex flex-1 relative items-center gap-2">
-        <input type="text" data-reflex="change->Bot#search_thoughts" data-id="<%= @bot.id %>"
-               placeholder="<%= it("Search memories...") %>" data-controller="bot"
-               class="w-full border-4 py-1 pl-10 bg-slate-400 text-gray-800 focus:outline-none border-2 border-gray-900 rounded-md mb-2">
-        <select class="py-1 border-4 mb-2 border-slate-400 bg-slate-400 text-gray-800 rounded-md">
-          <option value="importance">Importance</option>
-          <option value="created_at">Date</option>
-        </select>
-        <div class="absolute bottom-4 left-4 opacity-60 text-sm">🔎</div>
+  <div class="flex flex-1 relative items-end justify-between gap-2">
+    <h2 class="text-xl text-gray-300">Memories</h2>
+    <div class="flex gap-2">
+      <div class="relative">
+        <input type="text" data-reflex="change->Bot#search_thoughts" data-id="<%= @bot.id %>" placeholder="<%= it("Search...") %>" data-controller="bot" class="w-32 sm:w-48 pr-8 bg-gray-200 text-gray-800 rounded-md">
+        <div class="absolute right-2 top-1/2 -translate-y-1/2 text-gray-800"><%= heroicon "magnifying-glass" %></div>
       </div>
+      <select class="bg-gray-300 text-gray-600 text-sm rounded-md">
+        <option value="importance">Importance</option>
+        <option value="created_at">Date</option>
+      </select>
     </div>
-    <% if @stimulus_reflex %>
-      <div class="">
-        <%= @thoughts.length %>
-        <%= it("matching thoughts found") %>
-        <%= link_to it("clear"), bot_path(@bot), class: "text-indigo-300 underline font-medium" %>
-      </div>
-    <% end %>
-    <%= cable_ready_updates_for @bot, :thoughts, html_options: { class: "flex flex-col gap-2 mb-24 text-xs" } do %>
-      <%= render @thoughts %>
-    <% end %>
   </div>
+
+  <% if (@stimulus_reflex) %>
+    <div>
+      <%= @thoughts.length %>
+      <%= it("matching thoughts found") %>
+      <%= link_to it("clear"), bot_path(@bot), class: "text-indigo-300 underline font-medium" %>
+    </div>
+  <% end %>
+
+  <%= cable_ready_updates_for @bot, :thoughts, html_options: { class: "space-y-3" } do %>
+    <%= render @thoughts %>
+  <% end %>
+
 </div>
