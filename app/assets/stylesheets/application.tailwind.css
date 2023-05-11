@@ -92,6 +92,7 @@ body {
   .grow-wrap::after {
     /* Identical styling required!! */
     border: 1px solid transparent;
+    padding: 1rem;
     font: inherit;
 
     /* Place on top of each other */
