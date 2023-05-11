@@ -13,14 +13,9 @@
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
   </head>
-
-  <body class="dark flex flex-col h-screen" data-controller="sidebar">
-    <%= render "header" %>
-    <div class="flex grow relative">
-      <%= render "sidebar" %>
-      <main class="flex-1 flex flex-col overflow-y-auto bg-gray-600">
-        <%= yield %>
-      </main>
-    </div>
+  <body>
+    <main>
+      <%= yield %>
+    </main>
   </body>
 </html>
