@@ -1,7 +1,10 @@
 class BotsController < ApplicationController
   before_action :require_user
   before_action :load_latest_conversations
-  before_action :set_bot
+  before_action :set_bot, only: [:show]
+
+  def index
+  end
 
   def show
     @conversations = @bot.conversations

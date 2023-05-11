@@ -16,7 +16,7 @@
     <% unless params[:message] || action_name["readonly"] %><span data-controller="scroll" data-action="scroll#scroll"></span><% end %>
   <% end %>
 
-  <%= render "conversations/footer" if current_user == @conversation.user %>
+  <%= render "conversations/input" if current_user == @conversation.user %>
 </div>
 
 <% content_for :sidebar_prepend do %>

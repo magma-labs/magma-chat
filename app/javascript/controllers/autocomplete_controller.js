@@ -50,11 +50,11 @@ export default class extends ApplicationController {
       event.preventDefault()
       this.completeHighlightedSelection()
     }
-    if (event.key === 'ArrowUp') {
+    if (event.key === 'ArrowUp' && this.element.value[0] === '/') {
       event.preventDefault()
       this.decrementIndex()
     }
-    if (event.key === 'ArrowDown') {
+    if (event.key === 'ArrowDown' && this.element.value[0] === '/') {
       event.preventDefault()
       this.incrementIndex()
     }
