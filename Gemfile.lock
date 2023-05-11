@@ -1,4 +1,14 @@
 GIT
+  remote: https://github.com/obie/instant18n.git
+  revision: 6451589b2fc3296f87476070102cf2ec2352441a
+  specs:
+    instant18n (0.3.0)
+      actionview
+      activesupport
+      railties
+      ruby-openai (~> 4.0.0)
+
+GIT
   remote: https://github.com/rails/rails.git
   revision: 533161a73df4bfaccb7856dad45c531ac6cafde7
   branch: main
@@ -183,11 +193,6 @@ GEM
     importmap-rails (1.1.5)
       actionpack (>= 6.0.0)
       railties (>= 6.0.0)
-    instant18n (0.3.0)
-      actionview
-      activesupport
-      railties
-      ruby-openai (~> 4.0.0)
     io-console (0.6.0)
     irb (1.6.4)
       reline (>= 0.3.0)
@@ -450,7 +455,7 @@ DEPENDENCIES
   honeybadger
   httparty
   importmap-rails
-  instant18n (~> 0.3.0)
+  instant18n!
   jbuilder
   judoscale-rails
   judoscale-sidekiq
