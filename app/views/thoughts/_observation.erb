@@ -1,6 +1,6 @@
-<div class="bg-gray-400 text-gray-700 p-2 px-3 rounded-md" data-id="<%= observation.id %>">
+<div class="hover:bg-gray-200 p-2 bg-gray-300 text-gray-700 p-2 px-3 rounded-md" data-id="<%= observation.id %>">
   <div><%= observation.brief %></div>
-  <div class="text-right block text-xs text-gray-600">
+  <div class="block text-xs text-gray-500">
     <%= l(observation.created_at, format: :long) %> ・
     <%= it("Observation about") %>
     <%= it(observation.subject_type) %> ・

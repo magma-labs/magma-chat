@@ -4,7 +4,7 @@
     <div class="flex-1 p-3 space-y-2 w-full">
       <div class="flex gap-3 sm:gap-4 w-full">
         <%= form_for :search, url: "/conversations/search", class: "relative w-full" do |f| %>
-          <input type="text" placeholder="<%= it("Search...") %>" name="q" class="rounded-md bg-gray-300 focus:bg-gray-100 text-gray-800 p-1 pl-2 w-full">
+          <input type="text" placeholder="<%= it("Search...") %>" name="q" class="rounded-md bg-gray-400 focus:bg-gray-200 text-gray-800 p-1 pl-2 w-full">
           <div class="absolute right-2 top-1/2 -translate-y-1/2 text-gray-800"><%= heroicon "magnifying-glass" %></div>
         <% end %>
         <%#= link_to it("New"), new_conversation_path, class:"bg-magma-red-400 text-gray-100 hover:scale-105 py-1 px-2 rounded", title: "New conversation" %>

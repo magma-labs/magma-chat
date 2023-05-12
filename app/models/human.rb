@@ -20,7 +20,7 @@
 class Human < User
   include UsedAsSubject
 
-  has_many :conversations, dependent: :destroy, foreign_key: :user_id, inverse_of: :user
+  has_many :conversations, dependent: :destroy, foreign_key: :user_id, inverse_of: :user, enable_cable_ready_updates: true
   has_many :messages, as: :sender
 
   def tag_cloud(limit: 70)
