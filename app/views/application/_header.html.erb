@@ -17,7 +17,7 @@
     <%= link_to heroicon("users", options: { class:"w-6 h-6" }), "/bots" %>
     <div data-controller="visibility">
       <%= heroicon "user-circle", options: {"data-action": "click->visibility#toggleTargets", class:"w-6 h-6"} %>
-      <div class="hidden divide-y absolute bg-gray-400 text-gray-700 shadow rounded-md overflow-hidden right-2 top-10"
+      <div class="hidden divide-y absolute bg-gray-400 text-gray-700 shadow-2xl rounded-md overflow-hidden right-2 top-10"
            data-visibility-target="hideable">
         <div class="menu-header font-medium">Logged in as <%= current_user.name %></div>
         <%= link_to heroicon("cog-8-tooth") + " Settings", "/settings", class: "menu-item border-gray-500" %>
