@@ -7,6 +7,9 @@ class Message::BaseStrategy
   def broadcast_message
   end
 
+  def message_timeout_job
+  end
+
   def override_disclaimers
   end
 

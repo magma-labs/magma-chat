@@ -1,4 +1,9 @@
 class Message::AssistantStrategy < Message::BaseStrategy
+  def message_timeout_job
+    # todo: make configurable or dynamic
+    MessageTimeoutJob.set(wait: 2.minutes).perform_later(context)
+  end
+
   def override_disclaimers
     return unless content.present? && conversation.bot.humanize?
     # todo: can we make this work in user's language not just English?

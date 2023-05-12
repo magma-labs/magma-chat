@@ -56,6 +56,7 @@ class Message < ApplicationRecord
 
   after_commit :broadcast_message, on: :create, unless: :skip_broadcast
   after_commit :reanalyze, if: :run_analysis_after_saving
+  after_commit :message_timeout_job, on: :create
 
   validates :role, presence: true
   validates :rating, numericality: { greater_than_or_equal_to: 0, less_than_or_equal_to: 5 }
