@@ -39,6 +39,6 @@ class AnalysisJob < ApplicationJob
   def time_to_analyze?
     return false if conversation.messages.last.content.blank?
     return true if conversation.last_analysis_at.nil?
-    conversation.last_analysis_at > 1.minute.ago
+    Time.current - conversation.last_analysis_at > 1.minute
   end
 end

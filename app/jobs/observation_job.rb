@@ -61,8 +61,9 @@ class ObservationJob < ApplicationJob
   end
 
   def time_to_observe?
-    return false if conversation.messages.last.content.blank?
+    last_message = conversation.messages.last
+    return false if last_message.content.blank?
     return true if conversation.last_observations_at.nil?
-    conversation.last_observations_at > 1.minute.ago
+    Time.current - conversation.last_observations_at > 1.minute
   end
 end
