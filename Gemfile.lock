@@ -251,6 +251,8 @@ GEM
       racc (~> 1.4)
     nokogiri (1.14.4-arm64-darwin)
       racc (~> 1.4)
+    nokogiri (1.14.4-x86_64-linux)
+      racc (~> 1.4)
     oauth2 (2.0.9)
       faraday (>= 0.17.3, < 3.0)
       jwt (>= 1.0, < 3.0)
@@ -401,10 +403,13 @@ GEM
       railties (>= 6.0.0)
     tailwindcss-rails (2.0.29-arm64-darwin)
       railties (>= 6.0.0)
+    tailwindcss-rails (2.0.29-x86_64-linux)
+      railties (>= 6.0.0)
     thor (1.2.2)
     thread-local (1.1.0)
     tiktoken_ruby (0.0.5-aarch64-linux)
     tiktoken_ruby (0.0.5-arm64-darwin)
+    tiktoken_ruby (0.0.5-x86_64-linux)
     timeout (0.3.2)
     trailblazer-option (0.1.2)
     turbo-rails (1.4.0)
@@ -437,6 +442,7 @@ PLATFORMS
   aarch64-linux
   arm64-darwin-21
   arm64-darwin-22
+  x86_64-linux
 
 DEPENDENCIES
   action-cable-redis-backport (~> 1)
