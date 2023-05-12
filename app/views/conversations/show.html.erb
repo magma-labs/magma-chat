@@ -15,32 +15,34 @@
 
   <%= cable_ready_updates_for @conversation, html_options: { class: "bg-gray-800 sticky top-0 z-20" } do %>
     <details class="p-2 sm:p-3 shadow-2xl z-40 bg-gray-800">
-      <summary class="text-lg font-medium conversation-title block <%= 'text-yellow-500' if public_access %>">
+      <summary class="text-lg font-medium cursor-pointer <%= 'text-yellow-500' if public_access %>">
         <%= @conversation.title %>
       </summary>
-      <div>
-        <div class="text-base text-gray-200 mb-1 flex gap-2 items-center">
-          <div>
-            <div class="text-gray-400">
-              Conversation with <span class="underline">
-                <%= link_to "#{@conversation.bot.name}, #{@conversation.bot.role}", class:'flex items-center gap-2' %>
-              </span>
+      <div class="ml-5">
+        <div>
+          <div class="text-base text-gray-200 mb-1 flex gap-2 items-center">
+            <div>
+              <div class="text-gray-400">
+                Conversation with <span class="underline">
+                  <%= link_to "#{@conversation.bot.name}, #{@conversation.bot.role}", class:'flex items-center gap-2' %>
+                </span>
+              </div>
             </div>
           </div>
+          <% if public_access %>
+            <div class="text-xs text-gray-500">
+              <span>Available to public at <%= link_to "this URL", readonly_url(@conversation), class: "text-xs font-medium text-yellow-500", target: "_blank" %></span>
+              <span class="pl-1 opacity-75 hover:opacity-100 cursor-pointer" data-content="<%= readonly_url(@conversation) %>" data-controller="clipboard" data-action="click->clipboard#content" title="Copy to clipboard">📋</span>
+            </div>
+          <% end %>
         </div>
-        <% if public_access %>
-          <div class="text-xs text-gray-500">
-            <span>Available to public at <%= link_to "this URL", readonly_url(@conversation), class: "text-xs font-medium text-yellow-500", target: "_blank" %></span>
-            <span class="pl-1 opacity-75 hover:opacity-100 cursor-pointer" data-content="<%= readonly_url(@conversation) %>" data-controller="clipboard" data-action="click->clipboard#content" title="Copy to clipboard">📋</span>
-          </div>
-        <% end %>
-      </div>
-      <div class="analysis text-sm space-y-2 w-full text-gray-300 flex flex-col gap-2">
-        <%= render "analysis" if @conversation.analysis.present? %>
+        <div class="analysis text-sm space-y-2 w-full text-gray-300 flex flex-col gap-2">
+          <%= render "analysis" if @conversation.analysis.present? %>
+        </div>
       </div>
     </details>
   <% end %>
-  <%= cable_ready_updates_for @conversation, :messages, html_options: { class: "grow flex flex-col gap-0 mb-8", data: { controller: "newmessage" } } do %>
+  <%= cable_ready_updates_for @conversation, :messages, html_options: { class: "grow flex flex-col gap-0 mb-20", data: { controller: "newmessage" } } do %>
     <%= render @conversation.messages.order(:updated_at) %>
 
     <% unless params[:message] || action_name["readonly"] %><span data-controller="scroll" data-action="scroll#scroll"></span><% end %>
@@ -48,10 +50,12 @@
     <% if @conversation.analysis_next.present? && current_user == @conversation.user %>
       <details class="space-y-2 p-4">
         <summary class="text-sm mb-2 font-bold text-gray-700"><%= it("Ideas for continuing the conversation...") %></summary>
-        <% @conversation.analysis_next.each do |sugg| %>
-          <%= tag.div sugg, data: { id: @conversation&.id, value: sugg, reflex: current_user ? 'click->Conversation#suggested' : nil },
-                            class: 'cursor-pointer mb-2 rounded-md text-gray-400' %>
-        <% end %>
+        <div class="pl-4">
+          <% @conversation.analysis_next.each do |sugg| %>
+            <%= tag.div sugg, data: { id: @conversation&.id, value: sugg, reflex: current_user ? 'click->Conversation#suggested' : nil },
+                              class: 'cursor-pointer mb-2 rounded-md text-gray-400' %>
+          <% end %>
+        </div>
       </details>
     <% end %>
   <% end %>

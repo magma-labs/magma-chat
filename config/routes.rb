@@ -30,6 +30,8 @@ Rails.application.routes.draw do
     resources :users
   end
 
+  get "/dashboard", to: "dashboard#index", as: :dashboard
+
   get "/tts/:message_id.mp3", to: "conversations#tts", as: :tts
 
   get "/tag/:q", to: "conversations#tag", as: :tag

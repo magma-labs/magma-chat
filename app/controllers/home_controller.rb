@@ -7,6 +7,6 @@ class HomeController < ApplicationController
   private
 
   def redirect_if_logged_in
-    redirect_to conversations_path if current_user
+    redirect_to dashboard_path if current_user
   end
 end

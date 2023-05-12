@@ -1,5 +1,4 @@
 <header class="p-2 lg:p-3 bg-gray-900 flex justify-between text-gray-400 relative z-50">
-
   <div class="sm:hidden">
     <div data-action="click->sidebar#reveal" data-sidebar-target="revealbutton">
       <%= heroicon "bars-3", options: { class:"w-6 h-6" } %>
@@ -9,7 +8,7 @@
     </div>
   </div>
 
-  <%= link_to [:conversations], class: "flex gap-3" do %>
+  <%= link_to root_path, class: "flex gap-3" do %>
     <%= image_tag("nav_logo.svg", class: "h-6 object-fit sm:m-auto") %>
   <% end %>
 
