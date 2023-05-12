@@ -11,7 +11,7 @@ export default class extends Controller {
       this.element.classList.remove("selected")
     }
     // on double click, put "Hello" in the conversation_first_message field and fire its change event
-    this.element.addEventListener("dblclick", (event) => {
+    this.element.addEventListener("click", (event) => {
       document.querySelector("#conversation_first_message").value = this.element.dataset.hello
       document.querySelector("#conversation_first_message").dispatchEvent(new Event('change', { bubbles: true }))
     })

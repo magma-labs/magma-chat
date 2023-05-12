@@ -1,4 +1,4 @@
-<header class="p-2 lg:p-3 bg-gray-900 flex justify-between text-gray-400 relative z-10">
+<header class="p-2 lg:p-3 bg-gray-900 flex justify-between text-gray-400 relative z-50">
 
   <div class="sm:hidden">
     <div data-action="click->sidebar#reveal" data-sidebar-target="revealbutton">
@@ -14,10 +14,14 @@
   <% end %>
 
   <div class="flex gap-2 items-center text-gray-400">
+    <%= link_to heroicon("users", options: { class:"w-6 h-6" }), "/bots" %>
     <div data-controller="visibility">
       <%= heroicon "user-circle", options: {"data-action": "click->visibility#toggleTargets", class:"w-6 h-6"} %>
-      <div class="hidden divide-y absolute bg-gray-400 text-gray-700 shadow rounded-md overflow-hidden right-2 top-10 z-10" data-visibility-target="hideable">
+      <div class="hidden divide-y absolute bg-gray-400 text-gray-700 shadow rounded-md overflow-hidden right-2 top-10"
+           data-visibility-target="hideable">
+        <div class="menu-header font-medium">Logged in as <%= current_user.name %></div>
         <%= link_to heroicon("cog-8-tooth") + " Settings", "/settings", class: "menu-item border-gray-500" %>
+        <%= link_to heroicon("cog") + "Bot Configuration", "/admin/bots", class: "menu-item border-gray-500" if current_admin? %>
         <%= link_to heroicon("arrow-right-on-rectangle") + " Logout", "/logout", class: "menu-item border-gray-500" %>
       </div>
     </div>

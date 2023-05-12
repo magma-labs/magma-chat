@@ -72,7 +72,7 @@ class Conversation < ApplicationRecord
 
   def prompt!(message: first_message, visible: true, sender: user)
     Rails.logger.info("USER PROMPT: #{message}")
-    user_message!(message, visible: visible, skip_broadcast: false)
+    user_message!(message, visible: messages.any?, skip_broadcast: false)
   end
 
   def redo!(sender, message)

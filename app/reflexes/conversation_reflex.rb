@@ -48,7 +48,7 @@ class ConversationReflex < ApplicationReflex
       case value.strip
       when /^\/new/
         # assume the title is whatever string supplied after the /new command
-        msg = value.split("/new").last&.strip.presence || I18n.it("Hello")
+        msg = value.split("/new").last&.strip.presence || "Hello"
         @conversation = current_user.conversations.create!(bot: bot, first_message: msg)
         reload
       when /^\/delete/

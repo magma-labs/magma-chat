@@ -102,9 +102,13 @@ body {
     @apply border-2 border-transparent;
   }
 
-  .menu-item {
-    @apply text-gray-700 px-3 py-2 text-sm flex gap-1 items-center no-underline cursor-pointer;
+  .menu-header {
+    @apply text-gray-700 px-3 py-2 text-sm flex gap-1 items-center no-underline;
     text-decoration-line: none !important;
+  }
+
+  .menu-item {
+    @apply menu-header cursor-pointer;
   }
 
   .message.highlight {
@@ -126,5 +130,15 @@ body {
 
   .tab.active {
     @apply bg-red-200 font-bold py-2 px-4 rounded-t-lg;
+  }
+
+  summary.conversation-title:after {
+    @apply inline-block ml-2;
+    transition: 0.2s;
+    content: '▸'; /* chevron */
+  }
+
+  details[open] summary.conversation-title::after {
+    transform: rotate(90deg);
   }
 }

@@ -1,0 +1,15 @@
+<%= cable_ready_updates_for @conversation do %>
+  <div class="flex gap-2 text-gray-900 items-center w-full rounded-lg bg-gray-400">
+    <%= image_tag conversation.bot.image_url, class: "rounded-md w-16" %>
+    <div class="w-full truncate flex flex-col pr-2">
+      <div class="flex items-baseline justify-between">
+        <%= link_to [conversation], class: "items-baseline flex-1 flex gap-2 truncate" do %>
+          <div class="font-medium"><%= conversation.bot.name.split.first %></div>
+          <div class="text-gray-500 text-xs truncate"><%= conversation.bot.role %></div>
+        <% end %>
+        <div class="text-gray-600 font-light text-xs"><%= distance_of_time_in_words_to_now(conversation.updated_at) + " ago" %></div>
+      </div>
+      <div class="w-full text-sm text-gray-600 font-light truncate"><%= link_to conversation.messages.visible.last.content, [conversation] %></div>
+    </div>
+  </div>
+<% end %>

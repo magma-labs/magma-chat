@@ -16,9 +16,23 @@ class ApplicationController < ActionController::Base
     @current_user ||= session[:user_id] && User.find_by(id: session[:user_id])
   end
 
+  # def load_latest_conversations
+  #   @latest_conversations = current_user.conversations.order(updated_at: :desc).limit(10)
+  # end
+
   def load_latest_conversations
-    @latest_conversations = current_user.conversations.order(updated_at: :desc).limit(10)
+    subquery = current_user.conversations
+      .select('bot_id, MAX(updated_at) as max_updated_at')
+      .group(:bot_id)
+      .to_sql
+
+    @latest_conversations = Conversation
+      .select('conversations.*')
+      .from("(#{subquery}) AS subquery")
+      .joins('INNER JOIN conversations ON conversations.bot_id = subquery.bot_id AND conversations.updated_at = subquery.max_updated_at')
+      .order('conversations.updated_at DESC')
   end
+
 
   def require_user
     if current_user

@@ -9,7 +9,7 @@ class ObservationJob < ApplicationJob
     if time_to_observe?
       Rails.logger.info("\n\nObservationJob for #{conversation.id} 👁👁\n\n")
       make_observations!
-      conversation.touch!(:last_observations_at)
+      conversation.touch(:last_observations_at)
     else
       # defer to save resources
       ObservationJob.set(wait_until: 1.minute.from_now).perform_later(conversation)
@@ -61,6 +61,7 @@ class ObservationJob < ApplicationJob
   end
 
   def time_to_observe?
+    return false if conversation.messages.last.content.blank?
     return true if conversation.last_observations_at.nil?
     conversation.last_observations_at > 1.minute.ago
   end

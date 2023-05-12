@@ -27,7 +27,7 @@ class AnalysisJob < ApplicationJob
           conversation.save!
         end
       end
-      conversation.touch!(:last_analysis_at)
+      conversation.touch(:last_analysis_at)
     else
       # save resources by skipping analysis until conversation is idle
       AnalysisJob.set(wait_until: 1.minute.from_now).perform_later(conversation)
@@ -37,6 +37,7 @@ class AnalysisJob < ApplicationJob
   private
 
   def time_to_analyze?
+    return false if conversation.messages.last.content.blank?
     return true if conversation.last_analysis_at.nil?
     conversation.last_analysis_at > 1.minute.ago
   end

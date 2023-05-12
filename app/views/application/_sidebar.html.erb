@@ -1,19 +1,19 @@
-<aside data-sidebar-target="sidebar" style="left: -100%;" class="flex flex-col overflow-hidden z-10 top-0 bottom-0 absolute sm:static w-64 bg-gray-800 transition-all drop-shadow-lg overflow-y-auto">
-  <%= yield :sidebar_prepend %>
-  <div class="flex-1 p-3 space-y-10">
-
-    <div class="flex flex-col gap-1">
-      <%= render "sidebar_link", path: conversations_path, text: it("Conversations"), icon: "chat-bubble-left-ellipsis" %>
-      <%= render "sidebar_link", path: bots_path, text: it("Bots"), icon: "users" %>
-      <%= render "sidebar_link", path: settings_path, text: it("Settings"), icon: "cog-8-tooth" %>
+<% if current_user %>
+  <aside data-sidebar-target="sidebar" style="left: -100%;" class="flex flex-col overflow-hidden z-10 top-0 bottom-0 absolute sm:static w-96 sm:w-1/4 sm:min-w-[250px] bg-gray-800 transition-all drop-shadow-lg overflow-y-auto">
+    <%= yield :sidebar_prepend %>
+    <div class="flex-1 p-3 space-y-2 w-full">
+      <div class="flex gap-3 sm:gap-4 w-full">
+        <%= form_for :search, url: "/conversations/search", class: "relative w-full" do |f| %>
+          <input type="text" placeholder="<%= it("Search...") %>" name="q" class="rounded-md bg-gray-300 focus:bg-gray-100 text-gray-800 p-1 pl-2 w-full">
+          <div class="absolute right-2 top-1/2 -translate-y-1/2 text-gray-800"><%= heroicon "magnifying-glass" %></div>
+        <% end %>
+        <%#= link_to it("New"), new_conversation_path, class:"bg-magma-red-400 text-gray-100 hover:scale-105 py-1 px-2 rounded", title: "New conversation" %>
+      </div>
+      <div class="latest-conversations flex flex-col gap-2">
+        <%= render collection: @latest_conversations, partial: "conversations/latest", as: :conversation %>
+      </div>
     </div>
-
-    <div class="flex flex-col gap-1">
-      <h2 class="text-gray-500 text-xs uppercase font-bold">Admin</h2>
-      <%= link_to "Bot Configuration", "/admin/bots", class: "text-gray-400 hover:text-yellow-500 block" if current_admin? %>
-    </div>
-
-  </div>
-</aside>
+  </aside>
+<% end %>
 
 <div data-sidebar-target="sidebaroverlay" data-action="click->sidebar#hide" class="hidden sm:hidden fixed inset-0 bg-gray-500/80"> </div>

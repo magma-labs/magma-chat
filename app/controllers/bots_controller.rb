@@ -1,7 +1,7 @@
 class BotsController < ApplicationController
   before_action :require_user
   before_action :load_latest_conversations
-  before_action :set_bot, only: [:show]
+  before_action :set_bot, only: [:new_conversation, :show]
 
   def index
   end
@@ -10,6 +10,12 @@ class BotsController < ApplicationController
     @conversations = @bot.conversations
     # can be set by reflex
     @thoughts ||= @bot.thoughts.latest
+  end
+
+  def new_conversation
+    current_user.conversations.create!(bot: @bot, first_message: "Hello").then do |conversation|
+      redirect_to [conversation]
+    end
   end
 
   private
