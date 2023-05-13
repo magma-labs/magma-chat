@@ -27,7 +27,7 @@ class ConversationReflex < ApplicationReflex
 
   def destroy
     conversation.destroy!
-    cable_ready.redirect_to(url: "/conversations/new").broadcast
+    cable_ready.redirect_to(url: "/bots").broadcast
     morph :nothing
   end
 

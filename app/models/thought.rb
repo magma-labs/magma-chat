@@ -20,7 +20,7 @@
 #  index_thoughts_on_subject  (subject_type,subject_id)
 #
 class Thought < ApplicationRecord
-  INDEX = :thoughts
+  include Vectorable
 
   attribute :subject_name, :string
 
@@ -53,28 +53,21 @@ class Thought < ApplicationRecord
     "thoughts/#{self.class.name.underscore}"
   end
 
+  protected
+
+  def non_tensor_fields
+    [:type, :bot_id, :subject_id, :subject_type, :importance]
+  end
+
+  def vector_fields
+    content.merge(attributes.symbolize_keys.slice(:type, :brief, :bot_id, :subject_id, :subject_type, :importance))
+  end
+
   private
 
   def create_new_subject
     return if subject_id?
     raise "Cannot create new subject with name and no type" if subject_type.blank?
     self.subject = subject_type.constantize.create!(name: subject_name)
-  end
-
-  def store_vector
-    fields = attributes.symbolize_keys.slice(:type, :brief, :bot_id, :subject_id, :subject_type, :importance)
-    document = content.merge(fields)
-    Marqo.client.store(
-      index: INDEX, id: id, doc: document,
-      non_tensor_fields: [:type, :bot_id, :subject_id, :subject_type, :importance]
-    )
-  rescue
-    Rails.logger.error("Failed to store vector for thought #{id}")
-  end
-
-  def delete_vector
-    Marqo.client.delete(INDEX, id)
-  rescue
-    Rails.logger.error("Failed to delete vector for thought #{id}")
   end
 end

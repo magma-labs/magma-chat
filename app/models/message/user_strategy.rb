@@ -1,4 +1,4 @@
-class Message::UserStrategy < Message::BaseStrategy
+class Message::UserStrategy < Message::ParticipantStrategy
   def broadcast_message
     ConversationJob.perform_later(conversation, content, visible)
   end

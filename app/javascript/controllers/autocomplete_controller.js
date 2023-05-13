@@ -46,7 +46,7 @@ export default class extends ApplicationController {
   }
 
   keydown(event) {
-    if (event.key === 'Tab' || event.key === 'ArrowRight') {
+    if (event.key === 'Tab') {
       event.preventDefault()
       this.completeHighlightedSelection()
     }

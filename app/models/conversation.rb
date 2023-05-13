@@ -29,11 +29,15 @@ class Conversation < ApplicationRecord
 
   attribute :first_message
 
+  # TODO: Placeholder for flipping conversations to private, move to settings later
+  attribute :off_the_record, :boolean, default: false
+
   belongs_to :bot, optional: true, counter_cache: true
   # todo: rename to owner or initiator because there will be multiple participants in a single convo
   belongs_to :user, counter_cache: true
 
   has_many :messages, dependent: :destroy, enable_cable_ready_updates: true
+  has_one :latest_message, -> { visible.order(created_at: :desc) }, class_name: "Message"
 
   before_create :set_title
   before_create :copy_settings_from_bot
@@ -70,9 +74,21 @@ class Conversation < ApplicationRecord
     bot.observations.create!(observations.map {|o| { subject: user, brief: o } })
   end
 
+  def label
+    "a conversation between #{user.name} and #{bot.name}, #{bot.role}"
+  end
+
+  def latest_message_content
+    latest_message&.content
+  end
+
   def prompt!(message: first_message, visible: true, sender: user)
     Rails.logger.info("USER PROMPT: #{message}")
-    user_message!(message, visible: messages.any?, skip_broadcast: false)
+    user_message!(message, visible: messages.any?, skip_broadcast: false).tap do |um|
+      if bot.enable_shared_messages? && !off_the_record
+        MessageRememberJob.set(wait: 1.minute).perform_later(um)
+      end
+    end
   end
 
   def redo!(sender, message)
@@ -91,6 +107,10 @@ class Conversation < ApplicationRecord
 
   def summary
     analysis[:summary]
+  end
+
+  def tags
+    analysis[:tags] || []
   end
 
   def total_token_count
@@ -118,8 +138,9 @@ class Conversation < ApplicationRecord
       query = query.where("created_at > ?", since)
     end
     query.up_to_token_limit(self, token_limit, only_visible: only_visible).map do |message|
+      next if message.content.blank? # skip empty messages
       { role: message.role, content: message.content }
-    end
+    end.compact # remove nils
   end
 
   def analysis_next

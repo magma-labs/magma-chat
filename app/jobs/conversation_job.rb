@@ -22,10 +22,15 @@ class ConversationJob < ApplicationJob
 
     tokens_count = TikToken.count(conversation.directive + user_message)
 
+    transcript = messages_for_gpt(tokens_in_prompt: tokens_count, only_visible: false)
+    if bot.enable_shared_messages?
+      MessageAnnotator.add_relevant_messages_to(conversation, transcript)
+    end
+
     chat = Magma::Chat.new(
       model: conversation.model,
       directive: conversation.directive,
-      transcript: messages_for_gpt(tokens_in_prompt: tokens_count, only_visible: false),
+      transcript: transcript,
       max_tokens: conversation.max_tokens,
       temperature: conversation.temperature,
       top_p: conversation.top_p,
@@ -43,6 +48,10 @@ class ConversationJob < ApplicationJob
         message.update!(content: reply, run_analysis_after_saving: true)
       end
       # todo: proper error handling
+    end
+
+    if bot.enable_shared_messages?
+      MessageRememberJob.set(wait: 1.minute).perform_later(message)
     end
   end
 

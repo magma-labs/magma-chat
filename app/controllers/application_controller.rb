@@ -30,6 +30,8 @@ class ApplicationController < ActionController::Base
       .select('conversations.*')
       .from("(#{subquery}) AS subquery")
       .joins('INNER JOIN conversations ON conversations.bot_id = subquery.bot_id AND conversations.updated_at = subquery.max_updated_at')
+      .includes(:bot)
+      .includes(:latest_message)
       .order('conversations.updated_at DESC')
   end
 

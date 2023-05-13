@@ -1,4 +1,4 @@
-class Message::AssistantStrategy < Message::BaseStrategy
+class Message::AssistantStrategy < Message::ParticipantStrategy
   def message_timeout_job
     # todo: make configurable or dynamic
     MessageTimeoutJob.set(wait: 2.minutes).perform_later(context)

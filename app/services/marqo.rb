@@ -1,7 +1,17 @@
 require 'httparty'
 
+##
+# A Ruby wrapper for the Marqo API for embedding and later searching bot memories.
+# Lexical search works as expected. Tensor search is for sentences and paragraphs
+# up to 128 characters. See https://huggingface.co/sentence-transformers/all-MiniLM-L6-v1
+# for more information about the embedding model used natively by Marqo.
 class Marqo
   include HTTParty
+
+  # Note about settings: We are currently using the default settings for Marqo.
+  # But it is possible to change them, including the embedding model, on the fly.
+  # https://marqo.pages.dev/0.0.19/API-Reference/settings/
+  # TODO: Support for configuring index settings at runtime
 
   base_uri ENV.fetch('MARQO_URL')
 
@@ -42,15 +52,12 @@ class Marqo
     puts "🔍🔍🔍 #{query} 🔍🔍🔍"
     puts "🔍🔍🔍 #{filter} 🔍🔍🔍"
     puts
+    params = { q: query, searchMethod: "TENSOR", limit: limit }
+    params[:filter] = filter if filter.present?
     options = {
       basic_auth: @auth,
       headers: { 'Content-Type' => 'application/json' },
-      body: {
-        q: query,
-        filter: filter,
-        searchMethod: "TENSOR",
-        limit: limit
-      }.to_json
+      body: params.to_json
     }
     response = self.class.post("/indexes/#{index_name.to_s.parameterize}/search", options)
     SearchResult.new(response, recurse_over_arrays: true)

@@ -12,6 +12,8 @@ long_term_memory:
 ltm_recent_messages_count:
   default: 2
 short_term_memory:
+  default: false
+enable_shared_messages:
   default: true
 enable_observations:
   default: true
@@ -23,6 +25,8 @@ top_p:
   default: 1.0
 max_tokens:
   default: 64
+  min: 20
+  max: 2048
 presence_penalty:
   default: 0.0
 frequency_penalty:

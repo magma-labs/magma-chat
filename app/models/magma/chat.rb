@@ -7,11 +7,12 @@ module Magma
       end
 
       def to_entry
+        return nil if @content.blank?
         { role: @role.to_s, content: @content }
       end
     end
 
-    attr_accessor :model, :temperature, :top_p, :frequency_penalty, :presence_penalty, :max_tokens, :stream, :debug
+    attr_accessor :model, :temperature, :top_p, :frequency_penalty, :presence_penalty, :max_tokens, :stream
 
     ##
     # Creates a new chat object for facilitating chat-style completions with OpenAI
@@ -25,8 +26,7 @@ module Magma
     # - presence_penalty: Float between 0 and 1. Defaults to 0.0
     # - max_tokens: Integer. Defaults to 500
     # - stream: Proc that will be called with each response from OpenAI
-    # - debug: Boolean. Defaults to false. Puts responses from OpenAI to the console
-    def initialize(model: nil, directive: nil, transcript: [], temperature: 0.7, top_p: 1.0, frequency_penalty: 0.0, presence_penalty: 0.0, max_tokens: 500, stream: nil, debug: false)
+    def initialize(model: nil, directive: nil, transcript: [], temperature: 0.7, top_p: 1.0, frequency_penalty: 0.0, presence_penalty: 0.0, max_tokens: 500, stream: nil)
       self.model = model || ENV['OPENAI_DEFAULT_MODEL'] || 'gpt-3.5-turbo'
       self.temperature ||= temperature
       self.top_p ||= top_p
@@ -34,11 +34,16 @@ module Magma
       self.presence_penalty ||= presence_penalty
       self.max_tokens ||= max_tokens
       self.stream ||= stream
-      self.debug ||= debug
 
       directive ||= Magma::Prompts.get("gpt.default_chat_directive")
       @messages = [ Message.new(role: :system, content: directive).to_entry ]
-      @messages += transcript
+      @messages += transcript # prevent blank messages
+    end
+
+    ##
+    # Adds a message to the transcript.
+    def add_message(role:, content:)
+      @messages << Message.new(role: role, content: content).to_entry
     end
 
     ##
@@ -112,11 +117,22 @@ module Magma
       end
     end
 
+    ##
+    # Convenience method for asking GPT a simple yes no question.
+    # returns boolean `true` if yes, `false` if no
+    def yes_no_answer(key: nil, content: nil, **opts)
+      prompt(key: key, content: content, **opts).then do |reply|
+        !!reply.match?(/yes/i)
+      end
+    end
+
     private
 
     def send
-      Gpt.client.chat(parameters: params.merge(messages: @messages)).tap do |response|
-        puts response.inspect if debug
+      send_params = params.merge(messages: @messages.compact)
+      Rails.logger.info("😏 GPT REQUEST: #{send_params} #{object_id}")
+      Gpt.client.chat(parameters: send_params).tap do |response|
+        Rails.logger.info("👹 GPT RESPONSE: #{response} #{object_id}")
       end
     end
 

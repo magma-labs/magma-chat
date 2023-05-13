@@ -84,26 +84,18 @@
       <% end %>
     </div>
   </div>
-<% elsif current_user&.admin? && message.conversation.show_invisibles %>
-  <div class="message <%= message.role %> w-full p-1 opacity-75 text-gray-500" style="background-color: #cccccc; border-top: 1px solid gray">
-    <div class="text-lg xl:max-w-[80%] mx-auto flex items-start gap-2 md:gap-6">
-      <div class="flex-shrink-0 relative h-[36px] w-[36px] rounded-md flex items-center justify-center bg-gray-800">
-        <img src="<%= message.sender_image_url %>" alt="" class="object-fit rounded-md">
+<% elsif message.conversation.show_invisibles %>
+  <div class="flex bg-slate-400 items-center justify-between">
+    <div class="flex-1 p-2 opacity-75 text-sm">
+      <code class="whitespace-break-spaces text-gray-700"><%= message.content.presence || "n/a" %></code>
+      <div class="text-gray-600">
+        <%= message.role.capitalize %> ・
+        <%= "#{distance_of_time_in_words_to_now(message.updated_at)} ago" %>
+        ・ <%= message.tokens_count %> tokens
       </div>
-      <div class="flex-1 max-w-full relative min-h-[40px] text-gray-500 ">
-        <% if message.content.blank? %>
-          <%= render "loading" %>
-        <% else %>
-          <code class="text-xs whitespace-break-spaces"><%= message.content %></code>
-          <div class="text-gray-500 text-xs">
-            <%= "#{distance_of_time_in_words_to_now(message.updated_at)} ago" %>
-            ・ <%= message.tokens_count %> tokens
-          </div>
-        <% end %>
-      </div>
-      <% if current_admin? %>
-        <div class="text-xs p-2 cursor-pointer" data-reflex="click->Message#destroy" data-id="<%= message.id %>">🗑</div>
-      <% end %>
+    </div>
+    <div class="text-xs p-3 cursor-pointer" data-reflex="click->Message#destroy" data-id="<%= message.id %>">
+      <%= heroicon("trash") %>
     </div>
   </div>
 <% end %>

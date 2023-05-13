@@ -1,9 +1,16 @@
 <div class="flex flex-col gap-4">
   <div class="flex gap-2 items-top border-b pb-4">
+    <%= form.check_box :enable_shared_messages, class: "rounded-md bg-gray-400 w-4 h-4 m-2 p-2 w-6", data: { id: @bot.id, controller: "botsettings", action: "click->botsettings#toggle_setting", field: "enable_shared_messages" } %>
+    <div class="flex-1">
+      <%= form.label :enable_shared_messages, "Enable knowledge sharing (recommended)", class: "text-gray-700" %>
+      <div class="text-gray-500 text-xs"><%= it("Allows bot to share knowledge gained with other bots on this server.") %></div>
+    </div>
+  </div>
+  <div class="flex gap-2 items-top border-b pb-4">
     <%= form.check_box :enable_observations, class: "rounded-md bg-gray-400 w-4 h-4 m-2 p-2 w-6", data: { id: @bot.id, controller: "botsettings", action: "click->botsettings#toggle_setting", field: "enable_observations" } %>
     <div class="flex-1">
       <%= form.label :enable_observations, "Enable observations", class: "text-gray-700" %>
-      <div class="text-gray-500 text-xs"><%= it("Make observations about the user after each message exchange. Happens automatically in a background process.") %></div>
+      <div class="text-gray-500 text-xs"><%= it("Make private observations about the user after each message exchange. Happens automatically in a background process.") %></div>
     </div>
   </div>
   <div class="flex gap-2 items-top">
@@ -26,7 +33,7 @@
     <%= form.check_box :long_term_memory, class: "rounded-md bg-gray-400 w-4 h-4 m-2 p-2 w-6", data: { id: @bot.id, controller: "botsettings", action: "click->botsettings#toggle_setting", field: "long_term_memory" } %>
     <div class="flex-1">
       <%= form.label :long_term_memory, it("Enable long-term memory"), class: "text-gray-700" %>
-      <div class="text-gray-500 text-xs"><%= it("Performs tensor search for relevant thoughts prior to answering a prompt. Adds 5-15 seconds latency.") %></div>
+      <div class="text-gray-500 text-xs"><%= it("Considers what observations may be relevant prior to answering a prompt. Adds 5-15 seconds latency to each interaction.") %></div>
     </div>
   </div>
   <% if @bot.long_term_memory? %>

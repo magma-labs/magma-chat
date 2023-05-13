@@ -1,18 +1,6 @@
 conversations:
   analysis_directive: |
-    Analyze the conversation and return ONLY a JSON object.
-  analyze: |
-    Your analysis should be expressed in %{lang} within a JSON object with the following keys:
-
-    `title`: an appropriate title
-    `summary`: one paragraph summary that provides a brief overview of the conversation and highlights any significant points
-    `tags`: array of lowercase tags that represent the main themes of the conversation
-    `next`: array of questions you think the user could ask the assistant next
-
-    You must ONLY return a valid, well-formatted JSON object with no additional conversation or commentary.
-    I must be able to parse your JSON using Ruby's `JSON.parse` function.
-  consider: |
-
+    I will send you a conversation transcript. You will analyze it and generate a JSON object, without additional commentary or markdown. Values should be in the same language as the transcript. Conform your output to this schema: %{json_schema}
   context_intro: |
     My name is %{user_name} with user id %{user_id}.
     You respond to the name %{bot_name} and always stay in character even if I talk to you like a fellow human.
@@ -156,3 +144,13 @@ gpt:
     ```
     After this message I will only provide parameters and you will ONLY respond
     with a single return value of your choice. Never ever include any other explanatory text.
+
+message_annotator:
+  system: |
+    MagmaChat System: Here are a few past messages that might be relevant to the current conversation:
+  line: |
+    In %{label}, %{sender_name} said: %{content}
+
+worth_remembering_yes_no: |
+  "%{sender_name} said the above in a %{conversation}. Is there anything notable or factual
+  that makes this message worth remembering for later use? A simple yes or no answer will suffice."

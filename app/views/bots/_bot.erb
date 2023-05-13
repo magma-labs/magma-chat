@@ -1,7 +1,14 @@
 <div>
   <%= button_to image_tag(bot.image_url, class: "bg-gray-800 rounded-lg"), [:new_conversation, bot], method: :post %>
   <div class="mt-2 mb-4">
-    <div class="text-xl font-bold text-gray-300"><%= link_to bot.name, bot %></div>
+    <div class="flex gap-2 items-center text-xl font-bold text-gray-300">
+      <%= link_to bot.name, bot %>
+      <% if current_admin? %>
+        <%= link_to [:admin, bot], class: "text-gray-400 text-sm" do %>
+          <%= heroicon("cog") %>
+        <% end %>
+      <% end %>
+    </div>
     <div class="text-md text-gray-400 leading-5"><%= it(bot.role&.force_encoding("UTF-8")) %></div>
   </div>
 </div>

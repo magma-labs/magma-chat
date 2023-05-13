@@ -30,12 +30,14 @@
 class Message < ApplicationRecord
   include PgSearch::Model
   include Strategic
+  include Vectorable
 
+  attribute :content, :string, default: ""
   attribute :run_analysis_after_saving, :boolean, default: false
   attribute :skip_broadcast, :boolean, default: false
 
   delegate :to_partial_path, to: :strategy
-  delegate :bot, :user, to: :conversation
+  delegate :bot, :user, :tags, to: :conversation
 
   belongs_to :conversation
   belongs_to :sender, polymorphic: true, optional: true
@@ -56,6 +58,8 @@ class Message < ApplicationRecord
 
   after_commit :broadcast_message, on: :create, unless: :skip_broadcast
   after_commit :reanalyze, if: :run_analysis_after_saving
+
+  after_commit :delete_vector, on: :destroy
   after_commit :message_timeout_job, on: :create
 
   validates :role, presence: true
@@ -63,6 +67,10 @@ class Message < ApplicationRecord
 
   after_initialize do
     self.strategy ||= role.to_s
+  end
+
+  def conversation_label
+    conversation.label
   end
 
   def reanalyze
@@ -98,6 +106,18 @@ class Message < ApplicationRecord
       .order("subquery.created_at desc")
       .to_a
       .reverse
+  end
+
+  protected
+
+  def non_tensor_fields
+    [:conversation_id, :sender_type, :sender_id]
+  end
+
+  def vector_fields
+    properties
+      .merge(tags: tags.to_sentence)
+      .merge(attributes.symbolize_keys.slice(:conversation_id, :sender_type, :sender_id, :content, :sender_name))
   end
 
   private

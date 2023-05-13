@@ -1,10 +1,16 @@
 <div class="space-y-4">
 
   <div class="flex items-end gap-3 p-3">
-    <%= image_tag(@bot.image_url, class: "bg-gray-700 rounded-xl w-36 sm:w-48") %>
+    <%= button_to image_tag(@bot.image_url, class: "bg-gray-900 hover:bg-magma-red rounded-xl w-36 sm:w-48 shadow-xl"), [:new_conversation, @bot], method: :post %>
     <div>
       <h1 class="text-3xl font-medium"> <%= @bot.name %> </h1>
-      <div class="text-gray-400"> <%= @bot.role %> </div>
+      <div class="text-gray-400 flex items-center gap-1"> <%= @bot.role %>
+        <% if current_admin? %>
+          <%= link_to [:admin, @bot], class: "text-gray-400 text-sm" do %>
+            <%= heroicon("cog") %>
+          <% end %>
+        <% end %>
+      </div>
     </div>
   </div>
 

@@ -1,4 +1,4 @@
-<%= cable_ready_updates_for @conversation do %>
+<%= cable_ready_updates_for conversation do %>
   <div class="flex gap-2 text-gray-900 items-center w-full rounded-lg bg-gray-300 hover:bg-gray-200 overflow-hidden">
     <%= link_to image_tag(conversation.bot.image_url, class: "rounded-md w-16 bg-gray-950 rounded-none"), conversation.bot %>
     <div class="w-full truncate flex flex-col pr-2">
@@ -9,7 +9,7 @@
         <% end %>
         <div class="text-gray-600 font-light text-xs"><%= distance_of_time_in_words_to_now(conversation.updated_at) + " ago" %></div>
       </div>
-      <div class="w-full text-sm text-gray-600 font-light truncate"><%= link_to conversation.messages.visible.last.content, [conversation] %></div>
+      <div class="w-full text-sm text-gray-600 font-light truncate"><%= link_to conversation.latest_message_content, [conversation] %></div>
     </div>
   </div>
 <% end %>

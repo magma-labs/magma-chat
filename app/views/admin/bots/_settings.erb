@@ -2,7 +2,7 @@
   <div class="flex flex-col gap-0">
     <div class="flex items-center gap-3">
       <%= form.label :model, it("AI Model"), class: "block text-gray-800 font-bold" %>
-      <%= form.select :model, options_for_select([["GPT-3.5 Turbo", "gpt-3.5turbo"], ["GPT-4", "gpt-4"]], selected: @bot.model), {},
+      <%= form.select :model, options_for_select([["GPT-3.5 Turbo", "gpt-3.5-turbo"], ["GPT-4", "gpt-4"]], selected: @bot.model), {},
                   class: "border-0 rounded bg-transparent text-gray-800 pr-8" %>
     </div>
     <div class="text-gray-600 text-xs"><%= it("Choose the GPT version to work with. GPT-4 is slower but more awesome.") %></div>
