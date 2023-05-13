@@ -82,6 +82,11 @@ class Conversation < ApplicationRecord
     latest_message&.content
   end
 
+  def participants_sentence
+    # todo: ready for multiple participants
+    "#{user.name} and #{bot.name}"
+  end
+
   def prompt!(message: first_message, visible: true, sender: user)
     Rails.logger.info("USER PROMPT: #{message}")
     user_message!(message, visible: messages.any?, skip_broadcast: false).tap do |um|

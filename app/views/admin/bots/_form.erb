@@ -47,6 +47,9 @@
         <!-- Tab Buttons -->
         <div class="flex space-x-4">
           <div data-action="click->tabs#switch" data-tabs-target="tab" data-tab-name="directive" class="tab active">Directive</div>
+          <% if @bot.humanize? %>
+            <div data-action="click->tabs#switch" data-tabs-target="tab" data-tab-name="humanize" class="tab ">Backstory</div>
+          <% end %>
           <div data-action="click->tabs#switch" data-tabs-target="tab" data-tab-name="settings" class="tab ">Settings</div>
           <% if ENV['XI_API_KEY'] %>
             <div data-action="click->tabs#switch" data-tabs-target="tab" data-tab-name="voice" class="tab ">Voice</div>
@@ -59,6 +62,13 @@
           <div data-tabs-target="content" data-tab-name="directive">
             <%= render "directive", form: form %>
           </div>
+
+          <% if @bot.humanize? %>
+            <div data-tabs-target="content" data-tab-name="humanize">
+              <%= render "humanize", form: form %>
+            </div>
+          <% end %>
+
           <div data-tabs-target="content" data-tab-name="settings" class="hidden">
             <%= render "settings", form: form %>
           </div>

@@ -15,7 +15,7 @@
   </div>
 
   <div class="flex flex-1 relative items-end justify-between gap-2 bg-gray-700 p-3">
-    <h2 class="text-2xl text-gray-300">Messages</h2>
+    <h2 class="text-2xl text-gray-300">Conversations</h2>
     <div class="flex gap-2">
       <div class="relative">
         <input type="text" data-reflex="change->Bot#search_thoughts" data-id="<%= @bot.id %>" placeholder="<%= it("Search...") %>" data-controller="bot"
@@ -29,34 +29,39 @@
     </div>
   </div>
   <%= cable_ready_updates_for @bot, :conversations, html_options: { class: "space-y-3 px-3" } do %>
-    <%= render @bot.conversations.latest %>
+    <% if current_admin? %>
+      <%= render @bot.conversations.latest %>
+    <% else %>
+      <%= render @bot.conversations.latest.where(user_id: current_user.id) %>
+    <% end %>
   <% end %>
 
-  <div class="flex flex-1 relative items-end justify-between gap-2 bg-gray-700 p-3">
-    <h2 class="text-2xl text-gray-300">Memories</h2>
-    <div class="flex gap-2">
-      <div class="relative">
-        <input type="text" data-reflex="change->Bot#search_thoughts" data-id="<%= @bot.id %>" placeholder="<%= it("Search...") %>" data-controller="bot"
-               class="text-sm w-32 sm:w-48 pr-8 focus:bg-gray-200 bg-gray-600 text-gray-800 rounded-md">
-        <div class="absolute right-2 top-1/2 -translate-y-1/2 text-gray-800"><%= heroicon "magnifying-glass" %></div>
+  <% if current_admin? %>
+    <div class="flex flex-1 relative items-end justify-between gap-2 bg-gray-700 p-3">
+      <h2 class="text-2xl text-gray-300">Memories</h2>
+      <div class="flex gap-2">
+        <div class="relative">
+          <input type="text" data-reflex="change->Bot#search_thoughts" data-id="<%= @bot.id %>" placeholder="<%= it("Search...") %>" data-controller="bot"
+                class="text-sm w-32 sm:w-48 pr-8 focus:bg-gray-200 bg-gray-600 text-gray-800 rounded-md">
+          <div class="absolute right-2 top-1/2 -translate-y-1/2 text-gray-800"><%= heroicon "magnifying-glass" %></div>
+        </div>
+        <select class="bg-gray-600 text-gray-500 text-sm rounded-md">
+          <option value="importance">Importance</option>
+          <option value="created_at">Date</option>
+        </select>
       </div>
-      <select class="bg-gray-600 text-gray-500 text-sm rounded-md">
-        <option value="importance">Importance</option>
-        <option value="created_at">Date</option>
-      </select>
     </div>
-  </div>
 
-  <% if (@stimulus_reflex) %>
-    <div>
-      <%= @thoughts.length %>
-      <%= it("matching thoughts found") %>
-      <%= link_to it("clear"), bot_path(@bot), class: "text-indigo-300 underline font-medium" %>
-    </div>
+    <% if (@stimulus_reflex) %>
+      <div>
+        <%= @thoughts.length %>
+        <%= it("matching thoughts found") %>
+        <%= link_to it("clear"), bot_path(@bot), class: "text-indigo-300 underline font-medium" %>
+      </div>
+    <% end %>
+
+    <%= cable_ready_updates_for @bot, :thoughts, html_options: { class: "space-y-3 px-3" } do %>
+      <%= render @thoughts %>
+    <% end %>
   <% end %>
-
-  <%= cable_ready_updates_for @bot, :thoughts, html_options: { class: "space-y-3 px-3" } do %>
-    <%= render @thoughts %>
-  <% end %>
-
 </div>

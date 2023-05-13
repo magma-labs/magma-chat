@@ -1,14 +1,18 @@
 <div class="mb-4">
-  <%= form.text_area :directive, rows: 15, class: "shadow appearance-none border rounded w-full py-2 px-3 text-sm text-gray-700 leading-tight focus:outline-none focus:shadow-outline" %>
-  <div class="text-gray-500 text-xs">The prompt sent to GPT to set the role of the assistant whenever a new conversation is started.</div>
+  <%= form.label :predirective, "System Directive (Read Only)" %>
+  <%= cable_ready_updates_for @bot, only: :predirective, html_options: {
+    class: "w-full shadow border rounded-md bg-gray-100 text-gray-400 h-20 p-2 text-sm mb-4" } do %>
+    <%= @bot.predirective %>
+  <% end %>
+  <%= form.label :directive, "Additional Instructions (Optional)" %>
+  <%= form.text_area :directive, rows: 8, class: "shadow appearance-none border rounded w-full py-2 px-3 text-sm text-gray-700 leading-tight focus:outline-none focus:shadow-outline" %>
+  <div class="text-gray-500 text-xs">Use this space to give additional information about the bot's role, including goals and responsibilities.</div>
   <% #todo: add link to documentation about writing effective directives %>
 </div>
-<div class="flex gap-2 items-top field">
+<div class="flex gap-2 items-top field mb-4">
   <%= form.check_box :humanize, class: "w-4 h-4 m-2 p-2 w-6" %>
   <div class="flex-1">
     <%= form.label :humanize, "Humanize", class: "text-gray-700" %>
     <div class="text-gray-500 text-xs"><%= it("Prevent bot from adding disclaimers about being an AI-based language model.") %></div>
   </div>
 </div>
-
-<%#= render "auto_archive" %>

@@ -19,6 +19,8 @@ enable_observations:
   default: true
 humanize:
   default: true
+backstory:
+  default: ""
 temperature:
   default: 1.0
 top_p:

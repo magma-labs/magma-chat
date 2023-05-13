@@ -20,6 +20,21 @@ class BotReflex < ApplicationReflex
     @thoughts = Thought.where(id: @bot.ask(element.value, subject_id: current_user.id).hits.map(&:_id))
   end
 
+  def generate_backstory
+    @bot.update(backstory: "Generating... please wait.")
+    backstory = Gpt.magic(
+      model: "gpt-4",
+      description: "Writes a comprehensive, multi-paragraph personal history aka backstory
+                    backstory for a character with the provided name and role. If the role
+                    is a professional title, include resume and job history information.".squish,
+      signature: "generate_backstory(name, role)",
+      args: [@bot.name, @bot.role],
+      max_tokens: 400,
+      temp: 0.2
+    )
+    @bot.update(backstory: backstory.gsub('"',''))
+  end
+
   def destroy
     if @bot.conversations.empty?
       @bot.destroy!

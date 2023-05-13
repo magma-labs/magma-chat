@@ -1,9 +1,16 @@
 <%= link_to conversation_path(conversation), class: "hover:bg-gray-200 p-2 bg-gray-300 rounded block #{@conversation == conversation ? "active" : ""}" do %>
-  <div class="w-full text-gray-700 flex justify-between items-baseline gap-2">
+  <div class="flex w-full text-gray-700 justify-between items-baseline gap-2">
     <span class="truncate"><%= conversation.title.capitalize %></span>
-    <span class="text-gray-500 font-light text-xs"><%= distance_of_time_in_words_to_now(conversation.updated_at) + " ago" %></span>
+    <span class="text-gray-500 font-light text-xs hidden xl:inline">
+      <%= conversation.participants_sentence %>
+      <%= distance_of_time_in_words_to_now(conversation.updated_at) + " ago" %>
+    </span>
   </div>
-  <div class="text-gray-500 font-light">
+  <div class="text-gray-700 font-light">
     <%= conversation.analysis[:summary] %>
+  </div>
+  <div class="xl:hidden text-gray-500 font-light text-xs">
+    <%= conversation.participants_sentence %>
+    <%= distance_of_time_in_words_to_now(conversation.updated_at) + " ago" %>
   </div>
 <% end %>
