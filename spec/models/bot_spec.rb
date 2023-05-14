@@ -66,7 +66,7 @@ RSpec.describe Bot do
     end
 
     before do
-      allow(Gpt).to receive(:chat)
+      allow(Magma::OpenAI).to receive(:chat)
     end
 
     it 'creates observations with correct attributes', :aggregate_failures do
@@ -93,7 +93,7 @@ RSpec.describe Bot do
 
     before do
       # the intro is generated
-      allow(Gpt).to receive(:chat).and_return("Hello!")
+      allow(Magma::OpenAI).to receive(:chat).and_return("Hello!")
     end
 
     it 'creates a default bot', :aggregate_failures do
@@ -112,7 +112,7 @@ RSpec.describe Bot do
     let(:bot2) { create(:bot, name: 'A') }
 
     before do
-      allow(Gpt).to receive(:chat)
+      allow(Magma::OpenAI).to receive(:chat)
 
       described_class.default
       bot1

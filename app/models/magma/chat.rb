@@ -131,7 +131,7 @@ module Magma
     def send
       send_params = params.merge(messages: @messages.compact)
       Rails.logger.info("😏 GPT REQUEST: #{send_params} #{object_id}")
-      Gpt.client.chat(parameters: send_params).tap do |response|
+      Magma::OpenAI.client.chat(parameters: send_params).tap do |response|
         Rails.logger.info("👹 GPT RESPONSE: #{response} #{object_id}")
       end
     end

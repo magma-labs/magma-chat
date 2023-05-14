@@ -20,7 +20,7 @@ module Magma
     private
 
     def send
-      Gpt.client.edits(parameters: params).tap do |response|
+      Magma::OpenAI.client.edits(parameters: params).tap do |response|
         puts response.inspect if debug
       end.then do |response|
         response.dig("choices", 0, "text")

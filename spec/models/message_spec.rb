@@ -31,7 +31,7 @@ require 'rails_helper'
 
 RSpec.describe Message, type: :model do
   before do
-    allow(Gpt).to receive(:chat)
+    allow(Magma::OpenAI).to receive(:chat)
   end
 
   describe '#broadcast_message' do

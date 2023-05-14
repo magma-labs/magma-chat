@@ -10,7 +10,7 @@ RSpec.describe ConversationSearch do
     let(:message_content) { conversation.messages.last.content }
 
     before do
-      allow(Gpt).to receive(:chat)
+      allow(Magma::OpenAI).to receive(:chat)
       allow_any_instance_of(Conversation).to receive(:add_user_intro)
 
       conversation

@@ -39,9 +39,6 @@ class Thought < ApplicationRecord
 
   before_create :create_new_subject, if: :subject_name?
 
-  after_commit :store_vector, on: %i[create update]
-  after_commit :delete_vector, on: %i[destroy]
-
   # brief should be unique per bot and subject
   validates :brief, presence: true, uniqueness: { scope: %i[type bot_id subject_id subject_type] }
 

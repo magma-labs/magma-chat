@@ -32,7 +32,7 @@ RSpec.describe User, type: :model do
     end
 
     before do
-      allow(Gpt).to receive(:chat)
+      allow(Magma::OpenAI).to receive(:chat)
     end
 
     let(:expected_tags) do

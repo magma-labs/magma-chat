@@ -24,7 +24,7 @@ class BotReflex < ApplicationReflex
     # give the user some feedback
     cable_ready.text_content(selector: "#bot_backstory", text: "Generating... please wait.").broadcast
 
-    backstory = Gpt.magic(
+    backstory = Magma::OpenAI.magic(
       description: "Writes a comprehensive, multi-paragraph personal history aka backstory
                     backstory for a character with the provided name and role. If the role
                     is a professional title, include resume and job history information.".squish,

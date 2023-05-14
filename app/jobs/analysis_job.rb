@@ -40,7 +40,7 @@ class AnalysisJob < ApplicationJob
     # todo: make idle time configurable
     if time_to_analyze?
       directive = Magma::Prompts.get("conversations.analysis_directive", json_schema: JSON_SCHEMA.to_json)
-      Gpt.chat(
+      Magma::OpenAI.chat(
         directive: directive,
         prompt: formatted(conversation.messages_for_gpt(only_visible: true)),
         max_tokens: 300

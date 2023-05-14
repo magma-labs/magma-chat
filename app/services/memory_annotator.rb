@@ -34,7 +34,7 @@ class MemoryAnnotator
 
     unique_hits = Set.new
 
-    response = Gpt.chat(transcript: Magma::Prompts.get("conversation_analyzer.prelude"), prompt: prompt(number_of_messages_to_pop))
+    response = Magma::OpenAI.chat(transcript: Magma::Prompts.get("conversation_analyzer.prelude"), prompt: prompt(number_of_messages_to_pop))
     questions = extract_questions(response)
     memories = questions.map do |question|
       search_result = bot.ask(question, subject_id: user.id)

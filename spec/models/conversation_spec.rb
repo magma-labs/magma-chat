@@ -27,7 +27,7 @@ require 'rails_helper'
 
 RSpec.describe Conversation do
   before do
-    allow(Gpt).to receive(:chat)
+    allow(Magma::OpenAI).to receive(:chat)
   end
 
   describe '#directive' do

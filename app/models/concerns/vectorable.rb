@@ -1,6 +1,13 @@
 module Vectorable
+  extend ActiveSupport::Concern
+
   # TODO: Make the implementation used here configurable
   # for use with other vector databases such as PgVector, Faiss or Pinecone
+
+  included do
+    after_commit :store_vector, on: %i[create update]
+    after_commit :delete_vector, on: %i[destroy]
+  end
 
   ##
   # Save a copy of `vector_fields` to the vector database

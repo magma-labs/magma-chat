@@ -28,7 +28,7 @@ class ObservationJob < ApplicationJob
       "conversations.observation.make.prompt",
       user_name: user.name, bot_name: bot.name, bot_role: bot.role
     )
-    Gpt.chat(
+    Magma::OpenAI.chat(
       directive: directive,
       transcript: conversation.messages_for_gpt(only_visible: true, since: :last_observations_at),
       prompt: prompt,
@@ -48,7 +48,7 @@ class ObservationJob < ApplicationJob
       observations: observations,
       schema: Observation::JSON_SCHEMA
     )
-    Gpt.chat(
+    Magma::OpenAI.chat(
       directive: directive,
       prompt: prompt,
       temperature: 0.6, # todo: make configurable

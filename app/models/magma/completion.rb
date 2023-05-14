@@ -56,7 +56,7 @@ module Magma
     def send(prompt)
       send_params = params.merge(prompt: prompt)
       Rails.logger.info("😏 GPT REQUEST: #{send_params} #{object_id}")
-      Gpt.client.completions(parameters: send_params).tap do |response|
+      Magma::OpenAI.client.completions(parameters: send_params).tap do |response|
         Rails.logger.info("👹 GPT RESPONSE: #{response} #{object_id}")
       end
     end

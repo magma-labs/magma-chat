@@ -14,7 +14,6 @@ describe Magma::Chat do
         expect(chat.presence_penalty).to eq(0.0)
         expect(chat.max_tokens).to eq(500)
         expect(chat.stream).to be_nil
-        expect(chat.debug).to be_falsey
       end
     end
 
@@ -27,8 +26,7 @@ describe Magma::Chat do
           frequency_penalty: 0.2,
           presence_penalty: 0.1,
           max_tokens: 300,
-          stream: ->(response) { puts response },
-          debug: true
+          stream: ->(response) { puts response }
         )
       end
 
@@ -40,7 +38,6 @@ describe Magma::Chat do
         expect(custom_chat.presence_penalty).to eq(0.1)
         expect(custom_chat.max_tokens).to eq(300)
         expect(custom_chat.stream).to be_a(Proc)
-        expect(custom_chat.debug).to be_truthy
       end
     end
   end
@@ -63,7 +60,7 @@ describe Magma::Chat do
       allow(Magma::Prompts).to receive(:get).with(key).and_return('What is your name?')
 
       # Mock the GPT client chat method to return a fixed response
-      allow(Gpt.client).to receive(:chat).and_return(
+      allow(Magma::OpenAI.client).to receive(:chat).and_return(
         {
           "choices" => [
             {

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2023_05_07_214825) do
+ActiveRecord::Schema[7.1].define(version: 2023_05_14_052436) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -71,6 +71,22 @@ ActiveRecord::Schema[7.1].define(version: 2023_05_07_214825) do
     t.index ["sender_type", "sender_id"], name: "index_messages_on_sender"
   end
 
+  create_table "request_logs", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "user_id", null: false
+    t.string "label", default: "", null: false
+    t.string "operation", default: "", null: false
+    t.string "model", default: "", null: false
+    t.jsonb "request", default: {}, null: false
+    t.jsonb "response", default: {}, null: false
+    t.integer "prompt_tokens", default: 0, null: false
+    t.integer "completion_tokens", default: 0, null: false
+    t.integer "total_tokens", default: 0, null: false
+    t.integer "duration_seconds", default: 0, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_request_logs_on_user_id"
+  end
+
   create_table "things", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "world_id", null: false
     t.string "name", null: false
@@ -127,5 +143,6 @@ ActiveRecord::Schema[7.1].define(version: 2023_05_07_214825) do
   end
 
   add_foreign_key "messages", "conversations"
+  add_foreign_key "request_logs", "users"
   add_foreign_key "tools", "bots"
 end

@@ -10,6 +10,10 @@ class ConversationJob < ApplicationJob
   def perform(conversation, user_message_content, visible)
     @conversation = conversation
 
+    if bot.humanize?
+      user_message_content = roleplay_prefix(user_message_content)
+    end
+
     if bot.long_term_memory?
       # create both placeholders in the right order
       memories_message = user_message!("", visible: false)
@@ -63,6 +67,10 @@ class ConversationJob < ApplicationJob
   FILTER_REGEX = Regexp.new(Magma::Prompts.get("disclaimers").join("|"))
 
   private
+
+  def roleplay_prefix(content)
+    "[MagmaChat System: As #{bot.label} how do you respond to #{user.name.split.first} saying: #{content}. Remember to stay in character always or you'll ruin the game!]"
+  end
 
   # todo: change to cableready streaming and save once response is finished
   def stream_proc(message:)
