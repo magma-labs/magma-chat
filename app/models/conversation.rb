@@ -41,7 +41,8 @@ class Conversation < ApplicationRecord
 
   before_create :set_title
   before_create :copy_settings_from_bot
-  after_create :add_context_messages
+  after_create :add_user_intro
+  after_create :add_context_memories
 
   after_commit :prompt!, on: :create, if: :first_message
 
@@ -50,7 +51,7 @@ class Conversation < ApplicationRecord
   pg_search_scope :search_tags, against: :analysis,
     using: { tsearch: { prefix: true } }
 
-  delegate :directive, to: :bot
+  delegate :full_directive, to: :bot
 
   def analysis
     text = super
@@ -89,6 +90,7 @@ class Conversation < ApplicationRecord
 
   def prompt!(message: first_message, visible: true, sender: user)
     Rails.logger.info("USER PROMPT: #{message}")
+    # make the first message invisible since it's auto-generated
     user_message!(message, visible: messages.any?, skip_broadcast: false).tap do |um|
       if bot.enable_shared_messages? && !off_the_record
         MessageRememberJob.set(wait: 1.minute).perform_later(um)
@@ -152,23 +154,6 @@ class Conversation < ApplicationRecord
     analysis[:next] || []
   end
 
-  # todo: replace this with throw/catch or exception handling so that it stops the original completion
-  def reprompt_with_human_override!(message)
-    # grab the last two visible messages in correct order
-    last_messages = self.messages.reload.latest.limit(3).to_a.reverse
-    prompt = Magma::Prompts.get("conversations.reprompt_with_human_override", {
-      bot_role: bot.role,
-      bot_message: last_messages.first.content,
-      user_message: last_messages.second.content
-    })
-    Gpt.chat(prompt: prompt, temperature: 1.2).then do |response|
-      puts
-      puts "😇😇😇 #{response}"
-      puts
-      message.update!(content: response, visible: true)
-    end
-  end
-
   def display_settings!
     messages.create!(role: "settings", skip_broadcast: true)
   end
@@ -177,43 +162,38 @@ class Conversation < ApplicationRecord
     analysis[:tags].presence || []
   end
 
-  def bot_message!(content, run_analysis_after_saving: false, skip_broadcast: true, visible: false)
-    messages.create!(role: "assistant", content: content, skip_broadcast: skip_broadcast, run_analysis_after_saving: run_analysis_after_saving, visible: visible)
+  def bot_message!(content, skip_broadcast: true, visible: false, responding_to: nil)
+    messages.build(role: "assistant", content: content, skip_broadcast: skip_broadcast, visible: visible).tap do |message|
+      message.responding_to = responding_to if responding_to
+      message.save!
+    end
   end
 
-  def user_message!(content, run_analysis_after_saving: false, skip_broadcast: true, visible: false)
+  def user_message!(content, skip_broadcast: true, visible: false)
     messages.create!(role: "user", content: content, skip_broadcast: skip_broadcast, visible: visible)
   end
 
   private
 
-  def add_context_messages
-    # at least for the moment, this is the way that short term memory is implemented
-    # so if the bot doesn't have short term memory, we don't need this routine
-    return unless bot.short_term_memory?
-    # if the bot is talking to the user for the first time, there will be no context
-    # todo: this will change once a bot has memory of conversations with other users
-    # that it is allowed to use to inform its conversation with a new user
-    return if bot.conversations.where(user_id: user.id).empty?
-
-    context_intro_prompt = Magma::Prompts.get("conversations.context_intro",
-      bot_name: bot.name,
-      bot_role: bot.role,
+  def add_user_intro
+    context_intro_prompt = Magma::Prompts.get("conversations.user_intro",
       user_name: user.name,
       user_id: user.id,
       date: Date.today.strftime("%B %d, %Y"),
       time: Time.now.strftime("%I:%M %p"),
-      timezone: "US/Central" # todo: just send localized time instead of UTC so we don't have issues with daylight savings, etc
+      timezone: user.time_zone
     )
-
     user_message!(context_intro_prompt, skip_broadcast: true, visible: false)
+  end
+
+  def add_context_memories
+    return if bot.conversations.where(user_id: user.id).empty?
+    return if bot.thoughts.where(subject_id: user.id).empty?
 
     top_memories = bot.top_memories_of(user)
     if top_memories.any?
       context_memories_prompt = Magma::Prompts.get("conversations.context_memories", { m: top_memories.join("\n\n"), lang: user.preferred_language })
       user_message!(context_memories_prompt, skip_broadcast: true, visible: false)
-      context_reply = Magma::Prompts.get("conversations.context_memories_reply", lang: user.preferred_language)
-      bot_message!(context_reply, skip_broadcast: true, visible: false)
     end
   end
 

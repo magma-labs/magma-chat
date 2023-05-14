@@ -13,7 +13,10 @@ class BotsController < ApplicationController
   end
 
   def new_conversation
-    current_user.conversations.create!(bot: @bot, first_message: "Hello").then do |conversation|
+    first_conversation = @bot.conversations.where(user: current_user).empty?
+    first_message = first_conversation ? "Hello, please introduce yourself." : "Hello!"
+
+    current_user.conversations.create!(bot: @bot, first_message: first_message).then do |conversation|
       redirect_to [conversation]
     end
   end

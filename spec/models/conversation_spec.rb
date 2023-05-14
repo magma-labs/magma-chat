@@ -34,7 +34,7 @@ RSpec.describe Conversation do
     let(:conversation) { build(:conversation) }
 
     it 'delegates directive to bot' do
-      expect(conversation.directive).to eq conversation.bot.directive
+      expect(conversation.full_directive).to eq conversation.bot.full_directive
     end
   end
 
@@ -134,7 +134,7 @@ RSpec.describe Conversation do
     let(:message) { conversation.messages.first }
 
     before do
-      allow_any_instance_of(Conversation).to receive(:add_context_messages)
+      allow_any_instance_of(Conversation).to receive(:add_user_intro)
     end
 
     it 'returns an array of hashes with role and content', :aggregate_failures do
@@ -180,7 +180,7 @@ RSpec.describe Conversation do
     end
   end
 
-  describe '#add_context_messages' do
+  describe '#add_user_intro' do
     let(:conversation) { create(:conversation, message_count: 2) }
 
     let(:context_user_prompt) do
@@ -194,7 +194,7 @@ RSpec.describe Conversation do
     end
 
     before do
-      expect_any_instance_of(Conversation).to receive(:add_context_messages).and_call_original
+      expect_any_instance_of(Conversation).to receive(:add_user_intro).and_call_original
     end
 
     it 'creates context messages', :aggregate_failures do

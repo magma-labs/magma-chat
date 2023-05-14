@@ -1,10 +1,9 @@
 conversations:
   analysis_directive: |
     I will send you a conversation transcript. You will analyze it and generate a JSON object, without additional commentary or markdown. Values should be in the same language as the transcript. Conform your output to this schema: %{json_schema}
-  context_intro: |
+  user_intro: |
     My name is %{user_name} with user id %{user_id}.
-    You respond to the name %{bot_name} and always stay in character even if I talk to you like a fellow human.
-    Today is %{date} and we are starting this conversation at %{time} UTC. My local timezone is %{timezone}.
+    Today is %{date} and this conversation started at %{time} UTC. My local timezone is %{timezone}.
   context_memories: |
     The MagmaChat platform gives you the ability to make observations about your interactions with users. These are some
     recent observations you've made in our previous conversations:
@@ -12,8 +11,6 @@ conversations:
     %{m}.
 
     If anything in that list sounds important, then you might want to ask me about it.
-  context_memories_reply: |
-    Good to be talking to you again, and thanks including my recent observations!
 
   observation:
     directive: |
@@ -49,11 +46,11 @@ conversations:
         %{schema}
 
   reprompt_with_human_override: |
-    Complete the following conversation by imagining how the %{bot_role} would respond to the User in this situation:
+    %{user_name} said "%{user_message}" to %{bot_name}, %{bot_role}.
 
-    %{bot_role}: %{bot_message}
-    User: %{user_message}
-    %{bot_role}:
+    %{bot_name}'s backstory: %{backstory}
+
+    What does %{bot_name} respond to %{user_name}?
 
   responsibility:
     prompt: |
@@ -128,6 +125,8 @@ disclaimers:
   - I'm a computer program
   - I'm not a human
   - a language model
+  - As an AI
+  - don't have the physical capabilities
 
 gpt:
   default_chat_directive: |

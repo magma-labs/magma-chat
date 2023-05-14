@@ -21,16 +21,17 @@ class BotReflex < ApplicationReflex
   end
 
   def generate_backstory
-    @bot.update(backstory: "Generating... please wait.")
+    # give the user some feedback
+    cable_ready.text_content(selector: "#bot_backstory", text: "Generating... please wait.").broadcast
+
     backstory = Gpt.magic(
-      model: "gpt-4",
       description: "Writes a comprehensive, multi-paragraph personal history aka backstory
                     backstory for a character with the provided name and role. If the role
                     is a professional title, include resume and job history information.".squish,
       signature: "generate_backstory(name, role)",
       args: [@bot.name, @bot.role],
-      max_tokens: 400,
-      temp: 0.2
+      max_tokens: 100,
+      temp: 0.25
     )
     @bot.update(backstory: backstory.gsub('"',''))
   end

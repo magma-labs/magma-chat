@@ -1,0 +1,10 @@
+<div class="hover:bg-gray-200 p-2 bg-gray-300 text-gray-700 p-2 px-3 rounded-md" data-id="<%= responsibility.id %>">
+  <div><%= responsibility.brief %></div>
+  <div class="block text-xs text-gray-500">
+    <%= l(responsibility.created_at, format: :long) %> ・
+    <%= it("Observation about") %>
+    <%= it(responsibility.subject_type) %> ・
+    <%= it("Importance:") %>
+    <%= responsibility.importance %>
+  </div>
+</div>

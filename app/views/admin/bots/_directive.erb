@@ -1,7 +1,7 @@
 <div class="mb-4">
   <%= form.label :predirective, "System Directive (Read Only)" %>
   <%= cable_ready_updates_for @bot, only: :predirective, html_options: {
-    class: "w-full shadow border rounded-md bg-gray-100 text-gray-400 h-20 p-2 text-sm mb-4" } do %>
+    class: "w-full shadow border rounded-md bg-gray-100 text-gray-400 h-32 p-2 text-sm mb-4" } do %>
     <%= @bot.predirective %>
   <% end %>
   <%= form.label :directive, "Additional Instructions (Optional)" %>

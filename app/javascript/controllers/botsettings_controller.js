@@ -9,4 +9,6 @@ export default class extends ApplicationController {
   toggle_setting() {
     this.stimulate('Bot#toggle_setting', this.element, {}, this.element.checked)
   }
+
+  before
 }

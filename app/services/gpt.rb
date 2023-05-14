@@ -48,7 +48,7 @@ module Gpt
         message(:user, Magma::Prompts.get("gpt.magic_prompt", { signature: signature, description: description })),
         message(:assistant, "Understood. Waiting for arguments")
       ]
-      chat(directive: Magma::Prompts.get("gpt.magic_directive"), prompt: args.join(", "), temperature: temp, transcript: messages)
+      chat(model: model, directive: Magma::Prompts.get("gpt.magic_directive"), prompt: args.join(", "), temperature: temp, transcript: messages)
     end
   end
 

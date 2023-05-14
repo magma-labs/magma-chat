@@ -11,7 +11,7 @@ RSpec.describe ConversationSearch do
 
     before do
       allow(Gpt).to receive(:chat)
-      allow_any_instance_of(Conversation).to receive(:add_context_messages)
+      allow_any_instance_of(Conversation).to receive(:add_user_intro)
 
       conversation
     end

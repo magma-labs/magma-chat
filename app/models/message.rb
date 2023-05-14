@@ -33,7 +33,8 @@ class Message < ApplicationRecord
   include Vectorable
 
   attribute :content, :string, default: ""
-  attribute :run_analysis_after_saving, :boolean, default: false
+  attribute :marked_for_deletion, :boolean, default: false
+  attribute :properties, :jsonb, default: {}
   attribute :skip_broadcast, :boolean, default: false
 
   delegate :to_partial_path, to: :strategy
@@ -56,8 +57,11 @@ class Message < ApplicationRecord
   before_save :calculate_tokens
   before_save :set_sender
 
+  # execution of conversation job handled by strategy, currently only for user messages
   after_commit :broadcast_message, on: :create, unless: :skip_broadcast
-  after_commit :reanalyze, if: :run_analysis_after_saving
+
+  # handle bad messages
+  after_commit :destroy, on: :update, if: :marked_for_deletion?
 
   after_commit :delete_vector, on: :destroy
   after_commit :message_timeout_job, on: :create
@@ -73,9 +77,23 @@ class Message < ApplicationRecord
     conversation.label
   end
 
+  def mark_for_deletion!
+    self.content = ""
+    self.visible = false
+    self.marked_for_deletion = true
+  end
+
   def reanalyze
     ObservationJob.perform_later(conversation) if bot.enable_observations?
     AnalysisJob.perform_later(conversation) if conversation.enable_analysis?
+  end
+
+  def responding_to
+    properties[:responding_to]
+  end
+
+  def responding_to=(prompt)
+    properties[:responding_to] = prompt
   end
 
   def role
