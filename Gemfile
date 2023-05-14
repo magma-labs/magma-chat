@@ -68,7 +68,7 @@ gem "rails_live_reload"
 gem "recursive-open-struct"
 gem "redcarpet"
 gem "redis-session-store", "~> 0.11.5"
-gem "ruby-openai", "~> 4.0.0"
+gem "ruby-openai", github: "obie/ruby-openai"
 gem 'sidekiq',"~> 7.0"
 gem 'strategic', '~> 1.2.0'
 gem "stimulus_reflex", "~> 3.5.0.pre10"

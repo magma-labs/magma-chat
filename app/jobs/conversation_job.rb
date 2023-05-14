@@ -43,7 +43,7 @@ class ConversationJob < ApplicationJob
       top_p: conversation.top_p,
       presence_penalty: conversation.presence_penalty,
       frequency_penalty: conversation.frequency_penalty,
-      stream: user.streaming && stream_proc(message:) #StreamProcessor.new(buffer: buffer, message: message)
+      stream: user.streaming && StreamProcessor.new(bot: bot, buffer: buffer, cable_ready: cable_ready, message: message)
     )
 
     chat.prompt(content: user_message_content).then do |reply|
@@ -85,23 +85,33 @@ class ConversationJob < ApplicationJob
   end
 
   class StreamProcessor
+    include ActionView::RecordIdentifier
+    include ActionView::Helpers::TagHelper
+
+
     FILTER_REGEX = Regexp.new(Magma::Prompts.get("disclaimers").join("|"))
 
-    def initialize(bot:, buffer:, message:)
+    attr_reader :bot, :buffer, :cable_ready, :message, :md_options
+
+    def initialize(bot:, buffer:, cable_ready:, message:)
       Rails.logger.info "💦💦💦 initializing stream processor for message: #{message} 💦💦💦"
+      @bot = bot
       @buffer = buffer
+      @cable_ready = cable_ready
       @message = message
+      @md_options = [:hard_wrap, :autolink, :no_intra_emphasis, :fenced_code_blocks]
     end
 
-    def call(chunk, _bytesize)
+    def call(chunk, _bytesize=nil)
       Rails.logger.info "💦💦💦 streaming chunk: #{chunk} (#{_bytesize} bytes) 💦💦💦"
       if new_content = chunk.dig("choices", 0, "delta", "content")
-        @buffer << new_content
-        ActiveRecord::Base.logger.silence do
-          @message.update(content: @message.content + new_content)
-        end
-
+        buffer << new_content
         raise "stopping non-humanized reply" if bot.humanize? && buffer.join.match?(FILTER_REGEX)
+
+        html = Markdown.new(buffer.join, *md_options).to_html.gsub(/<p><\/p>/, '').html_safe
+        div = tag.div(html, class: "markdown max-w-full")
+        selector = "##{dom_id(message)} .messagecontent"
+        cable_ready[message.conversation].inner_html(selector: selector, html: div).broadcast
       end
     end
   end

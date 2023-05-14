@@ -1,5 +1,5 @@
 <% if message.visible %>
-  <div class="message <%= message.role %> w-full p-1 md:p-4 <%= "highlight" if params[:message] == message.id %>">
+  <div class="message <%= message.role %> w-full p-1 md:p-4 <%= "highlight" if params[:message] == message.id %>" id="<%= dom_id(message) %>">
     <div class="xl:max-w-[80%] mx-auto flex items-start gap-3 md:gap-6 p-1">
       <div class="flex-shrink-0 relative h-[36px] w-[36px] rounded-md  text-white flex items-center justify-center bg-gray-800 transition hover:bg-gray-900 select-none">
         <% if message.role.assistant? && message.conversation.bot.voice_id.present? %>
@@ -9,7 +9,7 @@
           <img src="<%= message.sender_image_url %>" alt="" class="object-fit rounded-md select-none" referrerpolicy="no-referrer">
         <% end %>
       </div>
-      <div class="flex-1 max-w-full relative md:min-h-[40px]">
+      <div class="messagecontent flex-1 max-w-full relative md:min-h-[40px]">
         <% if message.content.blank? %>
           <%= render "loading" %>
         <% else %>
