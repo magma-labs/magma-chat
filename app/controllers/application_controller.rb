@@ -32,12 +32,12 @@ class ApplicationController < ActionController::Base
       .joins('INNER JOIN conversations ON conversations.bot_id = subquery.bot_id AND conversations.updated_at = subquery.max_updated_at')
       .includes(:bot)
       .includes(:latest_message)
-      .order('conversations.updated_at DESC').to_a
+      .order('conversations.updated_at DESC')
 
-    missing_bots = Bot.where.not(id: @latest_conversations.map(&:bot_id))
-    missing_bots.each do |bot|
-      @latest_conversations << Conversation.new(bot: bot)
-    end
+    # missing_bots = Bot.where.not(id: @latest_conversations.map(&:bot_id))
+    # missing_bots.each do |bot|
+    #   @latest_conversations << Conversation.new(bot: bot)
+    # end
 
   end
 
