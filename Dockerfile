@@ -10,6 +10,7 @@ WORKDIR /rails
 # Set production environment
 ENV RAILS_ENV="production" \
     BUNDLE_DEPLOYMENT="1" \
+    BUNDLE_RETRY=4 \
     BUNDLE_PATH="/usr/local/bundle" \
     SECRET_KEY_BASE="fakekeyforassets"
 
@@ -19,11 +20,12 @@ FROM base as build
 
 # Install packages needed to build gems
 RUN apt-get update -qq && \
-    apt-get install --no-install-recommends -y build-essential git pkg-config gnupg2 libpq-dev
+    apt-get install --no-install-recommends -y build-essential git pkg-config gnupg2 libpq-dev libicu-dev
 
 # Install application gems
 COPY Gemfile Gemfile.lock ./
-RUN bundle install && \
+RUN bundle install "-j$(nproc)" && \
+    bundle clean --force && \
     rm -rf ~/.bundle/ "${BUNDLE_PATH}"/ruby/*/cache "${BUNDLE_PATH}"/ruby/*/bundler/gems/*/.git && \
     bundle exec bootsnap precompile --gemfile
 
