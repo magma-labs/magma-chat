@@ -9,7 +9,7 @@ class SessionsController < ApplicationController
 
     # todo: should we do this everytime?
     calendar = service.get_calendar('primary')
-    user.update!(time_zone: calendar.time_zone.split('/').last.gsub('_', ' '))
+    user.update!(time_zone: calendar.time_zone)
 
     redirect_to "/conversations", notice: "Signed in!"
   end
