@@ -116,10 +116,6 @@ class Conversation < ApplicationRecord
     analysis[:summary]
   end
 
-  def tags
-    analysis[:tags] || []
-  end
-
   def total_token_count
     messages.sum(:tokens_count)
   end
