@@ -90,6 +90,8 @@ Right now the only authentication method supported is Google Oauth. You'll need 
 
 If you're using Marqo, make sure to set the `MARQO_URL` environment variable, otherwise the `MemoryAnnotator` will not run.
 
+You can use the `docker-compose.yml.marqo.example` docker-compose configuration to get marqo propped up with everything else. If you do this, you can set `MARQO_URL=http://host.docker.internal:8882` 
+
 ### Admin User
 
 Admin privileges are granted simply with the `admin` boolean attribute on `User`. There is no admin UI at the moment, so if you want to give your user admin rights, do it via the console.
