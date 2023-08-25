@@ -76,6 +76,7 @@ services:
 
 
 volumes:
+  app: null
   redis-data: null
   pg-data: null
 
