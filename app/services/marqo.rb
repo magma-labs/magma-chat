@@ -15,6 +15,9 @@ class Marqo
 
   base_uri ENV.fetch('MARQO_URL')
 
+  class IndexNotFound < StandardError
+  end
+
   class SearchResult < RecursiveOpenStruct
   end
 
@@ -23,8 +26,25 @@ class Marqo
     @auth = auth
   end
 
+  def create(index:, model: "hf/all_datasets_v4_MiniLM-L6")
+    puts
+    puts "🧠🧠🧠 CREATING INDEX: #{index} 🧠🧠🧠"
+    puts
+    options = {
+      headers: { 'Content-Type' => 'application/json' },
+      body: { index_defaults: { model: model } }.to_json
+    }
+    url = "/indexes/#{index.to_s.parameterize}"
+    self.class.post(url, options).then do |response|
+      puts response
+    end
+  end
+
   def store(index:, doc:, id:, non_tensor_fields: [])
     return if ENV['MARQO_URL'].blank?
+
+    create_index_attempts ||= 0
+
     puts
     puts "🧠🧠🧠 INDEX: #{index} 🧠🧠🧠"
     puts "🧠🧠🧠 DOC: #{doc} 🧠🧠🧠"
@@ -42,7 +62,15 @@ class Marqo
     end
     self.class.post(url, options).then do |response|
       puts response
+      raise IndexNotFound if response["type"].to_s == "invalid_request" && response["code"].to_s == "index_not_found"
       response.dig("items",0,"_id")
+    end
+  rescue IndexNotFound
+    create_index_attempts += 1
+
+    if create_index_attempts < 2
+      create(index: index)
+      retry
     end
   end
 
