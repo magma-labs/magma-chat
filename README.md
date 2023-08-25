@@ -68,6 +68,11 @@ configure environment variables
 cp .env.example .env.local
 ```
 
+configure database
+```sh
+cp config/database.yml.example config/database.yml
+```
+
 fire up the app
 ```sh
 docker-compose up --build
