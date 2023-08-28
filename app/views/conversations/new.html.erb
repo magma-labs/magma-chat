@@ -9,7 +9,8 @@
       <div class="card flex cursor-pointer border-4 px-4 w-full items-center xl:items-end relative"
           data-id="<%= bot.id %>" data-name="<%= bot.name&.force_encoding("UTF-8") %>"
           data-placeholder="<%= it("Start a new conversation with #{bot.name.force_encoding("UTF-8")}") %>"
-          data-hello="<%= hello_in_user_language&.force_encoding("UTF-8") %>">
+          data-hello="<%= hello_in_user_language&.force_encoding("UTF-8") %>"
+          data-controller="botselect" data-action="click->botselect#select">
         <div class="max-w-[140px]">
           <%= image_tag bot.image_url, class: "object-fit" %>
         </div>

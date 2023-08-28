@@ -68,6 +68,11 @@ configure environment variables
 cp .env.example .env.local
 ```
 
+configure database
+```sh
+cp config/database.yml.example config/database.yml
+```
+
 fire up the app
 ```sh
 docker-compose up --build
@@ -84,6 +89,8 @@ Right now the only authentication method supported is Google Oauth. You'll need 
 ### Marqo Vector DB
 
 If you're using Marqo, make sure to set the `MARQO_URL` environment variable, otherwise the `MemoryAnnotator` will not run.
+
+You can use the `docker-compose.yml.marqo.example` docker-compose configuration to get marqo propped up with everything else. If you do this, you can set `MARQO_URL=http://host.docker.internal:8882` 
 
 ### Admin User
 

@@ -28,6 +28,16 @@ x-assets: &default-assets
   ports: []
 
 services:
+  marqoai:
+    image: marqoai/marqo:latest
+    privileged: true
+    ports:
+      - '8882:8882'
+    volumes:
+      - 'vector-data:/data'
+    networks:
+      default:
+
   redis:
     image: redis
     healthcheck:
@@ -65,6 +75,9 @@ services:
 
   web:
     <<: *default-app
+    privileged: true
+    depends_on:
+      - marqoai
     ports:
       - "3000:3000"
     networks:
@@ -79,6 +92,7 @@ volumes:
   app: null
   redis-data: null
   pg-data: null
+  vector-data: null
 
 networks:
   default:
